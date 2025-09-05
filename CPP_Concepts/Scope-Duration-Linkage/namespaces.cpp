@@ -1,5 +1,5 @@
 /**
- * *Purpose: namespaces were originally introduced to prevent naming collisions in a huge project using vast nukber of 3rd party libraries
+ * *Purpose: namespaces were originally introduced to prevent naming collisions in a huge project using vast number of 3rd party libraries
  * - Nested namespaces
  * - namespace aliasing
  * - same namespace can be used in multip[le files or multiple places in a file
@@ -32,7 +32,7 @@
 
  /**********namespaxce aliasing **********/
 
-namespace Foo::Goo
+namespace Foo::Goo  //C++17 compatible syntax for nested namespace
 {
     int add(int x, int y)
     {

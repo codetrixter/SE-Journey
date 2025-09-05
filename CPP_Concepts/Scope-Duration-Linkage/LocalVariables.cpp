@@ -13,7 +13,7 @@
  * 
  * !importanat points to rem.:
  * - Local vairable have block scope.
- * - All varibale names withina scope must be unique.
+ * - All varibale names within a scope must be unique.
  * - Local variables have automatic storage duration.
  * - Local variabels have no linkage.
  * 
@@ -32,12 +32,12 @@
     std::cin >> large;
 
     //if the user did it incorrectly.
-    if(large < integer)
+    if(large < small)
     {
         std::cout << "Swapping the values..." << std::endl;
         int temp = 0;
         temp = large;
-        large = integer;
+        large = small;
         small = temp;
     }   //scope of temp ends here
        

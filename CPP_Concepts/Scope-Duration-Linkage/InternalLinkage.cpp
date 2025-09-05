@@ -1,6 +1,6 @@
 /**
  * *Internal Linkage
- * ! - Global varibales nad function identifiers can either have internal or external linkage.
+ * ! - Global varibales and function identifiers can either have internal or external linkage.
  * ! - An identifier with internal linkage can be seen and used within a single translation unit, but it is not accessible from other translation units. 
  * !   This means that if two source files have identically named identifiers with internal linkage, those identifiers will be treated as independent 
  * !   (and do not result in an ODR violation for having duplicate definitions).
@@ -8,7 +8,7 @@
  * ! - Functions can also be made to have internal linkage by adding static to their declaration
  * ! - Typically internal linkage is used fro following 2 reasons:
  *      1- Avoid naming collisions
- *      2- Restrict th euse of an identifier
+ *      2- Restrict the use of an identifier
  * 
  * NOTE: The C++11 standard (appendix C) provides the rationale for why const variables have internal linkage by default: “Because const objects can be
  *  used as compile-time values in C++, this feature urges programmers to provide explicit initializer values for each const. This feature allows the

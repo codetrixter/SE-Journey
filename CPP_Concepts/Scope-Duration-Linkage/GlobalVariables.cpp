@@ -2,8 +2,12 @@
  * *GLOBAL VARIABLES:
  * - These are the variables define at the start of the file
  * - These can also be defined in a namesapce.
+ * !Scope
  * - These have global scope or file scope.
+ * !Duration
  * - These have static duration meaning starts when main begins and ends when program is destroyed.
+ * 
+ * !- Prefer defining global vriables inside a namespace.
  */
 
  // Non-constant global variables
@@ -12,7 +16,7 @@ int g_x {};              // defines explicitly value-initialized global variable
 int g_x { 1 };           // defines explicitly initialized global variable
 
 // Const global variables
-const int g_y;           // error: const variables must be initialized
+//const int g_y;           // error: const variables must be initialized
 const int g_y { 2 };     // defines initialized global const
 
 // Constexpr global variables

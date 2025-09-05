@@ -1,7 +1,7 @@
 # TOPICS IN SEQUENCE
 
 1.  [Scope-Duration-Linkage](Scope-Duration-Linkage/)
-2.  [Type-COnversions-and-function-overloading](TypeConversionsAndFunctionOverloading/)
+2.  [Type-Conversions-and-function-overloading](TypeConversionsAndFunctionOverloading/)
 3.  [L-Value-R-Value References](lValue-rValueReferences/)
 4.  [Function-Dynamics](FunctionDynamics/)
 5.  [Move-Semantics-and-Smart-pointers](MoveSemantics-SmartPointers/)
