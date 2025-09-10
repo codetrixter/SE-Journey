@@ -3,7 +3,7 @@
  * @author Abhishek
  * @brief Here we discuss the Numeric promotions:
  * 1- This type of promotion a narrower numeric type is converted to a wider numeric type.
- * 2- All numeric promotions are value preserving meaning there is no loss od data or precision.
+ * 2- All numeric promotions are value preserving meaning there is no loss of data or precision.
  * Numeric promotions are of two type:
  * 1- Integral 
  * 2- Floating point
@@ -24,12 +24,12 @@
 
 void printInt(int val)
 {
-    std::cout << val << std::endl;
+    std::cout << "printInt(): " << val << std::endl;
 }
 
 void printDouble(double dd)
 {
-    std::cout << dd;
+    std::cout << "printDouble(): " << dd << std::endl;
 }
 
 int main(int argc, char const *argv[])
