@@ -6,11 +6,12 @@
  * 2- The scope of type aliases remains the same as the data type it is refering to.
  * 3- typedef is still used in c++ for historical reasons, but their use is discouraged.
  * 4- type aliases can be used for platform independant coding.
- * 5- type aliases make complext data types, simple to write and understand.
- * 6- type aliases can also be used to give meaning to the returnm types, since using the tyoes alone will 
+ * 5- type aliases make complex data types, simple to write and understand.
+ * 6- type aliases can also be used to give meaning to the return types, since using the types alone will 
  * not tell the user what the return values is for.
- * 7 - tyoe aliases also makes the code maintenance easier in the sense that, if a tyoe needs to be
- * chnaged/modified it can be done by making chnage at oneplace where the aliasing is done.
+ * 7 - type aliases also makes the code maintenance easier in the sense that, if a tyoe needs to be
+ * changed/modified it can be done by making chnage at oneplace where the aliasing is done.
+ * 8 - type aleases are not type safe, so they can be used interchangably with the original type, hence should be used carefully.
  * @version 0.1
  * @date 2022-07-06
  * 

@@ -24,7 +24,7 @@
         //return 10.0;    //error: inconsistent deduction for auto return type: ‘int’ and then ‘double
 } */
 
-//New way of defining function using auto keyword.
+//New way of defining function using auto keyword -> also known as Trailing return syntax.
 auto functionOne(bool b)->int
 {
     return 25;
@@ -34,4 +34,10 @@ int main(int argc, char const *argv[])
     std::cout << functionOne(true);
     //std::cout << fun();
     return 0;
+
+    //****Tyoe deduction cant be used for function parameter types */
+    {
+        //void func(auto a); //error: ‘auto’ not allowed in function prototype, allowed in C++20 using templates
+        //void func1(int a, auto b); //error: ‘auto’ not allowed in function prototype
+    }
 }
