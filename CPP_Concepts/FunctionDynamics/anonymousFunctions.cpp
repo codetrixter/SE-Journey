@@ -36,9 +36,9 @@
 // (no new memory allocated)
 /* bool containsNut(std::string_view str)
 {
-    // std::string_view::find returns std::string_view::npos if it doesn't find
-    // the substring. Otherwise it returns the index where the substring occurs
-    // in str.
+    /// std::string.find() returns std::string_view::npos if it doesn't find
+    /// the substring. Otherwise it returns the index where the substring occurs
+    /// in str.
     return (str.find("nut") != std::string_view::npos);
 }
 
@@ -46,16 +46,16 @@ int main()
 {
     std::array<std::string_view, 4> arr{ "apple", "banana", "walnut", "lemon" };
 
-    // Scan our array to see if any elements contain the "nut" substring
-    // Here containsNut() function is only used once and then never again, so it is useless to define it with name.
-    // We can use lambdas here to avoid such single use functions.
-    //auto found{ std::find_if(arr.begin(), arr.end(), containsNut) };
+    /// Scan our array to see if any elements contain the "nut" substring
+    /// Here containsNut() function is only used once and then never again, so it is useless to define it with name.
+    /// We can use lambdas here to avoid such single use functions.
+    /// auto found{ std::find_if(arr.begin(), arr.end(), containsNut) };
 
-    //Lambda version, this type of use of lambda right where it is used is also called function literal.
+    /// Lambda version, this type of use of lambda right where it is used is also called function literal.
     auto found = std::find_if(arr.begin(), arr.end(), [](std::string_view str) {
-        //body of the nameless function goes here.
-        //return type of this function is deduced automatically by the compiler, by looking at the
-        //last line of the function.
+        /// body of the nameless function goes here.
+        /// return type of this function is deduced automatically by the compiler, by looking at the
+        /// last line of the function.
         return (str.find("nut") != std::string_view::npos);
     });
 
@@ -72,28 +72,27 @@ int main()
 } */
 
 //*************naming a lambda***
-// naming the lambda so that it can be used easily without confusion.
-// instead of auto as a type inference, we can also use function pointer as long as the capture is empty.
-// bool (*isEven)(int) {
-//     [] (int n) {
-//         return ((n%2) == 0);
-//     }
-// };
+/* /// naming the lambda so that it can be used easily without confusion.
+/// instead of auto as a type inference, we can also use function pointer as long as the capture is empty.
+bool (*isEven)(int) {
+    [] (int n) {
+        return ((n%2) == 0);
+    }
+};
 
-// int main(int argc, char const *argv[])
-// {
-//     std::vector<int> array{ 2, 4, 6 };
-//     //std::all_of is a part of algorithm header, and it iterates through the given data structor and
-//     //checks for condition for each element of the structure
-//     std::cout << std::all_of(/* firs position interator */array.begin(), /* end pos iterator */array.end(),
-//     /* pred function that accepts an element and return bool */ isEven);
-//     return 0;
-// }
+int main(int argc, char const *argv[])
+{
+    std::vector<int> array{ 2, 4, 6 };
+    /// std::all_of is a part of algorithm header, and it iterates through the given data structor and
+    /// checks for condition for each element of the structure
+    std::cout << std::all_of(array.begin(), array.end(), isEven);
+    return 0;
+} */
 //*************naming a lambda***
 //*************storing lambda***
 /* int main(int argc, char const *argv[])
 {
-    //this version cannot have captures
+    /// this version cannot have captures
     int (*addNumbers1)(int, int){
         [](int a, int b)
         {
@@ -103,7 +102,7 @@ int main()
 
     std::cout << addNumbers1(10, 20) << std::endl;
 
-    //This version can have captures as well
+    /// This version can have captures as well
     std::function<int(int,int)> addNumbers2{
         [](int a, int b)
         {
@@ -113,7 +112,7 @@ int main()
 
     std::cout << addNumbers2(20, 30) << std::endl;
 
-    //This version of lambda can also have captures
+    /// This version of lambda can also have captures
     auto addNumbers3{
         [](int a, int b)
         {
@@ -146,8 +145,8 @@ int main()
 } */
 //*************using std::function for func param***
 //*************Generic lambda***
-//requires c++17 to build//
-/* int main()
+/* /// requires c++17 to build//
+int main()
 {
     std::array<const char *, 12> months{// pre-C++17 use std::array<const char*, 12>
                                         "January",
@@ -163,7 +162,7 @@ int main()
                                         "November",
                                         "December"};
 
-    // search for two months that start with the same letter.
+    /// search for two months that start with the same letter.
     const auto sameLetter{std::adjacent_find(months.begin(), months.end(),
                                              [](const auto &a, const auto &b)
                                              {
@@ -172,11 +171,11 @@ int main()
 
     if (sameLetter != months.end())
     {
-        // std::next returns the next iterator after sameLetter.
+        /// std::next returns the next iterator after sameLetter.
         std::cout << *sameLetter << " and " << *std::next(sameLetter) << " start with the same letter\n";
     }
 
-    //c-style strings are not always the first choice, therefore string_view is used whenever string fun are needed 
+    /// c-style strings are not always the first choice, therefore string_view is used whenever string fun are needed 
     const auto stringswithfive{std::count_if(months.begin(), months.end(),
                                              [](std::string_view str)   
                                              {
@@ -189,7 +188,7 @@ int main()
 //*************Generic lambda duplicates***
 /* int main(int argc, char const *argv[])
 {
-    //Here two version of lambda's are generated one for string and other for integer.
+    /// Here two version of lambda's are generated one for string and other for integer.
     auto print{
         [](auto value)
         {
@@ -211,10 +210,10 @@ int main()
 //*************Return type deductions***
 /* int main(int argc, char const *argv[])
 {
-    //here we rceieve error: inconsistent types ‘int’ and ‘double’ deduced for lambda return type
-    //In order to fix this we can do two things:
-    //1- explict casting of the return type to same types.
-    //2- explicitly define the return type of the lambda.
+    /// here we rceieve error: inconsistent types ‘int’ and ‘double’ deduced for lambda return type
+    /// In order to fix this we can do two things:
+    /// 1- explict casting of the return type to same types.
+    /// 2- explicitly define the return type of the lambda.
     auto divide {
         [](int x, int y, bool bInteger) -> double
         {
@@ -231,12 +230,12 @@ int main()
 } */
 //*************Return type deductions***
 //*************example of a library lambda***
-#include <array>
+/* #include <array>
 
-/* int main(int argc, char const *argv[])
+int main(int argc, char const *argv[])
 {
     std::array arr{13, 90, 99, 5, 40, 80};
-    std::sort(arr.begin(), arr.end(), std::greater{}); //curly braces are for instantiating object
+    std::sort(arr.begin(), arr.end(), std::less{}); //curly braces are for instantiating object
     
     for(int i: arr)
     {
@@ -289,10 +288,7 @@ int main()
       { "Fall", 288.0 },
       { "Winter", 263.0 } }
   };
-
-  /*
-   * Use std::sort here
-   */
+  
   std::sort(seasons.begin(), seasons.end(), [](const auto &a, const auto &b)
   {
     return (a.averageTemperature < b.averageTemperature);

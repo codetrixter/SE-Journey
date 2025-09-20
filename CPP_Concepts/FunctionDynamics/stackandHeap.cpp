@@ -5,10 +5,10 @@
  * 
  * The memory that a typical program uses is divide into segments:
  * 1- code/text segment which is the read only area of the memory where the compiled program sits.
- * 2- bss/uninitialized data segment, where 0 initialized global/static varibale reside.
+ * 2- bss/uninitialized data segment, where 0 initialized global/static variables reside.
  * 3- data/initialized segment, whereinitialized global/static variables reside.
  * 4- Heap is the part of the memory where dynamically allocated variables are stored.
- * 5- call stack, where function call, local variables and other finction related information is stored.
+ * 5- call stack, where function call, local variables and other function related information is stored.
  * -----------------------------------------------------------------------------------------------------------------
  * Advantages/Disadvantages of heap memory allocation:
  * 1- memory allocation in heap is slow.
@@ -81,7 +81,7 @@ int main() {
 }
 /* compiles to this:
 
-// main()'s function prologue (sets up the base pointer)
+/// main()'s function prologue (sets up the base pointer)
 push   rbp
 mov    rbp,rsp
 
@@ -89,7 +89,7 @@ mov    DWORD PTR [rbp-0xc],0x1 ; // x = 1 ; x is at rbp-0xc
 mov    DWORD PTR [rbp-0x8],0x2 ; // y = 2 ; y is at rbp-0x8
 mov    DWORD PTR [rbp-0x4],0x3 ; // z = 3 ; z is at rbp-0x4
 
-// main()'s function epilogue
+/// main()'s function epilogue
 mov    eax,0x0
 pop    rbp
 ret

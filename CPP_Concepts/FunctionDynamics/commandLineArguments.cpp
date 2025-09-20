@@ -20,16 +20,17 @@
 #include <iostream>
 #include <sstream>
 //****************basic command line example***
-/* int main(int argc, char const *argv[])
+ int main(int argc, char const *argv[])
 {
     for(int i = 0; i < argc; i++)
     {
         std::cout << i << ' ' << argv[i] << "\n";
     }
     return 0;
-} */
+} 
 //****************basic command line example***
 //****************Dealing with numerc arguments***
+/*
 int main(int argc, char* const argv[])
 {
     if (argc <= 1)
@@ -53,5 +54,5 @@ int main(int argc, char* const argv[])
 	std::cout << "Got integer: " << myint << '\n';
 
 	return 0;
-}
+}*/
 //****************Dealing with numerc arguments***
