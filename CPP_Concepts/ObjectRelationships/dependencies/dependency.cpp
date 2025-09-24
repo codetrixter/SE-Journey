@@ -12,6 +12,7 @@
  */
 #include <iostream>
 
+//Dependent class
 class Point
 {
 private:
@@ -27,6 +28,7 @@ public:
     friend std::ostream& operator<< (std::ostream& out, const Point& point); // Point has a dependency on std::ostream here
 };
 
+//Dependency implementation
 std::ostream& operator<< (std::ostream& out, const Point& point)
 {
     // Since operator<< is a friend of the Point class, we can access Point's members directly.

@@ -3,7 +3,7 @@
  * @author Abhishek
  * @brief Here we discuss about the usage of captures in lambda:
  * 1- These are used to give access to the surrounding variables of the lambda to to the lambda.
- * 2- The default values captured by the lambda are of constant type and cannot be changed. "mutable" keyword ca be used to make the captured
+ * 2- The default values captured by the lambda are of constant type and cannot be changed. "mutable" keyword can be used to make the captured
  * variables modifyable.
  * 3- capture by reference, once the lambda captures the variables by reference, they are no longer const.
  * 4- captures can be used to atke multiple captures or default captures, which takes all the member variables and feeds to the lambda either
@@ -27,7 +27,7 @@
 {
     std::array<std::string_view, 4> arr{"apple", "banana", "walnut", "lemon"};
 
-    // Ask the user what to search for.
+    /// Ask the user what to search for.
     std::cout << "search for: ";
 
     std::string search{};
@@ -35,7 +35,7 @@
 
     auto found{std::find_if(arr.begin(), arr.end(), [search](std::string_view str)
                             {
-                                // Search for @search rather than "nut".
+                                /// Search for @search rather than "nut".
                                 return (str.find(search) != std::string_view::npos); // Error: search not accessible in this scope
                             }
                         )};
@@ -59,9 +59,9 @@
 
     auto shoot
     {
-        //when we captue ammo a new const version is copied which cannot be updated hence the error.
-        //If we want to update.modify the captured variables then we need to mark the lambda with the mutable keyword like below.
-        //Since captured variables are the members of the lambda object hence they persist across the multiple calls to the lambda.
+        /// when we captue ammo a new const version is copied which cannot be updated hence the error.
+        /// If we want to update.modify the captured variables then we need to mark the lambda with the mutable keyword like below.
+        /// Since captured variables are the members of the lambda object hence they persist across the multiple calls to the lambda.
         [ammo]() mutable
         {
             --ammo;     //error: decrement of read-only variable ‘ammo’
@@ -83,7 +83,7 @@
 
     auto shoot
     {
-        //variable ammo is captured by reference, hence does not needs mutable keyword.
+        /// variable ammo is captured by reference, hence does not needs mutable keyword.
         [&ammo]()
         {
             --ammo;     //error: decrement of read-only variable ‘ammo’
@@ -113,12 +113,12 @@ int main()
   int comparisons{ 0 };
 
   std::sort(cars.begin(), cars.end(),
-    // Capture @comparisons by reference.
+    /// Capture @comparisons by reference.
     [&comparisons](const auto& a, const auto& b) {
-      // We captured comparisons by reference. We can modify it without "mutable".
+      /// We captured comparisons by reference. We can modify it without "mutable".
       ++comparisons;
 
-      // Sort the cars by their make.
+      /// Sort the cars by their make.
       return (a.make < b.make);
   });
 
@@ -149,47 +149,47 @@ int main()
                                  return (width * height == knownArea); // because they're mentioned here
                                }) };
 
-    // auto found{std::find_if(areas.begin(), areas.end(),
-    //                         [width, height, &length](int knownArea) { // captures width and height by value and length by reference
-    //                             ++length;
-    //                             return (width * height == knownArea);
-    //                         })};
+    /// auto found{std::find_if(areas.begin(), areas.end(),
+    ///                         [width, height, &length](int knownArea) { // captures width and height by value and length by reference
+    ///                             ++length;
+    ///                             return (width * height == knownArea);
+    ///                         })};
 
-    // auto found{std::find_if(areas.begin(), areas.end(),
-    //                         [=, &length](int knownArea) { // captures length by reference and everything else by value.
-    //                             ++length;
-    //                             return (width * height == knownArea);
-    //                         })};
+    /// auto found{std::find_if(areas.begin(), areas.end(),
+    ///                         [=, &length](int knownArea) { // captures length by reference and everything else by value.
+    ///                             ++length;
+    ///                             return (width * height == knownArea);
+    ///                         })};
 
-    // auto found{std::find_if(areas.begin(), areas.end(),
-    //                         [&, length](int knownArea) { // captures length by value and everything else by reference
-    //                             ++length;
-    //                             return (width * height == knownArea);
-    //                         })};
+    /// auto found{std::find_if(areas.begin(), areas.end(),
+    ///                         [&, length](int knownArea) { // captures length by value and everything else by reference
+    ///                             ++length;
+    ///                             return (width * height == knownArea);
+    ///                         })};
 
-    // auto found{std::find_if(areas.begin(), areas.end(),
-    //                         [&, &length](int knownArea) { // error
-    //                             ++length;
-    //                             return (width * height == knownArea);
-    //                         })};
+    /// auto found{std::find_if(areas.begin(), areas.end(),
+    ///                         [&, &length](int knownArea) { // error
+    ///                             ++length;
+    ///                             return (width * height == knownArea);
+    ///                        })};
 
-    // auto found{std::find_if(areas.begin(), areas.end(),
-    //                         [=, length](int knownArea) { // error
-    //                             ++length;
-    //                             return (width * height == knownArea);
-    //                         })};
+    /// auto found{std::find_if(areas.begin(), areas.end(),
+    ///                         [=, length](int knownArea) { // error
+    ///                             ++length;
+    ///                             return (width * height == knownArea);
+    ///                         })};
 
-    // auto found{std::find_if(areas.begin(), areas.end(),
-    //                         [width, height, &width](int knownArea) { // error since width appears twice
-    //                             ++length;
-    //                             return (width * height == knownArea);
-    //                         })};
+    /// auto found{std::find_if(areas.begin(), areas.end(),
+    ///                         [width, height, &width](int knownArea) { // error since width appears twice
+    ///                             ++length;
+    ///                            return (width * height == knownArea);
+    ///                        })};
 
-    //error: expected identifier before ‘]’ token
-    // auto found{std::find_if(areas.begin(), areas.end(),
-    //                         [width, height, &](int knownArea) { // error since default capture needs to the first element in the capture.
-    //                             return (width * height == knownArea);
-    //                         })};
+    /// error: expected identifier before ‘]’ token
+    /// auto found{std::find_if(areas.begin(), areas.end(),
+    ///                         [width, height, &](int knownArea) { // error since default capture needs to the first element in the capture.
+    ///                             return (width * height == knownArea);
+    ///                         })};
 
     if (found == areas.end())
     {
@@ -214,11 +214,11 @@ int main()
   std::cout << "Enter width and height: ";
   std::cin >> width >> height;
 
-  // We store areas, but the user entered width and height.
-  // We need to calculate the area before we can search for it.
+  /// We store areas, but the user entered width and height.
+  /// We need to calculate the area before we can search for it.
   auto found{ std::find_if(areas.begin(), areas.end(),
-                           // Declare a new variable that's visible only to the lambda.
-                           // The type of userArea is automatically deduced to int.
+                           /// Declare a new variable that's visible only to the lambda.
+                           /// The type of userArea is automatically deduced to int.
                            [userArea{ width * height }](int knownArea) {
                              return (userArea == knownArea);
                            }) };
@@ -239,8 +239,8 @@ int main()
 // returns a lambda
 /* auto makeWalrus(const std::string& name)
 {
-  // Capture name by reference and return the lambda.
-  // temporary string does when this function returns.
+  /// Capture name by reference and return the lambda.
+  /// temporary string does when this function returns.
   return [&]() {
     std::cout << "I am a walrus, my name is " << name << '\n'; // Undefined behavior
   };
@@ -248,17 +248,17 @@ int main()
 
 int main()
 {
-  // Create a new walrus whose name is Roofus.
-  // sayName is the lambda returned by makeWalrus.
+  /// Create a new walrus whose name is Roofus.
+  /// sayName is the lambda returned by makeWalrus.
   auto sayName{ makeWalrus("Roofus") };
 
-  // Call the lambda function that makeWalrus returned.
+  /// Call the lambda function that makeWalrus returned.
   sayName();
 
   return 0;
 } */
 //************ point-6***
-//************ point-7***
+//************ point-7-unintended copies of a lambda***
 /* #include <functional>
 
 void myInvoke(const std::function<void()>& fn)
@@ -275,9 +275,9 @@ int main(int argc, char const *argv[])
       std::cout << ++i << "\n";
     }
   };
-  //when the count is passed as an argument, function myInvoke creates a copy of count and makes changes to that copy, hence
-  //you see 1 printed 3 times.
-  //use std::ref in order to avoid such case.
+  /// when the count is passed as an argument, function myInvoke creates a copy of count and makes changes to that copy, hence
+  /// you see 1 printed 3 times.
+  /// use std::ref in order to avoid such case.
   myInvoke(std::ref(count));
   myInvoke(std::ref(count));
   myInvoke(std::ref(count));
@@ -306,13 +306,13 @@ int main()
   static const int h{ getValue() };
 
   [](){
-    // Try to use the variables without explicitly capturing them.
-    //a;  //No. a has automatic storage duration.
+    /// Try to use the variables without explicitly capturing them.
+    /// a;  //No. a has automatic storage duration.
     b;    
     c;
     d;
     e;
-    //f;  //No. f‘s value depends on getValue, which might require the program to run.
+    /// f;  //No. f‘s value depends on getValue, which might require the program to run.
     g;
     h;
     i;
@@ -323,7 +323,7 @@ int main()
 } */
 //************ QUIZ***
 //************ QUIZ***
-int main()
+/* int main()
 {
   std::string favoriteFruit{ "grapes" };
 
@@ -338,13 +338,12 @@ int main()
   printFavoriteFruit();
 
   return 0;
-}
+} */
 //************ QUIZ***
 //************ QUIZ***
 /**
  * @brief
- * We’re going to write a little game with square numbers (numbers which can be created by multiplying an integer with 
- * itself (1, 4, 9, 16, 25, …)).
+ * TODO:We’re going to write a little game with square numbers (numbers which can be created by multiplying an integer with itself (1, 4, 9, 16, 25, …)).
   Ask the user to input 2 numbers, the first is the square root of the number to start at, the second is the amount of numbers to generate.
    Generate a random integer from 2 to 4, and square numbers in the range that was chosen by the user. Multiply each square number 
    by the random number. You can assume that the user enters valid numbers.

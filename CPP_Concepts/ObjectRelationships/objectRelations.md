@@ -8,8 +8,6 @@
 
 4. [Dependencies](dependencies/dependency.cpp)
 
-5. [Containers](Container/myInt.hpp)
-
 6. [Initializer List](initializerList.cpp)
 
 # What type of relationship (composition, aggregation, association, or dependency) do the following describe?
@@ -23,7 +21,7 @@
 ## Ans: Aggregation -- When the Items are associated with the Adventurer, the Adventurer has-them. A sword being used by an adventurer can’t be used by anybody else at that time. But the Adventurer doesn’t manage the items existences.
 
 ## 1d) The Player prays at a Shrine to receive a new power.
-## Ans: Dependency -- They player depends on the shrine to receive the power, but does not have any long-term association with it.
+## Ans: Dependency -- The player depends on the shrine to receive the power, but does not have any long-term association with it.
 
 ## 1e) A Computer class that contains a CPU class. The CPU can be removed from the Computer and tested on its own.
 ## Ans: Aggregation -- The computer has a CPU, but does not manage its existence.

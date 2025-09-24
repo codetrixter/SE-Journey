@@ -13,9 +13,10 @@
    2- Direct association: When one class is associated with anothere via reference or pointer to the object.
 
    3- Indirect association: Whne the object of one is associated to another without reference or pointer to the object. 
-        This kind of indirect associationcanbe used when the object to ber accessed is not in main memory and needs to be fetched from some DB.
+        This kind of indirect associationcanbe used when the object to be accessed is not in main memory and needs to be fetched from some DB.
 
-   4- reflexive Associativity: TODO
+	@todo:
+   4- reflexive Associativity:
 --------------------------------------------------------------------------------------------------------------------------------------
     Property                                *   Composition           *     Aggregation           *      Association
 --------------------------------------------------------------------------------------------------------------------------------------
@@ -53,7 +54,7 @@ public:
 
 	void addPatient(Patient& patient);
 
-	// We'll implement this function below Patient since we need Patient to be defined at that point
+	/// We'll implement this function below Patient since we need Patient to be defined at that point
 	friend std::ostream& operator<<(std::ostream& out, const Doctor& doctor);
 
 	const std::string& getName() const { return m_name; }
@@ -65,8 +66,8 @@ private:
 	std::string m_name{};
 	std::vector<std::reference_wrapper<const Doctor>> m_doctor{}; // so that we can use it here
 
-	// We're going to make addDoctor private because we don't want the public to use it.
-	// They should use Doctor::addPatient() instead, which is publicly exposed
+	/// We're going to make addDoctor private because we don't want the public to use it.
+	/// They should use Doctor::addPatient() instead, which is publicly exposed
 	void addDoctor(const Doctor& doctor)
 	{
 		m_doctor.push_back(doctor);
@@ -78,21 +79,21 @@ public:
 	{
 	}
 
-	// We'll implement this function below to parallel operator<<(std::ostream&, const Doctor&)
+	/// We'll implement this function below to parallel operator<<(std::ostream&, const Doctor&)
 	friend std::ostream& operator<<(std::ostream& out, const Patient& patient);
 
 	const std::string& getName() const { return m_name; }
 
-	// We'll friend Doctor::addPatient() so it can access the private function Patient::addDoctor()
+	/// We'll friend Doctor::addPatient() so it can access the private function Patient::addDoctor()
 	friend void Doctor::addPatient(Patient& patient);
 };
 
 void Doctor::addPatient(Patient& patient)
 {
-	// Our doctor will add this patient
+	/// Our doctor will add this patient
 	m_patient.push_back(patient);
 
-	// and the patient will also add this doctor, called on Doctor class hence can use *this as parameter.
+	/// and the patient will also add this doctor, called on Doctor class hence can use *this as parameter.
 	patient.addDoctor(*this);
 }
 
@@ -128,7 +129,7 @@ std::ostream& operator<<(std::ostream& out, const Patient& patient)
 
 int main()
 {
-	// Create a Patient outside the scope of the Doctor
+	/// Create a Patient outside the scope of the Doctor
 	Patient dave{ "Dave" };
 	Patient frank{ "Frank" };
 	Patient betsy{ "Betsy" };
@@ -213,9 +214,9 @@ int main(int argc, char const *argv[])
     auto car = CarLot::getCarID(driver.getCarId());
 
     if(car)
-        std::cout << driver.getName() << "is driving a " << car->getName() << std::endl;
+        std::cout << driver.getName() << " is driving a " << car->getName() << std::endl;
     else
-        std::cout << "could not find the car in the lot" << std::end;
+        std::cout << "could not find the car in the lot" << std::endl;
     return 0;
 }
 //********************************In-Direct Association***
