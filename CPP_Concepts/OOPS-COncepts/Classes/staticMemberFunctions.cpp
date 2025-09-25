@@ -2,12 +2,15 @@
  * @file staticMemberFunctions.cpp
  * @author Abhishek
  * @brief static member functions important points:
- * 1- If we want to access private static data members of the class we can use static member functions.
+ * !1- If we want to access private static data members of the class we can use static member functions, otherwise with non static member fuctions we need instances of that class.
  * 2- static member funtions dont have hidden this pointer.
  * 3- static member functions can access staic members(data and functions) but cannot access non-static members, this
  * is because non-static members must belong to class.
- * 4- pure static classes acts as class decalred with global scope.
- * 5- C++ does not suppor static constructors unlike other programming languages where static ctors are allowed.
+ * 4- pure static classes acts as class declared with global scope, hence generally ot preferred, also they canot be cloned or assigned.
+ * 5- C++ does not support static constructors unlike other programming languages where static ctors are allowed.
+ * !6- static classes vs namespaces:
+ * ! - generally speaking there is almost no difference between static classes and namespaces, except the fact that classes provide access control and 
+ * !   namespaces do not.
  * @version 0.1
  * @date 2022-06-07
  * 
@@ -17,25 +20,25 @@
 #include <iostream>
 
 //*************using static member functions
-// class Something
-// {
-// private:
-//     static int s_value;
-// public:
-//     static int getValue() { return s_value; } // static member function
-// };
+/* class Something
+{
+private:
+    static int s_value;
+public:
+    static int getValue() { return s_value; } // static member function
+};
 
-// int Something::s_value{ 1 }; // initializer
+int Something::s_value{ 1 }; // initializer
 
-// int main()
-// {
-//     std::cout << Something::getValue() << '\n';
-// }
+int main()
+{
+    std::cout << Something::getValue() << '\n';
+} */
 //*********************
-//***************defining static members outside the class
-#include <iostream>
 
-class IDGenerator
+//***************defining static members outside the class
+
+/* class IDGenerator
 {
 private:
     static int s_nextID; // Here's the declaration for a static member
@@ -44,11 +47,11 @@ public:
      static int getNextID(); // Here's the declaration for a static function
 };
 
-// Here's the definition of the static member outside the class.  Note we don't use the static keyword here.
-// We'll start generating IDs at 1
+/// Here's the definition of the static member outside the class.  Note we don't use the static keyword here.
+/// We'll start generating IDs at 1
 int IDGenerator::s_nextID{ 1 };
 
-// Here's the definition of the static function outside of the class.  Note we don't use the static keyword here.
+/// Here's the definition of the static function outside of the class.  Note we don't use the static keyword here.
 int IDGenerator::getNextID() { return s_nextID++; }
 
 int main()
@@ -57,10 +60,12 @@ int main()
         std::cout << "The next ID is: " << IDGenerator::getNextID() << '\n';
 
     return 0;
-}
-//***************
+} */
+//************************
 
 //***************Different unique ways of initializing static members.
+/*
+/// In this way a static object is iitialized by the fuction call, in this cse it is a lambda function. 
 class MyClass
 {
 public:
@@ -69,7 +74,7 @@ public:
 
 std::vector<char> MyClass::s_mychars{
   []{ // The parameter list of lambdas without parameters can be omitted.
-      // Inside the lambda we can declare another vector and use a loop.
+      /// Inside the lambda we can declare another vector and use a loop.
       std::vector<char> v{};
 
       for (char ch{ 'a' }; ch <= 'z'; ++ch)
@@ -79,10 +84,10 @@ std::vector<char> MyClass::s_mychars{
 
       return v;
   }() // Call the lambda right away
-};
+}; */
 
-//****
-class MyClass
+//****************************************
+/* class MyClass
 {
 public:
 	static std::vector<char> s_mychars;
@@ -102,11 +107,11 @@ public:
 	} ;
 
 private:
-// we'll use this static object to ensure the init_static constructor is called.
+/// we'll use this static object to ensure the init_static constructor is called.
 	static init_static s_initializer; 
 };
-// define our static member variable
+/// define our static member variable
 std::vector<char> MyClass::s_mychars{}; 
-// define our static initializer, which will call the init_static constructor, which will initialize s_mychars
-MyClass::init_static MyClass::s_initializer{}; 
-//***************
+/// define our static initializer, which will call the init_static constructor, which will initialize s_mychars
+MyClass::init_static MyClass::s_initializer{};  */
+//***************************************

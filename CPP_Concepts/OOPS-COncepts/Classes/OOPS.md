@@ -12,14 +12,16 @@
 
 6. [COnst Class objects and member Functions](constClasAndFunctions.cpp)
 
-7. [Static Member Variables](staticMembers.cpp)
+7. [constexper aggregates and classes]() //TODO:
 
-8. [Static Member Functions](staticMemberFunctions.cpp)
+8. [Static Member Variables](staticMembers.cpp)
 
-9. [Friend Funcions and Classes](friendClassesAnsFunctions.cpp)
+9. [Static Member Functions](staticMemberFunctions.cpp) // TODO: Quiz
 
-10. [Anonymous Objects](anonymousObjects.cpp)
+10. [Friend Funcions and Classes](friendClassesAnsFunctions.cpp)
 
-11. [nested Types in Classes]->TBD
+11. [Anonymous Objects](anonymousObjects.cpp)
 
-12. [Timing Our Code](timerClass.cpp)
+12. [nested Types in Classes]() //TODO
+
+13. [Timing Our Code](timerClass.cpp)

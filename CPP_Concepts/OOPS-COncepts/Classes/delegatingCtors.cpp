@@ -14,7 +14,7 @@
  */
 
 #include <iostream>
-// //If there is a common code that is required to be executed by both ctors then
+/// If there is a common code that is required to be executed by both ctors then
 // class dummy
 // {
 //     public:
