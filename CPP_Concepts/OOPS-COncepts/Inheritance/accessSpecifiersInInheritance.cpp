@@ -19,13 +19,13 @@
 class Base
 {
     private:
-    int m_private;
+    int m_private {};
 
     public:
-    int m_public;
+    int m_public {};
 
     protected:
-    int m_protected;
+    int m_protected {};
 };
 
 class Derived: private Base
@@ -49,7 +49,7 @@ class Derived: private Base
 int main(int argc, char const *argv[])
 {
     Derived d;
-    d.m_public = 10;        //inaccessible withing this context
+    /// d.m_public = 10;        //inaccessible withing this context
     d.get();                //protected is alos not accessible, hence has to accessed via member function.
     return 0;
 }

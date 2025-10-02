@@ -35,10 +35,10 @@ class Derived: public Base
     Derived(): Base{}
     {}
 
-    //overriden method that is extending the functionality of the identify method of the base class.
+    /// overriden method that is extending the functionality of the identify method of the base class.
     void identify()
     {
-        //we can also call base class method to do that first and then this .
+        /// we can also call base class method to do that first and then this .
         Base::identify();
         std::cout << "This is derived class" << std::endl;
     }
@@ -111,7 +111,7 @@ public:
 	friend std::ostream& operator<< (std::ostream& out, const Derived& d)
 	{
 		out << "In Derived\n";
-		// static_cast Derived to a Base object, so we call the right version of operator<<
+		/// static_cast Derived to a Base object, so we call the right version of operator<<
 		out << static_cast<const Base&>(d);
 		return out;
 	}

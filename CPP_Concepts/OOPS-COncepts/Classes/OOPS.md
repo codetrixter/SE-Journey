@@ -20,8 +20,11 @@
 
 10. [Friend Funcions and Classes](friendClassesAnsFunctions.cpp)
 
-11. [Anonymous Objects](anonymousObjects.cpp)
+11. [Anonymous Objects or Temporary Class object](anonymousObjects.cpp)
 
 12. [nested Types in Classes]() //TODO
 
 13. [Timing Our Code](timerClass.cpp)
+
+//TODO:
+There Are other things to be covered gere as well.

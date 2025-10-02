@@ -1,5 +1,5 @@
 /**
- * @file friendClassesAnsFunctions.cpp
+ * @file friendClassesAndFunctions.cpp
  * @author Abhishek
  * @brief Here we discuss the details and intricacies of the friend keyword:
  * 1- friend functions can access private members of a class as though it was a member of that class, it doesn't matter which section of the class you
@@ -21,13 +21,13 @@
  */
 #include <iostream>
 
-//**************1***
+//**************1- Friend non member function***
 /* class Value
 {
     private:
     int m_value { 0 };
 
-    //make reset the friend of this class
+    /// make reset the friend of this class
     friend bool equality(const Value &v1, const Value &v2);
 
     public:
@@ -36,7 +36,7 @@
 };
 
 bool equality(const Value &v1, const Value &v2)
-{
+{ 
     return (v1.m_value == v2.m_value);
 }
 
@@ -45,12 +45,12 @@ int main(int argc, char const *argv[])
     Value v1{5};
     Value v2{6};
 
-    std::cout << std::boolalpha << equality(v1, v2);    
+    std::cout << std::boolalpha << equality(v1, v2);   /// friend function equality is able to access private members of class Value. 
     return 0;
 } */
 //**************1***
 
-//**************2***
+//**************2- Friend non memeber function ***
 /* class Humidity;
 
 class Temperature
@@ -81,7 +81,7 @@ public:
     friend void printWeather(const Temperature& temperature, const Humidity& humidity);
 };
 
-//this functions cann access private members from both the classes.
+/// this functions cann access private members from both the classes.
 void printWeather(const Temperature& temperature, const Humidity& humidity)
 {
     std::cout << "The temperature is " << temperature.m_temp <<
@@ -99,7 +99,7 @@ int main()
 } */
 //**************2***
 
-//**************3***
+//**************3- Making class as a friend***
 /* class Storage
 {
 private:
@@ -111,7 +111,7 @@ public:
     {
     }
 
-    // Make the Display class a friend of Storage
+    /// Make the Display class a friend of Storage
     friend class Display;
 };
 
@@ -140,13 +140,14 @@ int main()
     Storage storage{5, 6.7};
     Display display{false};
 
+    /// here Sisplay class has full access to Storage clases private members.
     display.displayItem(storage);
 
     return 0;
 } */
 //**************3***
 
-//**************4***
+//**************4-Making only member functionas a friend***
 /* class Storage; // forward declaration for class Storage
 
 class Display
@@ -174,11 +175,11 @@ public:
 	{
 	}
 
-	// Make the Display::displayItem member function a friend of the Storage class (requires seeing the full declaration of class Display, as above)
+	/// Make the Display::displayItem member function a friend of the Storage class (requires seeing the full declaration of class Display, as above)
 	friend void Display::displayItem(const Storage& storage);
 };
 
-// Now we can define Display::displayItem, which needs to have seen the full definition of class Storage
+/// Now we can define Display::displayItem, which needs to have seen the full definition of class Storage
 void Display::displayItem(const Storage& storage)
 {
 	if (m_displayIntFirst)
@@ -200,7 +201,7 @@ int main()
 
 //**************QUIZ***
 
-class Vector3d;
+/* class Vector3d;
 
 class Point3d
 {
@@ -263,5 +264,5 @@ int main()
 	p.print();
 
 	return 0;
-}
+} */
 //**************QUIZ***

@@ -14,7 +14,7 @@
 #include <iostream>
 #include <string>
 
-/* class Person
+class Person
 {
 private:
     std::string m_name;
@@ -31,7 +31,7 @@ public:
 
 };
 
-// BaseballPlayer publicly inheriting Person
+/// BaseballPlayer publicly inheriting Person
 class BaseballPlayer : public Person
 {
 private:
@@ -60,10 +60,10 @@ int main(int argc, char const *argv[])
     std::cout << "Number of Home runs made by the player : " << bp.getHomeRuns() << std::endl;
 
     return 0;
-} */
+}
 
 //***********Simple quiz***
-class Fruit
+/* class Fruit
 {
     private: 
     std::string m_Name;
@@ -132,6 +132,6 @@ int main(int argc, char const *argv[])
 	std::cout << b << '\n';
 
     return 0;
-}
+} */
 
 //***********Simple quiz***
