@@ -10,6 +10,6 @@
 
 5. [Hiding Inherited functionality](hidingInheritedFunctionality.cpp)
 
-6. [Multiple Inheritance](multipleInheritance.cpp)
+6. [Multiple Inheritance](multipleInheritance.cpp) -- CRTP(Curiously Recurring Template Pattern)
 
-7. [Comprehensive QUIZ]->TBD
+7. [Comprehensive QUIZ](Quiz.cpp) --//TODO: complete game and extend to add potions and modularity

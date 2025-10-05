@@ -37,14 +37,14 @@ class Derived: public Base
     Derived(int val): Base{val}
     {}
 
-    //printValue was protected member but we changed it to public by using 
+    /// printValue was protected member but we changed it to public by using 
     using Base::printValue;  
 };
 
 int main(int argc, char const *argv[])
 {
     Derived d{ 10};
-    //This code works since the printValue is public.
+    /// This code works since the printValue is public.
     d.printValue();
     return 0;
 } */
@@ -54,21 +54,21 @@ int main(int argc, char const *argv[])
 //*************point - 2 -- a ***
 /* class Base
 {
-    private:
+    public:
     int m_value {};
 };
 
 class Derived: public Base
 {
     private:
-    //make Base classes m_value public as private in derived class
+    /// make Base classes m_value public as private in derived class
     using Base::m_value;
 
-    public::
+    public:
     Derived(int value)
-    //we can't initialize base class memeber 
+    /// we can't initialize base class memeber 
     {
-        //But we can assign value to it
+        /// But we can assign value to it
         m_value = value;
     }
 };
@@ -76,8 +76,8 @@ class Derived: public Base
 int main(int argc, char const *argv[])
 {
     Derived d{10};
-    //won't work since this is converted to private in derived class
-    //std::cout << d.m_value << std::endl;
+    /// won't work since this is converted to private in derived class
+    /// std::cout << d.m_value << std::endl;
     return 0;
 } */
 
@@ -114,13 +114,13 @@ int main()
 {
 	Derived derived { 7 };
 
-	// The following won't work because getValue() has been deleted!
-	//std::cout << derived.getValue();
+	/// The following won't work because getValue() has been deleted!
+	/// std::cout << derived.getValue();
 
-    //base version of the getValue can be called like below
+    /// base version of the getValue can be called like below
     std::cout << derived.Base::getValue() << std::endl;
 
-    //another way to call Vase version of getValue
+    /// another way to call Vase version of getValue
     std::cout << static_cast<Base&>(derived).getValue() << std::endl;
 
 	return 0;
