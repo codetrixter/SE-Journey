@@ -16,7 +16,7 @@
 #include <numeric>
 #include <limits>
 //********************operator overloading of istream and ostream***
-/* class Point
+class Point
 {
 private:
     double m_x{};
@@ -37,38 +37,42 @@ public:
     friend std::istream& operator>>(std::istream& in, Point& p);
 };
 
-std::ostream& operator<<(std::ostream& out, const Point& p)
-{
-    // return std::ostream so we can chain calls to operator<<
-    return (out << "Point(" << p.getX() << ", " << p.getY() << ", " << p.getZ() << ")");
-}
+/// std::ostream& operator<<(std::ostream& out, const Point& p)
+/// {
+     /// return std::ostream so we can chain calls to operator<<
+///     return (out << "Point(" << p.getX() << ", " << p.getY() << ", " << p.getZ() << ")");
+/// }
 
 std::istream& operator>>(std::istream& in, Point& p)
 {
-    // Since operator<< is a friend of the Point class, we can access Point's members directly.
+    /// Since operator<< is a friend of the Point class, we can access Point's members directly.
     return in >> p.m_x >> p.m_y >> p.m_z;
+}
+
+std::ostream& operator<<(std::ostream& out, const Point& p)
+{
+    return (out << "Point(" << p.getX() << ", " << p.getY() << ", " << p.getZ() << ")");
 }
 
 int main(int argc, char const *argv[])
 {
-    // Point p1{ 10, 20, 30 };
+    /// Point p1{ 10, 20, 30 };
     Point p1{};
     Point p2{ 40, 50, 60 };
 
     std::cout << "Enter the Points :" << std::endl;
     std::cin >> p1;
-    //
-    // @brief By returning the out parameter as the return type instead, (std::cout<< p1) returns std::cout. 
-    // Then our partially evaluated expression becomes: std::cout << p2; which becomes: std::cout << std::endl; 
-    // which then gets evaluated itself!
-    //
+    
+    /// @brief By returning the out parameter as the return type instead, (std::cout<< p1) returns std::cout. 
+    /// Then our partially evaluated expression becomes: std::cout << p2; which becomes: std::cout << std::endl; 
+    /// which then gets evaluated itself!
     
     std::cout << p1 << " " << p2 << std::endl;
     return 0;
-} */
+}
 //********************operator overloading of istream and ostream***
 //********************QUIZ***
-class Fraction
+/* class Fraction
 {
 private:
 	int m_numerator{};
@@ -78,8 +82,8 @@ public:
 	Fraction(int numerator=0, int denominator=1):
 		m_numerator{numerator}, m_denominator{denominator}
 	{
-		// We put reduce() in the constructor to ensure any new fractions we make get reduced!
-		// Any fractions that are overwritten will need to be re-reduced
+		/// We put reduce() in the constructor to ensure any new fractions we make get reduced!
+		/// Any fractions that are overwritten will need to be re-reduced
 		reduce();
 	}
 
@@ -126,14 +130,14 @@ std::istream& operator>>(std::istream& in, Fraction& frac)
     char ch{};
     in >> frac.m_numerator;
 
-    // Ignore the '/' separator, how is this done need to check
-	//in.ignore(std::numeric_limits<std::streamsize>::max(), '/');
-    //alternative to above this is easy to follow.
+    /// Ignore the '/' separator, how is this done need to check
+	/// in.ignore(std::numeric_limits<std::streamsize>::max(), '/');
+    /// alternative to above this is easy to follow.
     in >> ch;
 
     in >> frac.m_denominator;
 
-    //simplifying the fractions ater overwriting the values
+    /// simplifying the fractions ater overwriting the values
     frac.reduce();
     return  in;
 }
@@ -156,5 +160,5 @@ int main()
 	std::cout << f1 << " * " << f2 << " is " << f1 * f2 << '\n'; // note: The result of f1 * f2 is an r-value
 
 	return 0;
-}
+} */
 //********************QUIZ***

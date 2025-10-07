@@ -27,9 +27,9 @@ class Cents
     }
 };
 
-//// Need to explicitly provide prototype for operator+ so uses of operator+ in other files know 
-//this overload exists
-//Cents operator+(const Cents& lhs, const Cents& rhs);
+/// Need to explicitly provide prototype for operator+ so uses of operator+ in other files know 
+/// this overload exists
+/// Cents operator+(const Cents& lhs, const Cents& rhs);
 
 Cents operator+(const Cents& lhs, const Cents& rhs)
 {
@@ -38,12 +38,24 @@ Cents operator+(const Cents& lhs, const Cents& rhs)
     return Cents{ lhs.getCents() + rhs.getCents() };
 }
 
+Cents operator +(const Cents& lhs, const int& rhs)
+{
+    return { lhs.getCents() + rhs };
+}
+
+Cents operator +(const int& lhs, const Cents& rhs)
+{
+    return { lhs + rhs.getCents() };
+}
+
 int main(int argc, char const *argv[])
 {
     Cents someChange{10};
     Cents otherChange{20};
     Cents extraChange{ someChange + otherChange };
 
-    std::cout << extraChange.getCents();
+    Cents plus1 { extraChange +2 };
+    std::cout << extraChange.getCents() << "\n";
+    std::cout << plus1.getCents();
     return 0;
 }

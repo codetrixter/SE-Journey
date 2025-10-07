@@ -68,7 +68,7 @@ Digit& Digit::operator--()
 // scope dies. 
 Digit Digit::operator++(int)    
 {                                   
-    // Create a temporary variable with our current digit
+    // Create a temporary variable with our current digit, shallow copy is done here
     Digit temp{*this};
 
     // Use prefix operator to increment this digit
@@ -83,7 +83,7 @@ Digit Digit::operator++(int)
 // scope dies. 
 Digit Digit::operator--(int)
 {
-    // Create a temporary variable with our current digit
+    // Create a temporary variable with our current digit, shallow copy is done here
     Digit temp{*this};
 
     // Use prefix operator to decrement this digit

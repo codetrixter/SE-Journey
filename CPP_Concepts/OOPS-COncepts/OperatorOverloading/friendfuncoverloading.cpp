@@ -1,7 +1,7 @@
 /**
  * @file friendfuncoverloading.cpp
- * @author Abhihsek
- * @brief Here we discuss about the friend functionway of overloading operators:
+ * @author Abhishek
+ * @brief Here we discuss about the friend function way of overloading operators:
  * 1- Overlaoding arithmetic operators to work with user defned types.
  * 1- Overloading operators of diferent types:
  *  a. In this case we generally need to write two versions of the operator overloaded function.
@@ -31,11 +31,11 @@
     }
 };
 
-// note: this function is not a member function!
+/// note: this function is not a member function!
 Cents operator+(const Cents& lhsVal, const Cents& rhsVal)
 {
-    // use the Cents constructor and operator+(int, int)
-	// we can access m_cents directly because this is a friend function
+    /// use the Cents constructor and operator+(int, int)
+	/// we can access m_cents directly because this is a friend function
     return Cents{ lhsVal.m_cents + rhsVal.m_cents };
 }
 
@@ -68,18 +68,18 @@ int main(int argc, char const *argv[])
     }
 };
 
-// note: this function is not a member function!
+/// note: this function is not a member function!
 Cents operator+(const Cents& lhsVal, const int rhsVal)
 {
-    // use the Cents constructor and operator+(int, int)
-	// we can access m_cents directly because this is a friend function
+    /// use the Cents constructor and operator+(int, int)
+	/// we can access m_cents directly because this is a friend function
     return Cents{ lhsVal.m_cents + rhsVal };
 }
 
 Cents operator+(const int lhsVal, const Cents& rhsVal)
 {
-    // use the Cents constructor and operator+(int, int)
-	// we can access m_cents directly because this is a friend function
+    /// use the Cents constructor and operator+(int, int)
+	/// we can access m_cents directly because this is a friend function
     return Cents{ lhsVal + rhsVal.m_cents };
 }
 
@@ -132,7 +132,7 @@ MinMax operator+(const MinMax& m, int value)
 
 MinMax operator+(int value, const MinMax& m)
 {   
-    // call operator+(MinMax, int)
+    /// call operator+(MinMax, int)
     return { m + value };
 }
 
@@ -166,10 +166,10 @@ int main()
         std::cout << numerator << "/" << denominator << std::endl;
     }
 
-    // friend Fraction operator/(const int& lhs, const int& rhs)
-    // {
-    //     return Fraction{ lhs, rhs };
-    // }
+    /// friend Fraction operator/(const int& lhs, const int& rhs)
+    /// {
+    ///     return Fraction{ lhs, rhs };
+    /// }
 };
 int main()
 {
@@ -207,16 +207,16 @@ int main()
         return { num, den };
     }
 
-    // friend Fraction operator*(const Fraction& lhs, const int& rhs)
-    // {
-    //     int num{ lhs.numerator*rhs };
-    //     return { num, lhs.denominator };
-    // }
-    
-    // friend Fraction operator*(const int& lhs, const Fraction& rhs)
-    // {
-    //     return {rhs*lhs};
-    // }
+    friend Fraction operator*(const Fraction& lhs, const int& rhs)
+    {
+        int num{ lhs.numerator*rhs };
+        return { num, lhs.denominator };
+    }
+
+    friend Fraction operator*(const int& lhs, const Fraction& rhs)
+    {
+        return {rhs*lhs};
+    }
 
     void reduce()
 	{
@@ -238,26 +238,27 @@ int main()
 
     Fraction f3{ f1 * f2 };
     f3.print();
-    /**
-     * @brief This error will come if we remove the const references from operator overloaded functions
-     * error: cannot bind non-const lvalue reference of type ‘Fraction&’ to an rvalue of type ‘Fraction’
-  230 |     Fraction f4{ f1 * 2 };
-     */
+    
+    /// @brief This error will come if we remove the const references from operator overloaded functions
+    /// error: cannot bind non-const lvalue reference of type ‘Fraction&’ to an rvalue of type ‘Fraction’
+    /// Fraction f4{ f1 * 2 };
+     
     Fraction f4{ f1 * 2 };
     f4.print();
 
-    //This works even after commenting the specific operator overloaded function.
-    //because f5{ 2 * f2 } uses Fraction(int, int) constructor to created new Fraction object and then uses it to 
-    //calculate the multiplication with f2. Since this requires an extra conversion hence it is slower.
+    /// @brief This works even after commenting the specific operator overloaded function.
+    /// because f5{ 2 * f2 } uses Fraction(int, int) constructor to created new Fraction object and then uses it to 
+    /// calculate the multiplication with f2. Since this requires an extra conversion hence it is slower.
+
     Fraction f5{ 2 * f2 };
     f5.print();
 
-    /**
-     * @brief This line wont compile if we dont use const version of the operator overloading, since we are passing 
-        temporary fraction objects and non-cont references cannot bind to temporaries
-     * error: cannot bind non-const lvalue reference of type ‘Fraction&’ to an rvalue of type ‘Fraction’
-  239 |     Fraction f6{ Fraction{1, 2} * Fraction{2, 3} * Fraction{3, 4} };
-     */
+    /// @brief This line wont compile if we dont use const version of the operator overloading, since we are passing 
+    /// temporary fraction objects and non-cont references cannot bind to temporaries
+    /// error: cannot bind non-const lvalue reference of type ‘Fraction&’ to an rvalue of type ‘Fraction’
+
+    /// Fraction f6{ Fraction{1, 2} * Fraction{2, 3} * Fraction{3, 4} };
+     
     Fraction f6{ Fraction{1, 2} * Fraction{2, 3} * Fraction{3, 4} };
     f6.print();
 

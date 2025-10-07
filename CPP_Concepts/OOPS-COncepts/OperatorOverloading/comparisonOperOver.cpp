@@ -28,21 +28,37 @@ public:
     {
     }
 
-    friend bool operator== (const Car& c1, const Car& c2);
-    friend bool operator!= (const Car& c1, const Car& c2);
+    // friend bool operator== (const Car& c1, const Car& c2);
+    // friend bool operator!= (const Car& c1, const Car& c2);
+
+    /// member operator overloading
+    bool operator== (const Car& c2);
+    bool operator!= (const Car& c2);
 };
 
-bool operator== (const Car& c1, const Car& c2)
+bool Car::operator ==(const Car& c2)
 {
-    return (c1.m_make == c2.m_make &&
-            c1.m_model == c2.m_model);
+    return { m_make == c2.m_make &&
+            m_model == c2.m_model }; 
 }
 
-bool operator!= (const Car& c1, const Car& c2)
+bool Car::operator !=(const Car& c2)
 {
-    return (c1.m_make != c2.m_make ||
-            c1.m_model != c2.m_model);
+    return { m_make != c2.m_make &&
+            m_model != c2.m_model }; 
 }
+
+// bool operator== (const Car& c1, const Car& c2)
+// {
+//     return { c1.m_make == c2.m_make &&
+//             c1.m_model == c2.m_model };
+// }
+
+// bool operator!= (const Car& c1, const Car& c2)
+// {
+//     return { c1.m_make != c2.m_make ||
+//             c1.m_model != c2.m_model };
+// }
 
 int main()
 {
@@ -189,7 +205,7 @@ int main(int argc, char const *argv[])
 } */
 //**********************Point-3***
 //**********************QUIZ***
-#include <numeric> // for std::gcd
+//#include <numeric> // for std::gcd
 
 /* class Fraction
 {
@@ -201,8 +217,8 @@ public:
 	Fraction(int numerator = 0, int denominator = 1) :
 		m_numerator{ numerator }, m_denominator{ denominator }
 	{
-		// We put reduce() in the constructor to ensure any new fractions we make get reduced!
-		// Any fractions that are overwritten will need to be re-reduced
+		/// We put reduce() in the constructor to ensure any new fractions we make get reduced!
+		/// Any fractions that are overwritten will need to be re-reduced
 		reduce();
 	}
 
@@ -218,7 +234,7 @@ public:
 
 	friend std::ostream& operator<<(std::ostream& out, const Fraction& f1);
     
-    //comparison operators
+    /// comparison operators
     friend bool operator== (const Fraction& f1, const Fraction& f2);
     friend bool operator!= (const Fraction& f1, const Fraction& f2);
     friend bool operator< (const Fraction& f1, const Fraction& f2);
@@ -273,7 +289,7 @@ int main()
 } */
 //**********************QUIZ***
 //**********************QUIZ***
-#include <algorithm>
+/* #include <algorithm>
 #include <vector>
 class Car
 {
@@ -320,5 +336,5 @@ int main()
     std::cout << car << '\n'; // requires an overloaded operator<<
 
   return 0;
-}
+} */
 //**********************QUIZ***

@@ -38,7 +38,7 @@ public:
     int getCents() const { return m_cents; }
 };
 
-//here call to operator+(int value)-> operator(&Cents, int value), where Cents is the hidden this pointer.
+// here call to operator+(int value)-> operator(&Cents, int value), where Cents is the hidden this pointer.
 Cents Cents::operator+(int value)
 {
     return Cents(m_cents + value);
