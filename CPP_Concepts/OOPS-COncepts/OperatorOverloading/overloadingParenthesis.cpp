@@ -40,10 +40,10 @@ double Matrix::operator()(int row, int col) const
     return m_data[row][col];
 }
 
-//We don't usually use this for such purposes, since it is confusing.
+/// We don't usually use this for such purposes, since it is confusing.
 void Matrix::operator()()
 {
-    // reset all elements of the matrix to 0.0
+    /// reset all elements of the matrix to 0.0
     for (int row{ 0 }; row < 4; ++row)
     {
         for (int col{ 0 }; col < 4; ++col)
@@ -58,13 +58,16 @@ int main(int argc, char const *argv[])
     Matrix matrix{};
     matrix(1, 2) = 4.5;
     std::cout << matrix(1,2);
-    matrix();
+    matrix(); // erase the matrix
     std::cout << matrix(1, 2);
     return 0;
 } */
 //***********************Matrix***
 //***********************Functor***
-/* class Accumulator
+/* 
+/// This is just an example to show the functioning of the functor, esle these are usually used in complex 
+/// scenarios for full benefits.
+class Accumulator
 {
 private:
     int m_counter{ 0 };
@@ -79,36 +82,51 @@ int main()
     std::cout << acc(10) << '\n'; // prints 10
     std::cout << acc(20) << '\n'; // prints 30
 
+    Accumulator acc2{};
+    std::cout << acc2(35) << "\n";  // 35
+    std::cout << acc2(45) << "\n";  // 80
+
     return 0;
 } */
 //***********************Functor***
 //***********************QUIZ***
-#include <string>
+/* #include <string>
+#include <string_view>
+
 class MyString
 {
 private:
 	std::string m_string{};
 
 public:
-	MyString(const std::string& string = {})
-		:m_string{ string }
+	MyString(std::string_view str = {})
+		:m_string{ str }
 	{
 	}
 
-	std::string operator()(int start, int length)
+	/// @brief  Here string_view is used as a return type since using MyString class object creates too many copies.
+	/// @param start 
+	/// @param length 
+	/// @return string_view object
+	std::string_view operator()(int start, int length)
 	{
 		assert(start >= 0);
 		assert(start + length <= static_cast<int>(m_string.length()) && "MyString::operator(int, int): Substring is out of range");
 
-		return m_string.substr(start, length);
+		return std::string_view{m_string}.substr(start, length);
 	}
+
+    friend std::ostream& operator<< (std::ostream& out, const MyString& str)
+    {
+        return out << str.m_string;
+    }
 };
 
 int main()
 {
-	MyString string{ "Hello, world!" };
-	std::cout << string(7, 5) << '\n'; // start at index 7 and return 5 characters
+	MyString str{ "Hello, world!" };
+	std::cout << str(7, 5) << '\n'; // start at index 7 and return 5 characters
 
 	return 0;
-}
+} */
 //***********************QUIZ***

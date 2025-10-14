@@ -13,15 +13,15 @@
  */
 #include <cassert>
 #include <iostream>
-/* 
-class Fraction
+
+/* class Fraction
 {
 private:
     int m_numerator;
     int m_denominator;
 
 public:
-    // Default constructor
+    /// Default constructor
     Fraction(int numerator=0, int denominator=1)
         : m_numerator(numerator), m_denominator(denominator)
     {
@@ -39,9 +39,9 @@ std::ostream& operator<<(std::ostream& out, const Fraction& f1)
 
 int main(int argc, char const *argv[])
 {
-    //This uses copy initialization in a similar way as it is used in below condition, where elision happens.
+    /// This uses copy initialization in a similar way as it is used in below condition, where elision happens.
     Fraction six = Fraction(6);
-    //Fraction six(Fraction(6));
+    /// Fraction six(Fraction(6));
     std::cout << six;
     return 0;
 } */
@@ -53,18 +53,18 @@ private:
 	int m_denominator;
 
 public:
-    // Default constructor
+    /// Default constructor
     Fraction(int numerator=0, int denominator=1)
         : m_numerator(numerator), m_denominator(denominator)
     {
         assert(denominator != 0);
     }
 
-        // Copy constructor
+        /// Copy constructor
 	Fraction(const Fraction& copy) :
 		m_numerator(copy.m_numerator), m_denominator(copy.m_denominator)
 	{
-		// no need to check for a denominator of 0 here since copy must already be a valid Fraction
+		/// no need to check for a denominator of 0 here since copy must already be a valid Fraction
 		std::cout << "Copy constructor called\n"; // just to prove it works
 	}
 
@@ -109,18 +109,18 @@ public:
 
 Something foo()
 {
-	return Something(); // copy constructor normally called here
+	return Something(); // copy constructor normally called here, while returning the copy of Something
 }
 Something goo()
 {
 	Something s;
 	return s; // copy constructor normally called here
 }
-/**
- * @brief Even though copy constructor is called here at 4 places but all those are elised
- * 
- * @return int error code
- */
+/// 
+/// @brief Even though copy constructor is called here at 4 places but all those are elised
+/// 
+/// @return int error code
+/// 
 
 int main()
 {

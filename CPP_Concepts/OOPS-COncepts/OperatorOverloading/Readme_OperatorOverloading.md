@@ -18,13 +18,13 @@
 
 9. [Overloading subscript operator](subScriptOverloading.cpp)
 
-10. [Overloading parenthesis](overloadingParenthesis.cpp)->moderate understanding
+10. [Overloading parenthesis](overloadingParenthesis.cpp)
 
-11. [Overloading typecasts](typecastOverloading.cpp)->moderate understanding
+11. [Overloading typecasts](typecastOverloading.cpp)
 
 12. [The Copy Constructor](copyConstructor.cpp)
 
-13. [Copy Initialization](copyInitialization.cpp)->moderate understanding 
+13. [Copy Initialization](copyInitialization.cpp)
 
 14. [Converting Constructors, explicit and delete](COnvertingCtors-Explicit.cpp)
 

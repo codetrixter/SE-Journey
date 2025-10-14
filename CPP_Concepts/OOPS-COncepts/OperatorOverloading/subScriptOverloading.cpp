@@ -11,8 +11,9 @@
  * 
  * 4- pointers to objects with overloaded operator([]).
  * 5- function parameter for overloaded'[]' doesn't need to be integer.
- * 
- * ***NOTE: This operator overlaoding is used in string class for accessing each character.
+    
+ //!NOTE: C++23 adds support for overloading operator[] with multiple subscripts  
+ //!NOTE: This operator overlaoding is used in string class for accessing each character.
  * @version 0.1
  * @date 2022-08-14
  * 
@@ -27,11 +28,11 @@
 /* class IntList
 {
     private:
-    int m_list[10]{};
+    int m_list[10]{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
     public:
     int& operator[] (int index); 
-    int operator[] (int index) const; // could also return const int& if returning a non-fundamental type
+    const int& operator[] (int index) const; // could also return const int& if returning a non-fundamental type
 };
 
 /// @brief The reason why the retun type is reference is because the object while using subscript operator is on the
@@ -45,7 +46,7 @@ int& IntList::operator[] (int i) // for non-const objects: can be used for assig
     return m_list[i];
 }
 
-int IntList::operator[] (int i) const // for const objects: can only be used for access
+const int& IntList::operator[] (int i) const // for const objects: can only be used for access
 {
     return m_list[i];
 }
@@ -63,6 +64,78 @@ int main(int argc, char const *argv[])
     return 0;
 } */
 //*************************Point-1, 2 and 3***
+//**********************Addressing Redundancy in const and non-const overloads**************** */
+///! If the const and non-const sub-script overloads contain a lot of redundant code then we can internally 
+///! call const overload fron non-const overload function like below:
+///! 1- Implement the logic for const version of the function. 
+///! 2- Have the non-const function call the const function and use const_cast to remove the const.
+
+/* #include <utility>  //for std::as_const
+
+class IntList
+{
+    private:
+    int m_list[10]{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+    public:
+    int& operator[] (int index)
+    {
+        /// use std::as_const to get a const version of `this` (as a reference)
+        /// so we can call the const version of operator[]
+        /// then const_cast to discard the const on the returned reference
+        return const_cast<int&>(std::as_const(*this)[index]);
+    } 
+
+    const int& operator[] (int index) const
+    {
+        return m_list[index];
+    } // could also return const int& if returning a non-fundamental type
+};
+
+int main()
+{
+    IntList list{};
+    list[2] = 3; // okay: calls non-const version of operator[]
+    std::cout << list[2] << '\n';
+
+    const IntList clist{};
+    // clist[2] = 3; // compile error: clist[2] returns const reference, which we can't assign to
+    std::cout << clist[2] << '\n';
+
+    return 0;
+} */
+
+//**********************Addressing Redundancy in const and non-const overloads**************** */
+//**********************Addressing Redundancy in const and non-const overloads in C++23**************** */
+
+/* class IntList
+{
+    private:
+    int m_list[10]{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+    public:
+    /// Use an explicit object parameter (self) and auto&& to differentiate const vs non-const
+    auto&& operator[](this auto&& self, int index)
+    {
+        // Complex code goes here
+        return self.m_list[index];
+    }
+};
+
+int main()
+{
+    IntList list{};
+    list[2] = 3; // okay: calls non-const version of operator[]
+    std::cout << list[2] << '\n';
+
+    const IntList clist{};
+    // clist[2] = 3; // compile error: clist[2] returns const reference, which we can't assign to
+    std::cout << clist[2] << '\n';
+
+    return 0;
+} */
+//**********************Addressing Redundancy in const and non-const overloads in C++23**************** */
+
 //**********************************Point-4***
 /* class IntList
 {
@@ -124,7 +197,7 @@ int main()
 } */
 //**********************************Point-5***
 //**********************************QUIZ-1***
-#include <string>
+/* #include <string>
 #include <algorithm>
 #include <vector>
 
@@ -207,6 +280,6 @@ int main()
 	std::cout << "Frank has a grade of " << gradeFrank << '\n';
 
 	return 0;
-}
+} */
 //**********************************QUIZ-1***
 

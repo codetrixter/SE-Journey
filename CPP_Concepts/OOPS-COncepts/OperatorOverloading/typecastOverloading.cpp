@@ -1,7 +1,8 @@
 /**
  * @file typecastOverloading.cpp
  * @author Abhishek
- * @brief Here we see how type casts can be overloaded to support castinf one user defined type to another fundamental or user defined type:
+ * @brief Here we see how type casts can be overloaded to support casting one user defined type to another 
+ * fundamental or user defined type:
  * 
  * @version 0.1
  * @date 2022-08-17
@@ -23,7 +24,7 @@ public:
     {
     }
 
-    // Overloaded int cast
+    /// Overloaded int cast
     operator int() const { return m_cents; }
 
     int getCents() const { return m_cents; }
@@ -44,32 +45,43 @@ int main()
 class Cents
 {
 private:
-    int m_cents;
+    double m_cents;
 public:
-    Cents(int cents=0)
+    Cents(double cents=0)
         : m_cents{ cents }
     {
     }
 
-    // Overloaded int cast
-    operator int() const { return m_cents; }
+    /// Overloaded double cast
+    operator double() const { return m_cents; }
 
-    int getCents() const { return m_cents; }
+    double getCents() const { return m_cents; }
     void setCents(int cents) { m_cents = cents; }
 };
 
 class Dollars
 {
 private:
-    int m_dollars;
+    double m_dollars;
 public:
-    Dollars(int dollars=0)
+    Dollars(double dollars=0)
         : m_dollars{ dollars }
     {
     }
 
-    // Allow us to convert Dollars into Cents
-    operator Cents() const { return Cents { m_dollars * 100 }; }
+    /// @brief  allows us to covert cents to dollars
+    /// @param cent 
+    explicit Dollars(const Cents& cent):
+    m_dollars { cent.getCents()/100 }
+    {}
+
+    operator double() const
+    {
+        return m_dollars;
+    }
+
+    /// Allow us to convert Dollars into Cents
+    explicit operator Cents() const { return Cents { m_dollars * 100 }; }
 };
 
 void printCents(Cents cents)
@@ -80,9 +92,13 @@ void printCents(Cents cents)
 int main()
 {
     Dollars dollars{ 9 };
-    //printCents(dollars); // dollars will be implicitly cast to a Cents here
-    std::cout << static_cast<Cents>(dollars);   //we can cast explicitly as well
-    std::cout << '\n';
+    Cents cent{ 25 };
+    /// printCents(dollars); // could not convert dollars to Dollars, since typecast opertor is marked as explicit
+    std::cout << static_cast<Cents>(dollars) << "\n";   //we can cast explicitly as well
+
+    /// Converting Cents to Dollars
+    /// we created a converting constructor in Dollars class to avoid curcular dependency od dollars into cents class
+    std::cout << static_cast<Dollars>(cent) << "\n";
 
     return 0;
 }

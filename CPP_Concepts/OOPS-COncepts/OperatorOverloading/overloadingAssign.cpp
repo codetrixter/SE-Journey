@@ -21,22 +21,22 @@ private:
 	int m_denominator { 1 };
 
 public:
-	// Default constructor
+	/// Default constructor
 	Fraction(int numerator = 0, int denominator = 1 )
 		: m_numerator { numerator }, m_denominator { denominator }
 	{
 		assert(denominator != 0);
 	}
 
-	// Copy constructor
+	/// Copy constructor
 	Fraction(const Fraction& copy)
 		: m_numerator { copy.m_numerator }, m_denominator { copy.m_denominator }
 	{
-		// no need to check for a denominator of 0 here since copy must already be a valid Fraction
+		/// no need to check for a denominator of 0 here since copy must already be a valid Fraction
 		std::cout << "Copy constructor called\n"; // just to prove it works
 	}
 
-	// Overloaded assignment
+	/// Overloaded assignment
 	Fraction& operator= (const Fraction& fraction);
 
 	friend std::ostream& operator<<(std::ostream& out, const Fraction& f1);
@@ -49,14 +49,14 @@ std::ostream& operator<<(std::ostream& out, const Fraction& f1)
 	return out;
 }
 
-// A simplistic implementation of operator= (see better implementation below)
+/// A simplistic implementation of operator= (see better implementation below)
 Fraction& Fraction::operator= (const Fraction& fraction)
 {
-    // do the copy
+    /// do the copy
     m_numerator = fraction.m_numerator;
     m_denominator = fraction.m_denominator;
 
-    // return the existing object so we can chain this operator
+    /// return the existing object so we can chain this operator
     return *this;
 }
 
@@ -94,7 +94,7 @@ public:
 		delete[] m_data;
 	}
 
-	// Overloaded assignment
+	/// Overloaded assignment
 	MyString& operator= (const MyString& str);
 
 	friend std::ostream& operator<<(std::ostream& out, const MyString& s);
@@ -106,42 +106,42 @@ std::ostream& operator<<(std::ostream& out, const MyString& s)
 	return out;
 }
 
-// A simplistic implementation of operator= (do not use)
-/* MyString& MyString::operator= (const MyString& str)
-{
-	// if data exists in the current string, delete it
-	if (m_data) delete[] m_data;
+/// A simplistic implementation of operator= (do not use)
+// MyString& MyString::operator= (const MyString& str)
+// {
+// 	/// if data exists in the current string, delete it
+// 	if (m_data) delete[] m_data;
 
-	m_length = str.m_length;
+// 	m_length = str.m_length;
 
-	// copy the data from str to the implicit object
-	m_data = new char[str.m_length];
+// 	// copy the data from str to the implicit object
+// 	m_data = new char[str.m_length];
 
-	for (int i { 0 }; i < str.m_length; ++i)
-		m_data[i] = str.m_data[i];
+// 	for (int i { 0 }; i < str.m_length; ++i)
+// 		m_data[i] = str.m_data[i];
 
-	// return the existing object so we can chain this operator
-	return *this;
-} */
+// 	/// return the existing object so we can chain this operator
+// 	return *this;
+// } 
 
-// assignment overloading handling self assignments
+/// assignment overloading handling self assignments
 MyString& MyString::operator= (const MyString& str)
 {
-	// avoiding self assignments
+	/// avoiding self assignments
 	if (&str == this)
         return *this;
 
-    // if data exists in the current string, delete it
+    /// if data exists in the current string, delete it
     if (m_data) delete[] m_data;
 	m_length = str.m_length;
 
-	// copy the data from str to the implicit object
+	/// copy the data from str to the implicit object
 	m_data = new char[str.m_length];
 
 	for (int i { 0 }; i < str.m_length; ++i)
 		m_data[i] = str.m_data[i];
 
-	// return the existing object so we can chain this operator
+	/// return the existing object so we can chain this operator
 	return *this;
 }
 
@@ -149,7 +149,7 @@ int main()
 {
 	MyString alex("Alex", 5); // Meet Alex
 	MyString employee;
-    //employee = alex;    // Alex is our newest employee
+    ///employee = alex;    // Alex is our newest employee
 	alex = alex;    //self assignment, undefined behavviour
 	std::cout << alex; // Say your name, employee
 

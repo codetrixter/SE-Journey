@@ -1,7 +1,7 @@
 /**
  * @file COnvertingCtors-Explicit.cpp
  * @author Abhishek
- * @brief Here we discuss the implicit conversions while using cinstructors and how to avoid them:
+ * @brief Here we discuss the implicit conversions while using constructors and how to avoid them:
  * 1- "explicit" keyword can be used before the constructor to stop using that ctor from implicit casting.
  * @version 0.1
  * @date 2022-08-20
@@ -17,13 +17,17 @@
 private:
 	std::string m_string;
 public:
-	explicit MyString(int x) // allocate string of size x
+	 MyString(int x) // allocate string of size x
 	{
+		std::cout << "int version called...\n";
 		m_string.resize(x);
 	}
 
+	/// @brief  This will not be called by the 'x', since this takes a const char* which is not equal to const char
+	/// @param string 
 	MyString(const char* string) // allocate string to hold string value
 	{
+		std::cout << "char version called...\n";
 		m_string = string;
 	}
 
@@ -44,17 +48,15 @@ void printString(const MyString& s)
 
 int main()
 {
-    // WIth explicit used this will give error: invalid conversion from ‘char’ to ‘const char*’
-	//MyString mine = 'x'; // Will compile and use MyString(int), will do implicit casting char to int.
+    /// WIth explicit used this will give error: invalid conversion from ‘char’ to ‘const char*’
+	MyString mine1 = 'x'; // Will compile and use MyString(int), will do implicit casting char to int.
 
-    // These work eveb with explicit.
-    MyString mine{ 'x' }; //This doesn't do narrowing conversions but happily does other conversions.
+    /// These work eveb with explicit.
+    MyString mine2{ 'x' }; //This doesn't do narrowing conversions but happily does other conversions.
     std::cout << static_cast<MyString>(5);
 
-	std::cout << mine << '\n';
+	std::cout << mine1 << mine2 << '\n';
 
-    // WIth explicit used this will give error: invalid conversion from ‘char’ to ‘const char*’
-    // But explicit casting works even with explicit keyword.
 	printString(static_cast<MyString>('x')); // Will compile and use MyString(int)
 	return 0;
 } */
@@ -65,7 +67,7 @@ class MyString
 private:
 	std::string m_string;
 
-    // objects of type MyString(char) can't be constructed from outside the class
+    /// objects of type MyString(char) can't be constructed from outside the class
     //MyString(char) { }
 public:
 
@@ -91,17 +93,16 @@ std::ostream& operator<<(std::ostream& out, const MyString& s)
 	return out;
 }
 
-/**
- * @brief way to prevent implecit/explicit casting:
- * make the constructor private/delete
- * 
- * @param argc 
- * @param argv 
- * @return int 
- */
+///@brief way to prevent implecit/explicit casting:
+///make the constructor private/delete
+///
+///@param argc 
+///@param argv 
+///@return int 
+
 int main(int argc, char const *argv[])
 {
-    MyString mine{ 'x' };
+    MyString mine{ 'x' };	// This will throw error since const char ctor is delete, it will not prmote x to int and use int ctor in this case
     std::cout << mine << '\n';
     return 0;
 }

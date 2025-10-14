@@ -20,6 +20,9 @@
  */
 #include <cassert>
 #include <iostream>
+#include <cstring> // for strlen()
+#include <cassert> // for assert()
+
 //***************************Shallow copying***
 /* class Fraction
 {
@@ -28,7 +31,7 @@ private:
     int m_denominator { 1 };
 
 public:
-    // Default constructor
+    /// Default constructor
     Fraction(int numerator = 0, int denominator = 1)
         : m_numerator{ numerator }
         , m_denominator{ denominator }
@@ -36,25 +39,25 @@ public:
         assert(denominator != 0);
     }
 
-    // Possible implementation of implicit copy constructor
+    /// Possible implementation of implicit copy constructor
     Fraction(const Fraction& f)
         : m_numerator{ f.m_numerator }
         , m_denominator{ f.m_denominator }
     {
     }
 
-    // Possible implementation of implicit assignment operator
+    /// Possible implementation of implicit assignment operator
     Fraction& operator= (const Fraction& fraction)
     {
-        // self-assignment guard
+        /// self-assignment guard
         if (this == &fraction)
             return *this;
 
-        // do the copy
+        /// do the copy
         m_numerator = fraction.m_numerator;
         m_denominator = fraction.m_denominator;
 
-        // return the existing object so we can chain this operator
+        /// return the existing object so we can chain this operator
         return *this;
     }
 
@@ -66,95 +69,87 @@ public:
 }; */
 //***************************Shallow copying***
 //***************************Deep copying***
-// #include <cstring> // for strlen()
-// #include <cassert> // for assert()
+/* class MyString
+{
+private:
+    char *m_data{};
+    int m_length{};
 
-// class MyString
-// {
-// private:
-//     char *m_data{};
-//     int m_length{};
+public:
+    MyString(const char *source = "")
+    {
+        assert(source); // make sure source isn't a null string
 
-// public:
-//     MyString(const char *source = "")
-//     {
-//         assert(source); // make sure source isn't a null string
+        /// Find the length of the string
+        /// Plus one character for a terminator
+        m_length = std::strlen(source) + 1;
 
-//         // Find the length of the string
-//         // Plus one character for a terminator
-//         m_length = std::strlen(source) + 1;
+        /// Allocate a buffer equal to this length
+        m_data = new char[m_length];
 
-//         // Allocate a buffer equal to this length
-//         m_data = new char[m_length];
+        /// Copy the parameter string into our internal buffer
+        for (int i{0}; i < m_length; ++i)
+            m_data[i] = source[i];
+    }
 
-//         // Copy the parameter string into our internal buffer
-//         for (int i{0}; i < m_length; ++i)
-//             m_data[i] = source[i];
-//     }
+    MyString(const MyString &source)
+    {
+        deepCopy(source);
+    }
 
-//     // Default copy constructor would look something like this
-//     /* MyString(const MyString &source)
-//         : m_length{source.m_length}, m_data{source.m_data}
-//     {
-//     } */
+    MyString& operator= (const MyString &source)
+    {
+        if (this != &source)
+            deepCopy(source);
 
-//     MyString(const MyString &source)
-//     {
-//         deepCopy(source);
-//     }
+        return *this;
+    }
 
-//     MyString &operator=(const MyString &source)
-//     {
-//         if (this != &source)
-//             deepCopy(source);
+    ~MyString() // destructor
+    {
+        /// We need to deallocate our string
+        delete[] m_data;
+    }
 
-//         return *this;
-//     }
+    void deepCopy(const MyString &source)
+    {
+        /// first we need to deallocate any value that this string is holding!
+        delete[] m_data;
 
-//     ~MyString() // destructor
-//     {
-//         // We need to deallocate our string
-//         delete[] m_data;
-//     }
+        /// because m_length is not a pointer, we can shallow copy it
+        m_length = source.m_length;
 
-//     void deepCopy(const MyString &source)
-//     {
-//         // first we need to deallocate any value that this string is holding!
-//         delete[] m_data;
+        /// m_data is a pointer, so we need to deep copy it if it is non-null
+        if (source.m_data)
+        {
+            /// allocate memory for our copy
+            m_data = new char[m_length];
 
-//         // because m_length is not a pointer, we can shallow copy it
-//         m_length = source.m_length;
+            /// do the copy
+            for (int i{0}; i < m_length; ++i)
+                m_data[i] = source.m_data[i];
+        }
+        else
+            m_data = nullptr;
+    }
 
-//         // m_data is a pointer, so we need to deep copy it if it is non-null
-//         if (source.m_data)
-//         {
-//             // allocate memory for our copy
-//             m_data = new char[m_length];
+    char *getString() { return m_data; }
+    int getLength() { return m_length; }
+};
 
-//             // do the copy
-//             for (int i{0}; i < m_length; ++i)
-//                 m_data[i] = source.m_data[i];
-//         }
-//         else
-//             m_data = nullptr;
-//     }
+int main()
+{
+    /// error:free(): double free detected in tcache 2, Aborted (core dumped)
+    MyString hello{"Hello, world!"};
+    {
+        MyString copy{hello}; // use default copy constructor
+    }                         // copy is a local variable, so it gets destroyed here. The destructor deletes copy's string, 
+    ///which leaves hello with a dangling pointer
 
-//     char *getString() { return m_data; }
-//     int getLength() { return m_length; }
-// };
+    std::cout << hello.getString() << '\n'; // this will have undefined behavior
 
-// int main()
-// {
-//     // error:free(): double free detected in tcache 2, Aborted (core dumped)
-//     MyString hello{"Hello, world!"};
-//     {
-//         MyString copy{hello}; // use default copy constructor
-//     }                         // copy is a local variable, so it gets destroyed here. The destructor deletes copy's string, which leaves hello with a dangling pointer
-
-//     std::cout << hello.getString() << '\n'; // this will have undefined behavior
-
-//     return 0;
-// }
+    return 0;
+} */
 //***************************Deep copying***
 
 //--------Alternate example----------
@@ -185,15 +180,16 @@ public:
         cout << "A = " << num1 << " B = " << num2 << endl;
     }
 
-    // copy constructor -> it is responsible for deep copy.
+    /// copy constructor -> it is responsible for deep copy.
     DummyClass(DummyClass &D)
     {
+        ptr = new int;  //This needs to be allocated here else seg fault will occur.
         num1 = D.num1;
         num2 = D.num2;
-        *ptr = *(D.ptr);
+        *ptr = *(D.ptr);    //data pointed to by the pointer is copied and not the just the pointer address itself
     }
 
-    // destructor -> to deallocate memory consumed by new pointer ptr.
+    /// destructor -> to deallocate memory consumed by new pointer ptr.
     ~DummyClass()
     {
         delete ptr;
@@ -206,7 +202,7 @@ int main()
     D1.setData(3, 5, 11);
     D1.showData();
 
-    // Copy constructor declared above will came in action and do deep copy.
+    /// Copy constructor declared above will came in action and do deep copy.
     DummyClass D2 = D1;
     D2.showData();
 }

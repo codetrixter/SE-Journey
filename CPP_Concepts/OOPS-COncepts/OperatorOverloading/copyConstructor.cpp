@@ -27,15 +27,15 @@ public:
     {
         assert(denominator != 0);
     }
-
-    // Copy constructor with member wise initialization
-    // Here we need to pass the parameter as reference, since passing by value would require a copy constructor to copy the variable
-    // in the function parameter, hence will lead to infinite recursion.
+    /// This is also called Shallow copy 
+    /// Copy constructor with member wise initialization
+    /// Here we need to pass the parameter as reference, since passing by value would require a copy constructor to copy the variable
+    /// in the function parameter, hence will lead to infinite recursion.
     Fraction(const Fraction& fraction)
         : m_numerator{fraction.m_numerator}, m_denominator{fraction.m_denominator}
-        // Note: We can access the members of parameter fraction directly, because we're inside the Fraction class
+        /// Note: We can access the members of parameter fraction directly, because we're inside the Fraction class
     {
-        // no need to check for a denominator of 0 here since fraction must already be a valid Fraction
+        /// no need to check for a denominator of 0 here since fraction must already be a valid Fraction
         std::cout << "Copy constructor called\n"; // just to prove it works
     }
 
@@ -50,14 +50,14 @@ std::ostream& operator<<(std::ostream& out, const Fraction& f1)
 
 int main()
 {
-	// Fraction fiveThirds { 5, 3 }; // brace initialize a Fraction, calls Fraction(int, int) constructor
-	// Fraction fCopy { fiveThirds }; // brace initialization -- with Fraction copy constructor
+	/// Fraction fiveThirds { 5, 3 }; // brace initialize a Fraction, calls Fraction(int, int) constructor
+	/// Fraction fCopy { fiveThirds }; // brace initialization -- with Fraction copy constructor
 
     //copy constructor elision
 
     Fraction fiveThirds { Fraction { 5, 3 }};   
-    // no copy constructor is called here since the compiler optimised this call with below statement hence no copy ctor called.
-    // So compler instead of making two calls, 1- creating anonymous object, 2- calling copy ctor, it made just the former one.
-    // Fraction fiveThirds { 5, 3 };
+    /// no copy constructor is called here since the compiler optimised this call with below statement hence no copy ctor called.
+    /// So compler instead of making two calls, 1- creating anonymous object, 2- calling copy ctor, it made just the former one.
+    /// Fraction fiveThirds { 5, 3 };
 	std::cout << fiveThirds << '\n';
 }
