@@ -32,3 +32,10 @@
 
 16. [Shallow vs Deep copy](shallowDeepCopy.cpp)
 
+17. [function templates and overloading operators](./overloadingOperatorsTemplates.cpp)
+
+//TODO:
+18. [QUIZ]
+
+19. [PROJECT]
+

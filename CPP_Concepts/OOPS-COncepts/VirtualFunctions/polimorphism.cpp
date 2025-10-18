@@ -2,7 +2,7 @@
  * @file polimorphism.cpp
  * @author Abhishek
  * @brief Here we discuss the usage of virtual functions and polymorphism.
- * 1- Using virtual functions we can enbame a base reference holding the derived object to call derived version of the members.
+ * 1- Using virtual functions we can rename a base reference holding the derived object to call derived version of the members.
  * 2- Never call virtual functions from constructors and destructors:
  *      a. Reason is in virtual inheritance the base class is created and then the derived versions, so whe we call virtual functions from the 
  * base class constructor the derived version has not even been created yet, so the base version will be called.
@@ -39,32 +39,32 @@ int main()
 {
     Derived derived;
     Base& rBase{ derived };
-    //calls the derived version of the getName()
+    /// calls the derived version of the getName()
     std::cout << "rBase is a " << rBase.getName() << '\n';
 
     return 0;
 } */
 //-----------------------Alternate
-/* class Animal
+class Animal
 {
 protected:
     std::string m_name;
 
-    // We're making this constructor protected because
-    // we don't want people creating Animal objects directly,
-    // but we still want derived classes to be able to use it.
+    /// We're making this constructor protected because
+    /// we don't want people creating Animal objects directly,
+    /// but we still want derived classes to be able to use it.
     Animal(std::string_view name)
         : m_name{ name }
     {
     }
 
-    // To prevent slicing (covered later)
+    /// To prevent slicing (covered later)
     Animal(const Animal&) = default;
     Animal& operator=(const Animal&) = default;
 
 public:
     std::string_view getName() const { return m_name; }
-    //only base class function needs to be specified as virtual rest all derived version of the functions are optional
+    /// only base class function needs to be specified as virtual rest all derived version of the functions are optional
     virtual std::string_view speak() const { return "???"; }
 };
 
@@ -90,7 +90,7 @@ public:
     virtual std::string_view speak() const { return "Woof"; }
 };
 
-//without using reference to Base class if we wanted to print each animals name and speak the we would have to overload each function.
+/// without using reference to Base class if we wanted to print each animals name and speak the we would have to overload each function.
 void reportAnimal(const Animal* animal)
 {
     std::cout << animal->getName() << " says " << animal->speak() << std::endl;
@@ -105,20 +105,20 @@ int main(int argc, char const *argv[])
     const Dog pooky{ "Pooky" };
     const Dog truffle{ "Truffle" };
 
-    // Set up an array of pointers to animals, and set those pointers to our Cat and Dog objects
-    // Note: to_array requires C++20 support (and at the time of writing, Visual Studio 2022 still doesn't support it correctly)
-    //const auto animals{ std::to_array<const Animal*>({&fred, &garbo, &misty, &pooky, &truffle, &zeke }) };
+    /// Set up an array of pointers to animals, and set those pointers to our Cat and Dog objects
+    /// Note: to_array requires C++20 support (and at the time of writing, Visual Studio 2022 still doesn't support it correctly)
+    /// const auto animals{ std::to_array<const Animal*>({&fred, &garbo, &misty, &pooky, &truffle, &zeke }) };
 
-    // Before C++20, with the array size being explicitly specified
+    /// Before C++20, with the array size being explicitly specified
     const std::array<const Animal*, 6> animals{ &fred, &garbo, &misty, &pooky, &truffle, &zeke };
 
-    //all the speak functions are called properly since we used virtual keyword.
+    /// all the speak functions are called properly since we used virtual keyword.
     for (const auto animal : animals)
     {
         std::cout << animal->getName() << " says " << animal->speak() << '\n';
     }
     return 0;
-} */
+}
 //*************Point-1***
 //*************QUIZ-1***
 /* class A
@@ -198,7 +198,7 @@ int main()
 /* class A
 {
 public:
-    // note: no virtual keyword
+    /// note: no virtual keyword
     std::string_view getName() const { return "A"; }
 };
 
@@ -224,7 +224,7 @@ int main()
 {
     C c;
     A& rBase{ c };
-    //Since A has no virtual function so A's version of teh function get called hence A.
+    /// Since A has no virtual function so A's version of teh function get called hence A.
     std::cout << rBase.getName() << '\n';
 
     return 0;
@@ -240,7 +240,7 @@ public:
 class B: public A
 {
 public:
-    // note: no virtual keyword in B, C, and D
+    /// note: no virtual keyword in B, C, and D
     std::string_view getName() const { return "B"; }
 };
 
@@ -305,7 +305,7 @@ int main()
 } */
 //*************QUIZ-5***
 //*************QUIZ-5***
-class A
+/* class A
 {
 public:
 	A() { std::cout << getName(); } // note addition of constructor
@@ -338,5 +338,5 @@ int main()
 	C c;
 
 	return 0;
-}
+} */
 //*************QUIZ-5***

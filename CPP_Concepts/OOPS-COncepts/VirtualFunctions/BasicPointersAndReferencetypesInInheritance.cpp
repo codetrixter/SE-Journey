@@ -3,10 +3,11 @@
  * @author Abhishek 
  * @brief Here we discuss about the ability to store derived class instance in base 
  * reference/pointer.
- * 1- We can store derived class objects in the reference/pointers fo the base type.
+ * 1- We can store derived class objects in the reference/pointers for the base type.
  * 2- The above technique is usefult for places where there are lots of derived types and a common functionality needs to be implemented,
  * then that common functionality can be implemented with the Reference to the base type so that this functionality can accept any derived
  * object.
+  //TODO:chapter end Quiz
  * @version 0.1
  * @date 2022-07-21
  * 
@@ -92,15 +93,15 @@ class Animal
 protected:
     std::string m_name;
 
-    // We're making this constructor protected because
-    // we don't want people creating Animal objects directly,
-    // but we still want derived classes to be able to use it.
+    /// We're making this constructor protected because
+    /// we don't want people creating Animal objects directly,
+    /// but we still want derived classes to be able to use it.
     Animal(std::string_view name)
         : m_name{ name }
     {
     }
 
-    // To prevent slicing (covered later)
+    /// To prevent slicing (covered later)
     Animal(const Animal&) = default;
     Animal& operator=(const Animal&) = default;
 
@@ -131,31 +132,31 @@ public:
     std::string_view speak() const { return "Woof"; }
 };
 
-//without using reference to Base class if we wanted to print each animals name and speak the we would have to overload each function.
+/// without using reference to Base class if we wanted to print each animals name and speak the we would have to overload each function.
 void reportAnimal(const Animal* animal)
 {
     std::cout << animal->getName() << " says " << animal->speak() << std::endl;
 }
 
-/* int main()
-{
-    const Cat cat{ "Fred" };
-    std::cout << "cat is named " << cat.getName() << ", and it says " << cat.speak() << '\n';
+// int main()
+// {
+//     const Cat cat{ "Fred" };
+//     std::cout << "cat is named " << cat.getName() << ", and it says " << cat.speak() << '\n';
 
-    const Dog dog{ "Garbo" };
-    std::cout << "dog is named " << dog.getName() << ", and it says " << dog.speak() << '\n';
+//     const Dog dog{ "Garbo" };
+//     std::cout << "dog is named " << dog.getName() << ", and it says " << dog.speak() << '\n';
 
-    const Animal* pAnimal{ &cat };
-    std::cout << "pAnimal is named " << pAnimal->getName() << ", and it says " << pAnimal->speak() << '\n';
+//     const Animal* pAnimal{ &cat };
+//     std::cout << "pAnimal is named " << pAnimal->getName() << ", and it says " << pAnimal->speak() << '\n';
 
-    pAnimal = &dog;
-    std::cout << "pAnimal is named " << pAnimal->getName() << ", and it says " << pAnimal->speak() << '\n';
+//     pAnimal = &dog;
+//     std::cout << "pAnimal is named " << pAnimal->getName() << ", and it says " << pAnimal->speak() << '\n';
 
-    //same method is need for printing name and speak of all the animals, just the underlying object changes.
-    reportAnimal(pAnimal);
+//     /// same method is need for printing name and speak of all the animals, just the underlying object changes.
+//     reportAnimal(pAnimal);
 
-    return 0;
-} */
+//     return 0;
+// } 
 //--------------Alternatively we can do something like this with pointers/references of Base type.
 
 int main()
@@ -168,11 +169,11 @@ int main()
     const Dog pooky{ "Pooky" };
     const Dog truffle{ "Truffle" };
 
-    // Set up an array of pointers to animals, and set those pointers to our Cat and Dog objects
-    // Note: to_array requires C++20 support (and at the time of writing, Visual Studio 2022 still doesn't support it correctly)
-    //const auto animals{ std::to_array<const Animal*>({&fred, &garbo, &misty, &pooky, &truffle, &zeke }) };
+    /// Set up an array of pointers to animals, and set those pointers to our Cat and Dog objects
+    /// Note: to_array requires C++20 support (and at the time of writing, Visual Studio 2022 still doesn't support it correctly)
+    /// const auto animals{ std::to_array<const Animal*>({&fred, &garbo, &misty, &pooky, &truffle, &zeke }) };
 
-    // Before C++20, with the array size being explicitly specified
+    /// Before C++20, with the array size being explicitly specified
     const std::array<const Animal*, 6> animals{ &fred, &garbo, &misty, &pooky, &truffle, &zeke };
 
     for (const auto animal : animals)
