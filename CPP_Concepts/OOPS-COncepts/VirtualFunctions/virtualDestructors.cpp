@@ -15,10 +15,10 @@
 #include <iostream>
 
 //******************point-1***
-/* class Base
+class Base
 {
 public:
-    //by making this virtual we ensure that derived class detructor is also called while deleting base class objects.
+    /// by making this virtual we ensure that derived class detructor is also called while deleting base class objects.
     virtual ~Base() 
     {
         std::cout << "Calling ~Base()\n";
@@ -51,10 +51,10 @@ int main()
     delete base;
 
     return 0;
-} */
+}
 //******************point-1***
 //******************point-2***
-class Base
+/* class Base
 {
 public:
     virtual ~Base() = default;
@@ -67,7 +67,7 @@ public:
     virtual const char* getName() const { return "Derived"; }
 };
 
-//How can we call the base version of the getName() in this case.
+/// How can we call the base version of the getName() in this case.
 int main(int argc, char const *argv[])
 {
     Derived der;
@@ -76,7 +76,7 @@ int main(int argc, char const *argv[])
     //like this using scope resolution operator.
     std::cout << base->Base::getName();    
     return 0;
-}
+} */
 //******************point-2***
 //******************Herb Stutters Wisdome***
 /*

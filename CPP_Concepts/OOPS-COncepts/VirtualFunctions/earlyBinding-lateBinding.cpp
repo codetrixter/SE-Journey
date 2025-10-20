@@ -15,6 +15,7 @@
  * 
  * Note::Any class that uses virtual functions has a *__vptr, and thus each object of that class will be bigger by one pointer. 
  * Virtual functions are powerful, but they do have a performance cost.
+ //TODO: https://quuxplusone.github.io/blog/2021/02/15/devirtualization/
  * @version 0.1
  * @date 2022-07-31
  * 
@@ -23,17 +24,18 @@
  */
 #include <iostream>
 //*******************Point-1***
-/* int add(int x, int y)
+/* /// constexpr forces the compiler to do compile time evaluation
+constexpr int add(const int x, const int y)  
 {
     return x + y;
 }
 
-int subtract(int x, int y)
+constexpr int subtract(const int x, const int y) 
 {
     return x - y;
 }
 
-int multiply(int x, int y)
+constexpr int multiply(const int x, const int y) 
 {
     return x * y;
 }
@@ -58,7 +60,7 @@ int main()
     int result {};
     switch (op)
     {
-        // call the target function directly using early binding
+        /// call the target function directly using early binding
         case 0: result = add(x, y); break;
         case 1: result = subtract(x, y); break;
         case 2: result = multiply(x, y); break;
@@ -70,17 +72,17 @@ int main()
 } */
 //*******************Point-1***
 //*******************Point-2***
-int add(int x, int y)
+constexpr int add(const int x, const int y)  
 {
     return x + y;
 }
 
-int subtract(int x, int y)
+constexpr int subtract(const int x, const int y) 
 {
     return x - y;
 }
 
-int multiply(int x, int y)
+constexpr int multiply(const int x, const int y) 
 {
     return x * y;
 }
@@ -102,10 +104,10 @@ int main()
         std::cin >> op;
     } while (op < 0 || op > 2);
 
-    // Create a function pointer named pFcn (yes, the syntax is ugly)
+    /// Create a function pointer named pFcn (yes, the syntax is ugly)
     int (*pFcn)(int, int) { nullptr };
 
-    // Set pFcn to point to the function the user chose
+    /// Set pFcn to point to the function the user chose
     switch (op)
     {
         case 0: pFcn = &add; break;
@@ -113,9 +115,9 @@ int main()
         case 2: pFcn = &multiply; break;
     }
 
-    // Call the function that pFcn is pointing to with x and y as parameters
-    // This uses late binding
-    // address resolution of the function pointer is done at run time.
+    /// Call the function that pFcn is pointing to with x and y as parameters
+    /// This uses late binding
+    /// address resolution of the function pointer is done at run time.
     std::cout << "The answer is: " << pFcn(x, y) << '\n';
 
     return 0;

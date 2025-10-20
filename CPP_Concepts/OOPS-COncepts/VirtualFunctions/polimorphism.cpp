@@ -136,7 +136,7 @@ public:
 class C: public B
 {
 public:
-// Note: no getName() function here
+/// Note: no getName() function here
 };
 
 class D: public C
@@ -149,7 +149,7 @@ int main()
 {
     C c;
     A& rBase{ c };
-    //prints B since that is the most derived version of getName() available.
+    /// prints B since that is the most derived version of getName() available.
     std::cout << rBase.getName() << '\n';
 
     return 0;
@@ -260,7 +260,7 @@ int main()
 {
     C c;
     B& rBase{ c }; // note: rBase is a B this time
-    // C will be printed, reason: Base class has virtual function, hence all subclasses with same function became virtual by default.
+    /// C will be printed, reason: Base class has virtual function, hence all subclasses with same function became virtual by default.
     std::cout << rBase.getName() << '\n';
 
     return 0;
@@ -276,7 +276,7 @@ public:
 class B: public A
 {
 public:
-    // Note: Functions in B, C, and D are non-const.
+    /// Note: Functions in B, C, and D are non-const.
     virtual std::string_view getName() { return "B"; }
 };
 
@@ -296,9 +296,9 @@ int main()
 {
     C c;
     A& rBase{ c };
-    //A is printed,reason:-> Since A is teh reference storing C's object hence A's version of getName will be called, and when found virtual
-    //compiler will look for most derived version, only to see that there is no derived version of A.getName since others are const, hence not 
-    //considered overriding.
+    /// A is printed,reason:-> Since A is teh reference storing C's object hence A's version of getName will be called, and when found virtual
+    /// compiler will look for most derived version, only to see that there is no derived version of A.getName since others are const, hence not 
+    /// considered overriding.
     std::cout << rBase.getName() << '\n';
 
     return 0;
@@ -333,8 +333,8 @@ public:
 
 int main()
 {
-    //A is printed, reason: when C is created, A is created first due to ctor chaining, and inside A's ctor getName is called which at the time,
-    //cannot llok for derived versions since derived class are not created yet, hence A.getName() is called
+    /// A is printed, reason: when C is created, A is created first due to ctor chaining, and inside A's ctor getName is called which at the time,
+    /// cannot llok for derived versions since derived class are not created yet, hence A.getName() is called
 	C c;
 
 	return 0;

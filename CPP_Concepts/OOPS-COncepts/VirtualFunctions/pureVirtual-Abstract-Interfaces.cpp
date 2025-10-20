@@ -74,7 +74,7 @@ public:
     {
     }
 
-    // We forgot to redefine speak
+    /// We forgot to redefine speak
     const char* speak() const override { return "Moo"; }
 };
 
@@ -145,18 +145,57 @@ public:
     virtual ~IErrorLog() {} // make a virtual destructor in case we delete an IErrorLog pointer, so the proper derived destructor is called
 };
 
-//passing the log interface instance is beneficial, since any class derived from this iterface can be passed here.
-//so this function can take error messages that needs to printed on console or file or some browser etc.
-double mySqrt(double value, IErrorLog& log)
+/// @brief It is mandatory to implement all the functions of the Interface as you can see below.
+class errorConsole : public IErrorLog
 {
-    if (value < 0.0)
+    public:
+    bool openLog(const char *filename)
     {
-        log.writeError("Tried to take square root of value less than 0");
-        return 0.0;
+        return true;
     }
-    else
+
+    bool closeLog()
     {
-        return std::sqrt(value);
+        return true;
     }
+
+    bool writeError(const char* errorMessage) override
+    {
+        if(!errorMessage)
+            return false;
+        std::cerr << errorMessage << "\n";
+        return true;
+    }
+};
+
+class math
+{
+    public:
+    /// passing the log interface instance is beneficial, since any class derived from this iterface can be passed here.
+    /// so this function can take error messages that needs to printed on console or file or some browser etc.
+    double mySqrt(double value, IErrorLog& log)
+    {
+        if (value < 0.0)
+        {
+            log.writeError("Tried to take square root of value less than 0");
+            return 0.0;
+        }
+        else
+        {
+            return std::sqrt(value);
+        }
+    }
+};
+
+
+int main(int argc, char const *argv[])
+{
+    // Initialize logging class
+    IErrorLog* logg = new errorConsole();
+
+    math compute;
+    compute.mySqrt(-20.0d, *logg);
+    return 0;
 }
+
 //*************Point-3***
