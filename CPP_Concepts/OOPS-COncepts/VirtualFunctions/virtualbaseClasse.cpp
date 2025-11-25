@@ -65,9 +65,9 @@ public:
 class Copier: public Scanner, public Printer
 {
 public:
-    //In case of Virtual Base class, in order to initialize the base class the classes that have the shared copy
-    //cannot initialize it, so it is upto the most derived class.
-    //**This is the only time when the derived class is alloed to call the no-immediate parent constructor.
+    /// In case of Virtual Base class, in order to initialize the base class the classes that have the shared copy
+    /// cannot initialize it, so it is upto the most derived class.
+    /// **This is the only time when the derived class is allowed to call the non-immediate parent constructor.
     Copier(int scanner, int printer, int power)
         : PoweredDevice{ power }, Scanner{ scanner, power }, Printer{ printer, power }
     {
@@ -76,7 +76,7 @@ public:
 
 int main(int argc, char const *argv[])
 {
-    //here two copies of the Base class(PoweredDevice) will be created, one by Printer and the other by Scanner.
+    /// here two copies of the Base class(PoweredDevice) will be created, one by Printer and the other by Scanner.
     Copier copy(1, 2, 3);
     return 0;
 }
