@@ -21,16 +21,22 @@
     Widget(int i, bool d1) {std::cout << "int, bool\n";};
     Widget(int i, double d2) {std::cout << "int, double\n";};
 
-    //initializer_list parameters
-    Widget(std::initializer_list<long double> il) {std::cout << "initializer list\n";};
+    /// initializer_list parameters
+    Widget(std::initializer_list<long double> il) {std::cout << "initializer list long double\n";};
+    /// Both cannot be used here since that give ambiguous call error since both functions can be used for narrowing conversion from into 
+    /// to long double and bool, narrowing viability constraint comes after the argument matching constraint while compilers overload resolution 
+    /// hence we see this issue.
+    /// Compilers determination to match braced initializers with constructors is so stronmg that it skips perfectly matching normal parameter
+    /// constructors.
+    //Widget(std::initializer_list<bool> il) {std::cout << "initializer list bool\n";}; 
 
  };
 
  int main(int argc, char const *argv[])
  {
-    Widget w1(10, true);
-    Widget w2{10, true};    //calls initializer_list ctor with conversion of 10 and true to long double.
-    Widget w3(10, 5.0);
+    // Widget w1(10, true);
+    // Widget w2{10, true};    //calls initializer_list ctor with conversion of 10 and true to long double.
+    //Widget w3(10, 5.0);
     Widget w4{10, 5.0};     //same as w2
 
     return 0;

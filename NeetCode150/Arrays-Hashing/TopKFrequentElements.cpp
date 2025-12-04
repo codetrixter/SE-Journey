@@ -90,7 +90,7 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-    std::vector<int> inp = {4, 1, -1, 2, -1, 2, 3,};
+    std::vector<int> inp = {1, 2, 2, 3, 3, 3, 3};
     auto result = topKFrequent(inp, 2);
     std::cout << std::endl;
     for(auto item : result)
