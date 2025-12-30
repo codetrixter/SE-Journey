@@ -21,7 +21,7 @@
 #include <vector>
 #include <functional>   //std::reference_wrapper
 
-/* class Base
+class Base
 {
 protected:
     int m_value{};
@@ -47,7 +47,7 @@ public:
     const char* getName() const override { return "Derived"; }
 };
 
-//a version of object slicing : using pass by reference to avoid slicing
+/// a version of object slicing : using pass by reference to avoid slicing
 void printName(Base& base)
 {
     std::cout << base.getName() << " " << base.getValue();
@@ -56,11 +56,11 @@ void printName(Base& base)
 int main(int argc, char const *argv[])
 {
     // Derived der{10};
-    // //here derived part of the object is sliced off when assigning derived object to base class object.
-    // //Here a copy constructor is called which is initializing base object using derived instance.
+    // /// Here derived part of the object is sliced off when assigning derived object to base class object.
+    // /// Here a copy constructor is called which is initializing base object using derived instance.
     // Base base{der};
 
-    // //Hence ony base part of the functionality is ran
+    // /// Hence ony base part of the functionality is ran
     // std::cout << base.getName() << " " << base.getValue();
 
     //-------------------------------------
@@ -69,33 +69,35 @@ int main(int argc, char const *argv[])
     // printName(derived);
 
     //-------------------------------------
-    //another version of object slicing
+    /// another version of object slicing
     // Base base{ 10 };
     // Derived der{ 23 };
 
-    // std::vector<Base> v{};
-    // v.push_back(base);
-    // v.push_back(der);
+    // std::vector<Base> v1{};
+    // v1.push_back(base);
+    // v1.push_back(der);
 
-    // for(auto& item : v)
+    // std::cout << "object sliced....\n";
+    // for(auto& item : v1)
     // {
     //     std::cout << item.getName() << " " << item.getValue();
     // }
-    //In order to avoid slicing in above scenario we can use pointer as a type of the vector.
-    //We are not using reference as they cannot be reassined values and need to be initialized while definition.
+    // /// In order to avoid slicing in above scenario we can use pointer as a type of the vector.
+    // /// We are not using reference as they cannot be reassined values and need to be initialized while definition.
 
-    // std::vector<Base*> v{};
-    // v.push_back(new Base{25});
-    // v.push_back(new Derived{26});
+    // std::vector<Base*> v2{};
+    // v2.push_back(new Base{25});
+    // v2.push_back(new Derived{26});
 
-    // for(auto item : v)
+    // std::cout << "\nobject not sliced...\n";
+    // for(auto item : v2)
     // {
     //     std::cout << item->getName() << " " << item->getValue();
     // }
     
     //--------------------------------------------------------------
 
-    //another way to solve the above slicing issue is to use std::reference_wrapper
+    /// another way to solve the above slicing issue is to use std::reference_wrapper
     std::vector<std::reference_wrapper<Base>> v{}; // a vector of reassignable references to Base
 
 	Base b{ 5 }; // b and d can't be anonymous objects
@@ -104,15 +106,15 @@ int main(int argc, char const *argv[])
 	v.push_back(b); // add a Base object to our vector
 	v.push_back(d); // add a Derived object to our vector
 
-	// Print out all of the elements in our vector
-	// we use .get() to get our element out of the std::reference_wrapper
+	/// Print out all of the elements in our vector
+	/// we use .get() to get our element out of the std::reference_wrapper
 	for (const auto& element : v) // element has type const std::reference_wrapper<Base>&
 		std::cout << "I am a " << element.get().getName() << " with value " << element.get().getValue() << '\n';
 
     return 0;
-} */
+}
 //**************Frankenobject***
-class Base
+/* class Base
 {
 protected:
     int m_value{};
@@ -143,12 +145,12 @@ int main(int argc, char const *argv[])
     Derived d2{ 6 };
     Base& base{ d2 };
 
-    //Here the base portion of the d1 instance is copied to the d2, since = operator is not virtual by default.
+    /// Here the base portion of the d1 instance is copied to the d2, since "=" operator is not virtual by default.
     base = d1;
 
     std::cout << d2.getName() << " " << d2.getValue();
     std::cout << base.getName() << " " << base.getValue();
     return 0;
-}
+} */
 //**************Frankenobject***
 
