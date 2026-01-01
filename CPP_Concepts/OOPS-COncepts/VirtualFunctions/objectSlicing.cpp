@@ -21,7 +21,7 @@
 #include <vector>
 #include <functional>   //std::reference_wrapper
 
-class Base
+/* class Base
 {
 protected:
     int m_value{};
@@ -112,45 +112,67 @@ int main(int argc, char const *argv[])
 		std::cout << "I am a " << element.get().getName() << " with value " << element.get().getValue() << '\n';
 
     return 0;
-}
+} */
 //**************Frankenobject***
-/* class Base
+class Base
 {
-protected:
+public:
     int m_value{};
+    char* m_name;
 
 public:
-    Base(int value)
-        : m_value{ value }
+    Base(int value, char* name)
+        : m_value{value}, m_name{name}
     {
     }
 
-    virtual const char* getName() const { return "Base"; }
-    int getValue() const { return m_value; }
+    virtual ~Base() = default;  // Good practice for polymorphic base
+
+    virtual const char* getName() const { return m_name; }
+    virtual int getValue() const { return m_value; }
 };
 
-class Derived: public Base
+class Derived : public Base
 {
+    int m_increment{};  // Derived-specific data
+
 public:
-    Derived(int value)
-        : Base{ value }
+    Derived(int value, int increment, char* name)
+        : Base(value, name), m_increment{increment}
     {
     }
 
-    const char* getName() const override { return "Derived"; }
-};
-int main(int argc, char const *argv[])
-{
-    Derived d1{ 5 };
-    Derived d2{ 6 };
-    Base& base{ d2 };
+    const char* getName() const override { return m_name; }
 
-    /// Here the base portion of the d1 instance is copied to the d2, since "=" operator is not virtual by default.
+    int getValue() const override 
+    { 
+        return m_value + m_increment;  // Uses base m_value + derived-specific increment
+    }
+
+    int getIncrement() const { return m_increment; }  // For demonstration
+};
+
+int main()
+{
+    Derived d1{10, 100, const_cast<char*>("d1")};  // base value 10, derived adds +100 → visible 110
+    Derived d2{20,   1, const_cast<char*>("d2")};  // base value 20, derived adds +1  → visible 21
+
+    Base& base = d2;
+
+    std::cout << "Before assignment:\n";
+    std::cout << "  d2.getValue(): " << d2.getValue() << "  (base " << d2.m_value << " + derived increment " << d2.getIncrement() << ")\n\n";
+
+    // This triggers slicing: copies only Base part of d1 into d2's Base part
     base = d1;
 
-    std::cout << d2.getName() << " " << d2.getValue();
-    std::cout << base.getName() << " " << base.getValue();
+    std::cout << "After base = d1 (object slicing occurred):\n";
+    std::cout << "  d2.getValue(): " << d2.getValue() << "  (base now " << d2.m_value 
+              << " [copied from d1] + derived increment " << d2.getIncrement() 
+              << " [still d2's original])\n";
+    std::cout << "  base.getValue(): " << base.getValue() << "  (same as above, virtual dispatch)\n";
+    std::cout << "  d2.getName(): " << d2.getName() << "  (still original d2 name)\n";
+
     return 0;
-} */
+}
 //**************Frankenobject***
 

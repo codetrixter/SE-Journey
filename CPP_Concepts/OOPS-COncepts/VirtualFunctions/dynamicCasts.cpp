@@ -50,7 +50,7 @@
 #include <iostream>
 #include <string>
 //****************point-1***
-/* class Base
+class Base
 {
 protected:
 	int m_value{};
@@ -78,7 +78,7 @@ public:
 	const std::string& getName() const { return m_name; }
 };
 
-//How can we call the drived member here??
+/// How can we call the drived member here??
 Base* getObject(bool returnDerived)
 {
 	if (returnDerived)
@@ -99,7 +99,7 @@ void mainVersionTwo()
 {
     Base* base = getObject(true);
 
-    //static_cast also works here, need to know the difference between the two.
+    /// static_cast also works here, need to know the difference between the two.
     Derived* derCast = dynamic_cast<Derived*>(base);
     std::cout << derCast->getName();
 
@@ -109,22 +109,22 @@ void mainVersionTwo()
 
 int main(int argc, char const *argv[])
 {
-    //The above example of dynamic casting worked because the returned derived object was pointed by Base pointer,
-    //what if the returning object was of base type, the the dynamic cast would not have worked
+    /// The above example of dynamic casting worked because the returned derived object was pointed by Base pointer,
+    /// what if the returning object was of base type, the the dynamic cast would not have worked
     Base* b{ getObject(true) };
 
-    //If the dynamic cast fails then the result of the conversion is a null pointer
-    //hence the behaviour will be undefined or segfault.
+    /// If the dynamic cast fails then the result of the conversion is a null pointer
+    /// hence the behaviour will be undefined or segfault.
 	Derived* d{ dynamic_cast<Derived*>(b) }; // use dynamic cast to convert Base pointer into Derived pointer
 
-    //If the getObject() is called with false and no null check is done the program thows seg fault.
+    /// If the getObject() is called with false and no null check is done the program thows seg fault.
 	if (d) // make sure d is non-null
 		std::cout << "The name of the Derived is: " << d->getName() << '\n';
 
 	delete b;
 
     return 0;
-} */
+}
 //****************point-1***
 //****************point-2***
 // Class identifier
@@ -132,7 +132,7 @@ int main(int argc, char const *argv[])
 {
 	base,
 	derived
-	// Others can be added here later
+	/// Others can be added here later
 };
 
 class Base
@@ -180,7 +180,7 @@ int main()
 
 	if (b->getClassID() == ClassID::derived)
 	{
-		// We already proved b is pointing to a Derived object, so this should always succeed
+		/// We already proved b is pointing to a Derived object, so this should always succeed
 		Derived* d{ static_cast<Derived*>(b) };
 		std::cout << "The name of the Derived is: " << d->getName() << '\n';
 	}
@@ -191,7 +191,7 @@ int main()
 } */
 //****************point-2***
 //****************point-3***
-class Base
+/* class Base
 {
 protected:
 	int m_value;
@@ -228,6 +228,6 @@ int main()
 	std::cout << "The name of the Derived is: " << d.getName() << '\n'; // we can access Derived::getName through d
 
 	return 0;
-}
+} */
 //****************point-3***
 
