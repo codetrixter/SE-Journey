@@ -1,13 +1,28 @@
 # PROCESS
 
-- A **process** is a program in execution.
-- A program is a passive entity (executable file on disk), while a process is an active entity.
-- A process includes:
-  - **Text section**: The program code
-  - **Program counter**: Current activity
-  - **Stack**: Temporary data (function parameters, return addresses, local variables)
-  - **Data section**: Global variables
-  - **Heap**: Dynamically allocated memory during runtime
+## Table of Contents
+1. [Process](#process)
+2. [States of Process](#states-of-process)
+3. [PCB](#pcb)
+4. [First Process](#first-process)
+5. [Process Context Switching](#process-context-switching)
+6. [Process Creation](#process-creation)
+7. [Post Process Creation](#post-process-creation)
+8. [Process Termination](#process-termination)
+9. [Benefits of IPC](#benefits-of-ipc)
+10. [Shared Memory](#shared-memory)
+11. [Message Passing](#message-passing)
+12. [Message Queue](#message-queue---data-structure-used-in-message-passing)
+13. [Pipe](#pipe)
+14. [Job Queue](#job-queue)
+15. [Ready Queue](#ready-queue)
+16. [Device Queue](#device-queue)
+17. [Types of Processes](#types-of-processes)
+18. [Schedulers](#schedulers)
+19. [Scheduling Queues](#scheduling-queues)
+20. [Summary](#summary)
+
+---
 
 ![Process Definition](images/proc-def01.png)
 
@@ -19,9 +34,22 @@
 
 ![Parts of Process 2](images/partsofProc-02.png)
 
+- A **process** is a program in execution.
+- A program is a passive entity (executable file on disk), while a process is an active entity.
+- A process includes:
+  - **Text section**: The program code
+  - **Program counter**: Current activity
+  - **Stack**: Temporary data (function parameters, return addresses, local variables)
+  - **Data section**: Global variables
+  - **Heap**: Dynamically allocated memory during runtime
+
 ---
 
 # STATES OF PROCESS
+
+![States of Process](images/statesofproc.png)
+
+![State Transitions](images/statesofproc-transition.png)
 
 A process transitions through various states during its lifetime:
 
@@ -30,10 +58,6 @@ A process transitions through various states during its lifetime:
 3. **Running**: Instructions are being executed
 4. **Waiting (Blocked)**: Process is waiting for some event (I/O completion, signal)
 5. **Terminated**: Process has finished execution
-
-![States of Process](images/statesofproc.png)
-
-![State Transitions](images/statesofproc-transition.png)
 
 **Transitions:**
 - **New → Ready**: Admitted to ready queue
@@ -47,6 +71,8 @@ A process transitions through various states during its lifetime:
 
 # PCB
 
+![PCB](images/PCB.png)
+
 **Process Control Block (PCB)** - also called Task Control Block - contains information associated with each process:
 
 - **Process state**: New, ready, running, waiting, terminated
@@ -57,11 +83,13 @@ A process transitions through various states during its lifetime:
 - **Accounting information**: CPU time used, time limits, process numbers
 - **I/O status information**: List of I/O devices allocated, list of open files
 
-![PCB](images/PCB.png)
-
 ---
 
-# FIRST PROCESS 
+# FIRST PROCESS
+
+![Init Process](images/init-proc.png)
+
+![Init Process Details](images/initproc-002.png)
 
 - In UNIX/Linux, the first process is called **init** (PID = 1).
 - It is the ancestor of all other processes.
@@ -69,22 +97,18 @@ A process transitions through various states during its lifetime:
 - Responsible for starting system services and managing orphan processes.
 - In modern Linux systems, **systemd** often replaces traditional init.
 
-![Init Process](images/init-proc.png)
-
-![Init Process Details](images/initproc-002.png)
-
 ---
 
 # PROCESS CONTEXT SWITCHING
+
+![Context Switch Definition](images/contextswithc-def.png)
+
+![Context Switch Steps](images/contextswitch-steps.png)
 
 - **Context switch**: When CPU switches from one process to another, the system must save the state of the old process and load the saved state of the new process.
 - Context is represented in the PCB.
 - Context-switch time is pure overhead (system does no useful work while switching).
 - Time depends on hardware support (e.g., multiple register sets).
-
-![Context Switch Definition](images/contextswithc-def.png)
-
-![Context Switch Steps](images/contextswitch-steps.png)
 
 **Steps:**
 1. Save state of currently running process in its PCB
@@ -97,6 +121,18 @@ A process transitions through various states during its lifetime:
 ---
 
 # PROCESS CREATION
+
+![Process Creation](images/proc-create01.png)
+
+![Process Creation 2](images/proc-create02.png)
+
+![Process Creation Diagram](images/proc-create-diagram.png)
+
+![Forking](images/forking.png)
+
+![Fetching PID](images/fetching-pid.png)
+
+![Process Exec Function](images/proc-exec-func.png)
 
 - Processes are created using system calls (e.g., `fork()` in UNIX).
 - Parent process creates child processes, forming a **process tree**.
@@ -114,14 +150,6 @@ A process transitions through various states during its lifetime:
 **Address space options:**
 1. Child is duplicate of parent (same program and data)
 2. Child has a new program loaded into it
-
-![Process Creation](images/proc-create01.png)
-
-![Process Creation 2](images/proc-create02.png)
-
-![Process Creation Diagram](images/proc-create-diagram.png)
-
-![Forking](images/forking.png)
 
 **UNIX Example:**
 ```c
@@ -143,6 +171,14 @@ if (pid == 0) {
 
 # POST PROCESS CREATION
 
+![Post Process Creation](images/post-proc-create01.png)
+
+![Zombie Process](images/zombie-proc.png)
+
+![Zombie Process Details](images/z-proc-details.png)
+
+![Orphan Process](images/orphan-proc.png)
+
 After `fork()`:
 - Child gets a copy of parent's address space
 - Both processes continue execution from the instruction after `fork()`
@@ -151,21 +187,17 @@ After `fork()`:
   - **Child's PID** to the parent process
   - **-1** if fork fails
 
-![Post Process Creation](images/post-proc-create01.png)
-
 **Zombie Process**: A process that has completed execution but still has an entry in the process table (waiting for parent to read its exit status).
 
-![Zombie Process](images/zombie-proc.png)
-
-![Zombie Process Details](images/z-proc-details.png)
-
 **Orphan Process**: A process whose parent has terminated. Orphans are adopted by the init process.
-
-![Orphan Process](images/orphan-proc.png)
 
 ---
 
 # PROCESS TERMINATION
+
+![Process Termination](images/proc-termination-01.png)
+
+![Process Termination Flow](images/proc-term-flow.png)
 
 - Process terminates when it finishes executing its final statement and asks the OS to delete it using `exit()`.
 - Process can return a status value to its parent via `wait()`.
@@ -176,13 +208,15 @@ After `fork()`:
 2. Task assigned to child is no longer required
 3. Parent is exiting (cascading termination - some systems don't allow child to continue)
 
-![Process Termination](images/proc-termination-01.png)
-
-![Process Termination Flow](images/proc-term-flow.png)
-
 ---
 
 # BENEFITS OF IPC
+
+![IPC Benefits](images/pros-of-IPC.png)
+
+![IPC Overview](images/IPC-01.png)
+
+![Types of IPC](images/types-of-IPC.png)
 
 **Inter-Process Communication (IPC)** allows processes to communicate and synchronize.
 
@@ -192,28 +226,24 @@ After `fork()`:
 3. **Modularity**: Divide system into separate processes/threads
 4. **Convenience**: User may work on many tasks simultaneously
 
-![IPC Benefits](images/pros-of-IPC.png)
-
-![IPC Overview](images/IPC-01.png)
-
 **Two fundamental models of IPC:**
 1. Shared Memory
 2. Message Passing
-
-![Types of IPC](images/types-of-IPC.png)
 
 ---
 
 # SHARED MEMORY
 
+![Shared Memory](images/shared-mem-01.png)
+
+![Shared Memory Details](images/shared-mem-02.png)
+
+![Producer Consumer Shared Memory](images/pro-cons-shared-mem.png)
+
 - Region of memory shared between cooperating processes.
 - Processes can exchange information by reading/writing to shared region.
 - Faster than message passing (no kernel intervention after setup).
 - Requires synchronization to prevent race conditions.
-
-![Shared Memory](images/shared-mem-01.png)
-
-![Shared Memory Details](images/shared-mem-02.png)
 
 **Producer-Consumer Problem:**
 - **Producer**: Produces information (e.g., compiler producing assembly code)
@@ -222,11 +252,17 @@ After `fork()`:
   - **Unbounded buffer**: No limit on buffer size
   - **Bounded buffer**: Fixed buffer size
 
-![Producer Consumer Shared Memory](images/pro-cons-shared-mem.png)
-
 ---
 
 # MESSAGE PASSING
+
+![Message Passing](images/mesg-pass-01.png)
+
+![Direct Message Passing](images/dierct-mesg-pass.png)
+
+![Indirect Message Passing](images/indirect-mesg-pass.png)
+
+![Producer Consumer Message Passing](images/pro-con-mesg-pass.png)
 
 - Mechanism for processes to communicate and synchronize without sharing address space.
 - Useful in distributed systems (processes on different computers).
@@ -236,15 +272,11 @@ After `fork()`:
 - Establish link between processes
 - Exchange messages via send/receive
 
-![Message Passing](images/mesg-pass-01.png)
-
 **Direct Communication:**
 - Processes name each other explicitly
 - `send(P, message)` - send to process P
 - `receive(Q, message)` - receive from process Q
 - Link established automatically between communicating pair
-
-![Direct Message Passing](images/dierct-mesg-pass.png)
 
 **Indirect Communication:**
 - Messages sent/received through **mailboxes** (ports)
@@ -252,10 +284,6 @@ After `fork()`:
 - `receive(A, message)` - receive from mailbox A
 - Link established if processes share a mailbox
 - Mailbox can be owned by process or OS
-
-![Indirect Message Passing](images/indirect-mesg-pass.png)
-
-![Producer Consumer Message Passing](images/pro-con-mesg-pass.png)
 
 **Synchronization:**
 - **Blocking (synchronous)**: Sender blocks until received; receiver blocks until message available
@@ -265,19 +293,29 @@ After `fork()`:
 
 # MESSAGE QUEUE - DATA STRUCTURE USED IN MESSAGE PASSING
 
+![Message Queue](images/mesg-q-01.png)
+
+![Message Queue Details](images/mesg-q-details.png)
+
 - Messages exchanged between processes reside temporarily in a **message queue**.
 - Queue can be:
   - **Zero capacity**: No buffering; sender must wait (rendezvous)
   - **Bounded capacity**: Finite length n; sender waits if queue full
   - **Unbounded capacity**: Infinite length; sender never waits
 
-![Message Queue](images/mesg-q-01.png)
-
-![Message Queue Details](images/mesg-q-details.png)
-
 ---
 
 # PIPE
+
+![Pipes](images/pipes-01.png)
+
+![Unidirectional Pipe](images/pipe-unidire.png)
+
+![Unidirectional Pipe Details](images/unidir-pipe-details.png)
+
+![Unidirectional Pipe Details 2](images/unidir-pipe-details02.png)
+
+![Bidirectional Pipe](images/bidir-pipe-01.png)
 
 - A **pipe** acts as a conduit for communication between processes.
 - One of the earliest IPC mechanisms in UNIX.
@@ -288,19 +326,11 @@ After `fork()`:
 3. Must relationship (parent-child) exist?
 4. Can pipes communicate over a network?
 
-![Pipes](images/pipes-01.png)
-
 **Ordinary (Anonymous) Pipes:**
 - Unidirectional communication
 - One end for writing, one for reading
 - Requires parent-child relationship
 - Cannot be accessed from outside the process that created it
-
-![Unidirectional Pipe](images/pipe-unidire.png)
-
-![Unidirectional Pipe Details](images/unidir-pipe-details.png)
-
-![Unidirectional Pipe Details 2](images/unidir-pipe-details02.png)
 
 **Named Pipes (FIFOs):**
 - More powerful than ordinary pipes
@@ -309,28 +339,21 @@ After `fork()`:
 - Several processes can use the same pipe
 - Continue to exist after communicating processes have finished
 
-![Bidirectional Pipe](images/bidir-pipe-01.png)
-
 ---
 
 # JOB QUEUE
-
-- Set of **all processes** in the system.
-- When a process enters the system, it's placed in the job queue.
-- Contains processes in any state (new, ready, waiting, running, terminated).
 
 ![Job Queue](images/jobs-101.png)
 
 ![Job Queue Benefits](images/jobs-pros.png)
 
+- Set of **all processes** in the system.
+- When a process enters the system, it's placed in the job queue.
+- Contains processes in any state (new, ready, waiting, running, terminated).
+
 ---
 
 # READY QUEUE
-
-- Set of all processes residing in **main memory**, ready and waiting to execute.
-- Stored as a linked list.
-- Ready queue header contains pointers to first and last PCBs.
-- Each PCB includes a pointer to next PCB in ready queue.
 
 ![Ready Queue](images/readuq-101.png)
 
@@ -338,14 +361,14 @@ After `fork()`:
 
 ![Ready Queue Implementation 2](images/readyq-impl02.png)
 
+- Set of all processes residing in **main memory**, ready and waiting to execute.
+- Stored as a linked list.
+- Ready queue header contains pointers to first and last PCBs.
+- Each PCB includes a pointer to next PCB in ready queue.
+
 ---
 
 # DEVICE QUEUE
-
-- Set of processes **waiting for a particular I/O device**.
-- Each device has its own device queue.
-- Process moves from ready queue to device queue when it requests I/O.
-- After I/O completion, process returns to ready queue.
 
 ![Device Queue](images/deviceq-101.png)
 
@@ -353,9 +376,18 @@ After `fork()`:
 
 ![Device Queue Implementation](images/deviceq-impl.png)
 
+- Set of processes **waiting for a particular I/O device**.
+- Each device has its own device queue.
+- Process moves from ready queue to device queue when it requests I/O.
+- After I/O completion, process returns to ready queue.
+
 ---
 
 # TYPES OF PROCESSES
+
+![Types of Processes](images/proc-types.png)
+
+![Process Types Pros and Cons](images/proc-types-pro-cons.png)
 
 **I/O-Bound Process:**
 - Spends more time doing I/O than computations
@@ -369,13 +401,17 @@ After `fork()`:
 
 **Note:** A good process mix includes both I/O-bound and CPU-bound processes for efficient CPU and device utilization.
 
-![Types of Processes](images/proc-types.png)
-
-![Process Types Pros and Cons](images/proc-types-pro-cons.png)
-
 ---
 
 # SCHEDULERS
+
+![Long-Term Scheduler](images/LTsche-01.png)
+
+![Long-Term Scheduler 2](images/LTSched-02.png)
+
+![Short-Term Scheduler](images/STSche.png)
+
+![Medium-Term Scheduler](images/MTScheduler.png)
 
 **Long-Term Scheduler (Job Scheduler):**
 - Selects processes from job pool to bring into ready queue (memory)
@@ -383,24 +419,16 @@ After `fork()`:
 - Invoked infrequently (seconds, minutes)
 - Should select good mix of I/O-bound and CPU-bound processes
 
-![Long-Term Scheduler](images/LTsche-01.png)
-
-![Long-Term Scheduler 2](images/LTSched-02.png)
-
 **Short-Term Scheduler (CPU Scheduler):**
 - Selects from ready queue which process to execute next
 - Invoked very frequently (milliseconds)
 - Must be fast (context switch overhead)
-
-![Short-Term Scheduler](images/STSche.png)
 
 **Medium-Term Scheduler:**
 - Removes processes from memory (swapping)
 - Reduces degree of multiprogramming
 - Process swapped out, then swapped back in to continue execution
 - Helps manage memory and process mix
-
-![Medium-Term Scheduler](images/MTScheduler.png)
 
 ---
 

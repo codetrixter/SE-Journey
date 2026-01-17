@@ -13,7 +13,7 @@
 
 ### Types of Interfaces
 
-![Types of OS Interfaces](types-of-os-interfaces.png)
+![Types of OS Interfaces](images/types-of-os-interfaces.png)
 
 Operating systems provide interfaces for users and programs to interact with system resources:
 
@@ -37,7 +37,7 @@ Operating systems provide interfaces for users and programs to interact with sys
 
 ### Command Line Interface (CLI)
 
-![CLI Details](details-of-CLI.png)
+![CLI Details](images/details-of-CLI.png)
 
 **Characteristics:**
 - CLI may or may not be part of the kernel
@@ -64,7 +64,7 @@ Operating systems provide interfaces for users and programs to interact with sys
 
 ### What are System Calls?
 
-![System Call Definition](sys-call-definition.png)
+![System Call Definition](images/sys-call-definition.png)
 
 **System calls** provide the interface between a running program and the operating system. They are the means by which a user program requests services from the OS kernel.
 
@@ -76,7 +76,7 @@ Operating systems provide interfaces for users and programs to interact with sys
 
 ### System Call Examples
 
-![System Call Examples](syscall-examples.png)
+![System Call Examples](images/syscall-examples.png)
 
 Common system call categories:
 - **Process control**: create, terminate, load, execute
@@ -88,7 +88,7 @@ Common system call categories:
 
 ### System Call Invocation
 
-![System Call Invocation](syscall-invocation.png)
+![System Call Invocation](images/syscall-invocation.png)
 
 **Process:**
 1. Application makes API call
@@ -106,11 +106,11 @@ Common system call categories:
 
 ### Application Programming Interface (API)
 
-![What is API](what-is-api.png)
+![What is API](images/what-is-api.png)
 
-![API Examples](examples-of-API.png)
+![API Examples](images/examples-of-API.png)
 
-![API Benefits](benefits-api.png)
+![API Benefits](images/benefits-api.png)
 
 **API** is a set of functions available to programmers for accessing OS services, providing abstraction over system calls.
 
@@ -129,9 +129,9 @@ Common system call categories:
 
 #### Process Management System Calls
 
-![Process Management System Calls](syscall-procmgmt.png)
+![Process Management System Calls](images/syscall-procmgmt.png)
 
-![Process Management System Calls Details](syscall-for-procmgmt.png)
+![Process Management System Calls Details](images/syscall-for-procmgmt.png)
 
 **Key system calls:**
 - `fork()`: Create new process
@@ -144,9 +144,9 @@ Common system call categories:
 
 #### File Management System Calls
 
-![File Handling System Calls](filehandling-syscall.png)
+![File Handling System Calls](images/filehandling-syscall.png)
 
-![File Permissions](permission-file.png)
+![File Permissions](images/permission-file.png)
 
 **Key system calls:**
 - `open()`: Open file
@@ -166,7 +166,7 @@ Common system call categories:
 
 #### Device Management System Calls
 
-![Device Management System Calls](devicemgmt-syscall.png)
+![Device Management System Calls](images/devicemgmt-syscall.png)
 
 **Key system calls:**
 - `ioctl()`: Device-specific operations
@@ -182,7 +182,7 @@ Common system call categories:
 
 #### Miscellaneous System Calls
 
-![Miscellaneous System Calls](misc-syscalls.png)
+![Miscellaneous System Calls](images/misc-syscalls.png)
 
 **Information Maintenance:**
 - `getpid()`, `getuid()`: Get process/user ID
@@ -205,9 +205,9 @@ Common system call categories:
 
 ### Monolithic Kernels
 
-![Monolithic Kernel Design](monolithic-kernel-design.png)
+![Monolithic Kernel Design](images/monolithic-kernel-design.png)
 
-![Monolithic Kernel Pros and Cons](monolithickernel-por-cons.png)
+![Monolithic Kernel Pros and Cons](images/monolithickernel-por-cons.png)
 
 **Structure:**
 - All OS services run in kernel space
@@ -235,9 +235,9 @@ Common system call categories:
 
 ### Layered Kernels
 
-![Layered Kernel Definition](layeredkernel-definition.png)
+![Layered Kernel Definition](images/layeredkernel-definition.png)
 
-![Layered Kernel Pros and Cons](layeredkernel-pro-cons.png)
+![Layered Kernel Pros and Cons](images/layeredkernel-pro-cons.png)
 
 **Structure:**
 - OS divided into hierarchical layers
@@ -267,9 +267,9 @@ Common system call categories:
 
 ### Microkernels
 
-![Microkernel Architecture](microkernel-arch.png)
+![Microkernel Architecture](images/microkernel-arch.png)
 
-![Microkernel Pros and Cons](microkernel-pro-cons.png)
+![Microkernel Pros and Cons](images/microkernel-pro-cons.png)
 
 **Structure:**
 - Minimal kernel with only essential services
@@ -304,9 +304,9 @@ Common system call categories:
 
 ### Loadable Kernel Modules (LKM)
 
-![Loadable Kernel Modules Definition](loadableKernel-defined.png)
+![Loadable Kernel Modules Definition](images/loadableKernel-defined.png)
 
-![Loadable Kernel Modules Comparison](loadableKernel-compare.png)
+![Loadable Kernel Modules Comparison](images/loadableKernel-compare.png)
 
 **Structure:**
 - Core kernel with minimal functionality
@@ -341,9 +341,9 @@ Common system call categories:
 
 ### Hybrid Kernels
 
-![Hybrid Kernel Definition](hybridkernel-def.png)
+![Hybrid Kernel Definition](images/hybridkernel-def.png)
 
-![Hybrid Kernel Properties](hybridkernel-pro.png)
+![Hybrid Kernel Properties](images/hybridkernel-pro.png)
 
 **Structure:**
 - Combines microkernel and monolithic approaches
@@ -379,9 +379,9 @@ Common system call categories:
 
 ### BIOS (Basic Input/Output System)
 
-![BIOS](BIOS.png)
+![BIOS](images/BIOS.png)
 
-![BIOS Access](BIOS-access.png)
+![BIOS Access](images/BIOS-access.png)
 
 **BIOS** is firmware that initializes hardware during boot process before OS loads.
 
@@ -413,9 +413,9 @@ Common system call categories:
 
 ### POST (Power-On Self Test)
 
-![POST](POST.png)
+![POST](images/POST.png)
 
-![POST Operations](POST-ops.png)
+![POST Operations](images/POST-ops.png)
 
 **POST** is a diagnostic testing sequence run by BIOS to verify hardware is functioning correctly.
 
@@ -441,11 +441,11 @@ Common system call categories:
 
 ### Stages of Booting
 
-![Boot Stages 1](BOOT-stages-1.png)
+![Boot Stages 1](images/BOOT-stages-1.png)
 
-![Boot Stages 2](BOOT-stages-2.png)
+![Boot Stages 2](images/BOOT-stages-2.png)
 
-![GRUB Bootloader](GRUB-bootloader.png)
+![GRUB Bootloader](images/GRUB-bootloader.png)
 
 **Boot Process:**
 
