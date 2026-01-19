@@ -37,9 +37,11 @@
     for the base class to return). Using a pure virtual function may be an option here if you don’t need to 
     instantiate the base class.
 
-   A warning about dynamic_cast and RTTI::
+   //!A warning about dynamic_cast and RTTI::
 
-    Run-time type information (RTTI) is a feature of C++ that exposes information about an object’s data type at runtime. This capability is leveraged by dynamic_cast. Because RTTI has a pretty significant space performance cost, some compilers allow you to turn RTTI off as an optimization. Needless to say, if you do this, dynamic_cast won’t function correctly
+    //!Run-time type information (RTTI) is a feature of C++ that exposes information about an object’s data type at runtime. 
+	//!This capability is leveraged by dynamic_cast. Because RTTI has a pretty significant space performance cost, some compilers 
+	//!allow you to turn RTTI off as an optimization. Needless to say, if you do this, dynamic_cast won’t function correctly
    ******************
  * @version 0.1
  * @date 2022-08-05
@@ -50,7 +52,7 @@
 #include <iostream>
 #include <string>
 //****************point-1***
-class Base
+/* class Base
 {
 protected:
 	int m_value{};
@@ -109,9 +111,11 @@ void mainVersionTwo()
 
 int main(int argc, char const *argv[])
 {
+	//mainVersionTwo();
+
     /// The above example of dynamic casting worked because the returned derived object was pointed by Base pointer,
-    /// what if the returning object was of base type, the the dynamic cast would not have worked
-    Base* b{ getObject(true) };
+    /// what if the returning object was of base type, the the dynamic cast would not have worked, since it requires vtable to do casting.
+    Base* b{ getObject(false) };
 
     /// If the dynamic cast fails then the result of the conversion is a null pointer
     /// hence the behaviour will be undefined or segfault.
@@ -124,7 +128,7 @@ int main(int argc, char const *argv[])
 	delete b;
 
     return 0;
-}
+} */
 //****************point-1***
 //****************point-2***
 // Class identifier
@@ -176,7 +180,7 @@ Base* getObject(bool bReturnDerived)
 
 int main()
 {
-	Base* b{ getObject(true) };
+	Base* b{ getObject(false) };
 
 	if (b->getClassID() == ClassID::derived)
 	{
@@ -191,7 +195,7 @@ int main()
 } */
 //****************point-2***
 //****************point-3***
-/* class Base
+class Base
 {
 protected:
 	int m_value;
@@ -228,6 +232,6 @@ int main()
 	std::cout << "The name of the Derived is: " << d.getName() << '\n'; // we can access Derived::getName through d
 
 	return 0;
-} */
+}
 //****************point-3***
 

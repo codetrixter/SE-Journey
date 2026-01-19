@@ -20,6 +20,6 @@
  
 10. [Dynamic Casting](dynamicCasts.cpp)
  
-11. TBD - Printing Inherited Classes
+11. [Ostream operator overloading in inherited classes](printingInheritedClasses.cpp)
  
 12. TBD - Chapter End Quiz
