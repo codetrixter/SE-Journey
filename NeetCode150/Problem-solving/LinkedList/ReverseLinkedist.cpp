@@ -9,7 +9,9 @@
  *
  */
 #include <iostream>
-#include <list>
+//#include <list>
+
+using namespace std;
 
 struct ListNode
 {
@@ -29,7 +31,7 @@ ListNode *reverseList(ListNode *head)
 
     ListNode *prev = NULL;
     ListNode *curr = head;
-    ListNode *next = curr->next;
+    ListNode *next = NULL;
 
     while (curr != NULL)
     {
@@ -54,7 +56,13 @@ int main(int argc, char const *argv[])
     three->val = 30;three->next = four;
     two->val = 20;two->next = three;
     one->val = 10;one->next = two;
+
     auto list = reverseList(one);
-    std::cout << list->next->val;
+
+    while (list != nullptr)
+    {
+        cout << list->val << "->";
+        list = list->next;
+    }
     return 0;
 }
