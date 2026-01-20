@@ -22,44 +22,32 @@ struct ListNode
 class Solution
 {
 public:
+    // One pass solution O(n)
     ListNode *reverseBetween(ListNode *head, int left, int right)
     {
+        ListNode dummy(0);
+        dummy.next = head;
+        ListNode* curr = head;
+        ListNode* left_prev = &dummy;
 
-        ListNode *iter = head;
-        ListNode *temp = head;
-        ListNode *tempnext = nullptr;
-        ListNode *prev = nullptr;
-        ListNode *last = nullptr;
-
-        while (iter != nullptr)
+        for(int i{}; i < left-1; ++i)
         {
-            if (iter->val == left)
-            {
-                while (iter->val != right)
-                {
-                    if (last == nullptr)
-                    {
-                        last = iter;
-                        temp = iter;
-                        iter = iter->next;  
-                    }
-                    else
-                    {
-                        tempnext = iter->next;
-                        iter->next = temp;
-                        temp = iter;
-                        iter = tempnext;
-                    }
-                }
-                last->next = iter->next;
-                iter->next = temp;
-            }
-            prev = iter;
-            if(tempnext == nullptr)
-                iter = iter->next;
-            iter = tempnext;
+            left_prev = curr;
+            curr = curr->next;
         }
-        return head;
+
+        ListNode* prev = nullptr;
+        for(int i{}; i < right-left+1; ++i)
+        {
+            ListNode* temp = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = temp;
+        }
+        left_prev->next->next = curr;
+        left_prev->next = prev;
+
+        return dummy.next;
     }
 };
 
@@ -73,7 +61,7 @@ int main(int argc, char const *argv[])
     node1->next->next->next->next = new ListNode(5);
     node1->next->next->next->next->next = new ListNode(6);
 
-    auto head = s.reverseBetween(node1, 2, 5);
+    auto head = s.reverseBetween(node1, 2, 3);
 
     while (head != nullptr)
     {
