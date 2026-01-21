@@ -22,4 +22,4 @@
  
 11. [Ostream operator overloading in inherited classes](printingInheritedClasses.cpp)
  
-12. TBD - Chapter End Quiz
+12. [Summary and quiz very important for knowledge check](summary-quiz.cpp)
