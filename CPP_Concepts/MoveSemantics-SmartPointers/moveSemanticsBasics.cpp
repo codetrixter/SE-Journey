@@ -41,14 +41,14 @@ class String
 
     void print()
     {
-        for(uint32_t i = 0; i < m_size; i++)
+        for(u_int32_t i = 0; i < m_size; i++)
             printf("%c", m_data[i]);
         std::cout << std::endl;
     }
 
     private:
     char* m_data;
-    uint32_t m_size;
+    u_int32_t m_size;
 };
 
 class Entity
