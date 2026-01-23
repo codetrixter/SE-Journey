@@ -23,7 +23,7 @@
  */
 #include <iostream>
 
-template<typename T>
+/* template<typename T>
 class Auto_ptr3
 {
 	T* m_ptr;
@@ -117,7 +117,7 @@ Auto_ptr3<Resource> generateResource()
 	//  (which avoids the need to make a copy or do a move at all). In such a case, neither the copy constructor nor move constructor would be called.
 	 
 	
-	return res; // this return value will invoke the copy/move constructor
+	return res; // this return value will invoke the move constructor due to above reasons.
 }
 
 // @brief Here the resource acquisation is done 3 times for copy version :
@@ -141,10 +141,10 @@ int main()
 {
 	Auto_ptr3<Resource> mainres;
 	//In the presence of move contructor and assignment operator, copy versions are ignored.
-	mainres = generateResource(); // this assignment will invoke the copy assignment
+	mainres = generateResource(); // this assignment will invoke the move assignment on the temp object that has been move constructed while returning from generateResource().
 
 	return 0;
-}
+} */
 
 
 //*************************************Disabling copying in our smart pointer class***
@@ -172,6 +172,7 @@ public:
 	Auto_ptr5(Auto_ptr5&& a) noexcept
 		: m_ptr(a.m_ptr)
 	{
+		std::cout << "move ctor...\n";
 		a.m_ptr = nullptr;
 	}
 
@@ -182,6 +183,7 @@ public:
 	// Transfer ownership of a.m_ptr to m_ptr
 	Auto_ptr5& operator=(Auto_ptr5&& a) noexcept
 	{
+		std::cout << "move assign...\n";
 		// Self-assignment detection
 		if (&a == this)
 			return *this;
@@ -200,17 +202,26 @@ public:
 	T* operator->() const { return m_ptr; }
 	bool isNull() const { return m_ptr == nullptr; }
 };
+
 class Resource
 {
 public:
 	Resource() { std::cout << "Resource acquired\n"; }
 	~Resource() { std::cout << "Resource destroyed\n"; }
 };
+
+Auto_ptr5<Resource> generateResource()
+{
+	Auto_ptr5<Resource> res{new Resource};
+		
+	return res; // this return value will invoke the move constructor due to above reasons.
+}
+
 int main()
 {
 	Auto_ptr5<Resource> mainres;
 	//In the presence of move contructor and assignment operator, copy versions are ignored.
-	//mainres = generateResource(); // this assignment will invoke the copy assignment
+	mainres = generateResource(); // this assignment will invoke the copy assignment
 	return 0;
 } */
 //*************************************Disabling copying in our smart pointer class***
@@ -220,19 +231,27 @@ int main()
  * Move version takes : 0.0154859sec ~30% faster than copy version
  * 
  */
-/* #include <chrono>
+#include <chrono>
+#include <cstddef>
+#include <algorithm>
 
-template <typename T>
+/* template <typename T>
 class DynamicArray
 {
 private:
 	T* m_array;
 	int m_length;
 
+	void alloc(int length)
+	{
+		m_array = new T[static_cast<std::size_t>(length)];
+		m_length = length;
+	}
+
 public:
 	DynamicArray(int length)
-		: m_array(new T[length]), m_length(length)
 	{
+		alloc(length);
 	}
 
 	~DynamicArray()
@@ -246,8 +265,11 @@ public:
 	// 	: m_length(arr.m_length)
 	// {
 	// 	m_array = new T[m_length];
-	// 	for (int i = 0; i < m_length; ++i)
-	// 		m_array[i] = arr.m_array[i];
+
+	// 	std::copy_n(arr.m_array, m_length, m_array);	//Doing what below did
+	// 	// for (int i = 0; i < m_length; ++i)
+	// 	// 	m_array[i] = arr.m_array[i];
+
 	// } 
 
 	// Copy assignment
@@ -259,11 +281,13 @@ public:
 
 	// 	delete[] m_array;
 
-	// 	m_length = arr.m_length;
-	// 	m_array = new T[m_length];
+	// 	alloc(arr.m_length);	//Doing what below 2 lines did
+	// 	// m_length = arr.m_length;
+	// 	// m_array = new T[m_length];
 
-	// 	for (int i = 0; i < m_length; ++i)
-	// 		m_array[i] = arr.m_array[i];
+	// 	std::copy_n(arr.m_array, m_length, m_array);	//Doing what below did
+	// 	// for (int i = 0; i < m_length; ++i)
+	// 	// 	m_array[i] = arr.m_array[i];
 
 	// 	return *this;
 	// }
@@ -292,6 +316,7 @@ public:
 
 		return *this;
 	}
+
 	int getLength() const { return m_length; }
 	T& operator[](int index) { return m_array[index]; }
 	const T& operator[](int index) const { return m_array[index]; }
@@ -343,3 +368,98 @@ int main()
 	std::cout << t.elapsed();
 } */
 //*************************************Array class with copy and move operatiosn to see performance***
+
+//**************IMPORTANT POINT************************* */
+
+#include <string_view>
+
+/* class Name
+{
+	private:
+	std::string_view m_name{};
+
+	public:
+	Name(std::string_view name)
+	: m_name{name}
+	{}
+
+	Name(const Name& name) = default;
+	Name& operator =(const Name& name) = default;
+
+	// Name(Name&& name) = delete;
+	Name& operator =(Name&& name) = delete;
+
+	const std::string_view& get() const
+	{
+		return m_name;
+	}
+
+};
+
+Name getJoe()
+{
+	Name joe{"Joe"};
+	// gcc compiler tries to use move ctor due to its inherent performance optimization feature, 
+	// in order to override this feature you have to remove move ctor else move ctor is considered 
+	// declared evene if it is deleted.
+	return joe;	
+}
+
+int main(int argc, char const *argv[])
+{
+	Name n{getJoe()};
+	
+	std::cout << n.get() ;
+	return 0;
+} */
+
+//***************std::swap issues with move semantics *************/
+
+class Name
+{
+private:
+    std::string m_name {}; // std::string is move capable
+
+public:
+    Name(std::string_view name) : m_name{ name }
+    {
+    }
+
+    Name(const Name& name) = delete;
+    Name& operator=(const Name& name) = delete;
+
+    Name(Name&& name) noexcept
+    {
+        std::cout << "Move ctor\n";
+
+        // std::swap(*this, name); // bad! since this inetrnally calls move ctor, which becomes infinite recursion,
+		swap(*this, name);
+    }
+
+    Name& operator=(Name&& name) noexcept
+    {
+        std::cout << "Move assign\n";
+
+        swap(*this, name);
+
+        return *this;
+    }
+
+	friend void swap(Name& a, Name& b)
+	{
+		std::swap(a.m_name, b.m_name);
+	}
+
+    const std::string& get() const { return m_name; }
+};
+
+int main()
+{
+    Name n1{ "Alex" };
+    n1 = Name{"Joe"}; // invokes move assignment, and then infinite recursion.
+
+    std::cout << n1.get() << '\n';
+
+    return 0;
+}
+

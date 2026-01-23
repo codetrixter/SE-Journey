@@ -6,7 +6,8 @@
  * 2- We should not use std::move on any persistent object we don't want to modify.
  * 
  * CONCLUSION:
- * std::move can be used whenever we want to treat an l-value like an r-value for the purpose of invoking move semantics instead of copy semantics.
+ * //!std::move can be used whenever we want to treat an l-value like an r-value for the purpose of invoking move semantics instead of copy semantics.
+ * //!std::move can alsobe used in a lot of sorting algorithms since thise involve a lot of swapping.
  * @version 0.1
  * @date 2022-09-03
  * 
@@ -18,21 +19,21 @@
 #include <utility>
 
 // copy version of the swap, this leads to excessive string creation and destruction which is slow.
-/* template<class T>
-void myswap(T& a, T& b)
-{
-	T tmp { a }; // invokes copy constructor
-	a = b; // invokes copy assignment
-	b = tmp; // invokes copy assignment
-} */
+// template<class T>
+// void myswap(T& a, T& b)
+// {
+// 	T tmp { a }; // invokes copy constructor
+// 	a = b; // invokes copy assignment
+// 	b = tmp; // invokes copy assignment
+// } 
 
 //Move version of swap
 /* template<class T>
 void myswap(T& a, T& b)
 {
-	T tmp { std::move(a) }; // invokes copy constructor
-	a = std::move(b); // invokes copy assignment
-	b = std::move(tmp); // invokes copy assignment
+	T tmp { std::move(a) }; // invokes move constructor
+	a = std::move(b); // invokes move assignment
+	b = std::move(tmp); // invokes move assignment
 }
 
 int main()
@@ -68,6 +69,7 @@ int main()
 
 	v.push_back(std::move(str)); // calls r-value version of push_back, which moves str into the array element
 
+	// Here str is  a moved from object, these objects are in a valid but indeterminate state hence should be avoided for any use after move operation.
 	std::cout << "str: " << str << '\n';
 	std::cout << "vector:" << v[0] << ' ' << v[1] << '\n';
 }
