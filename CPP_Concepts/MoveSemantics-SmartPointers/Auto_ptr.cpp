@@ -64,6 +64,7 @@ class Auto_ptr1
         return m_ptr;
     }
 };
+*/
 
 // A sample class to prove the above works
 class Resource
@@ -77,7 +78,7 @@ public:
         std::cout << "Hi\n";
     }
 };
- */
+
 /* void someFunction()
 {
     Auto_ptr1<Resource> ptr(new Resource()); // ptr now owns the Resource
@@ -114,31 +115,46 @@ int main()
 
 //-------------Solving double free by implementing move semantics via copy ctr--------------
 
+// Issues with this auto_ptr2 implementation:
+// 1. since we implemented move sematics using copy constructor, whenevr we call a function using pass by value
+//    the copy ctr is invoked leading to ownership transfer and the original pointer becomes null which may
+//    not be the intended behaviour.
+// 2. This does not have a feature of eleting arrays (delete[]), so it can only be used for single objects.
+// 3. It does not have a way to release ownership without deleting the object (like std::unique_ptr::release).
+
 template <typename T>
-class Auto_ptr1
+class Auto_ptr2
 {
     private:
-    // Raw pointer member that will hold the address of the dynamically allocated object
-    // This is the actual resource being managed by this smart pointer
     T* m_ptr;
 
     public:
-    // Constructor that takes a raw pointer (defaults to nullptr if no argument provided)
-    // 'explicit' would be better here to prevent implicit conversions, but it's omitted
-    // The pointer passed in becomes owned by this Auto_ptr1 instance
-    Auto_ptr1(T* ptr = nullptr)
-    // Member initializer list - initializes m_ptr with the passed pointer
-    // More efficient than assignment in constructor body
+    Auto_ptr2(T* ptr = nullptr)
     : m_ptr{ptr}
     {}
 
-    // Destructor - automatically called when Auto_ptr1 goes out of scope
-    // This is the key feature: it automatically deletes the managed resource
-    // preventing memory leaks without requiring manual delete calls
-    ~Auto_ptr1()
+    Auto_ptr2(Auto_ptr2& obj)
     {
-        // Deletes the dynamically allocated object pointed to by m_ptr
-        // Note: delete on nullptr is safe and does nothing
+        m_ptr = obj.m_ptr;
+        obj.m_ptr = nullptr;
+    }
+
+    Auto_ptr2& operator =(Auto_ptr2& obj)
+    {
+        if(this == &obj)
+            return *this;
+
+        // make sure we deallocate any pointer the destination is already holding first
+        delete m_ptr;
+
+        m_ptr = obj.m_ptr;
+        obj.m_ptr = nullptr;
+
+        return *this;
+    }
+
+    ~Auto_ptr2()
+    {
         delete m_ptr;
     }
     
@@ -151,4 +167,27 @@ class Auto_ptr1
     {
         return m_ptr;
     }
+
+    bool isNull()
+    {
+        return m_ptr == nullptr;
+    }
 };
+
+int main(int argc, char const *argv[])
+{
+    Auto_ptr2<Resource> res1(new Resource());
+	Auto_ptr2<Resource> res2; // Start as nullptr
+
+	std::cout << "res1 is " << (res1.isNull() ? "null\n" : "not null\n");
+	std::cout << "res2 is " << (res2.isNull() ? "null\n" : "not null\n");
+
+	res2 = res1; // res2 assumes ownership, res1 is set to null
+
+	std::cout << "Ownership transferred\n";
+
+	std::cout << "res1 is " << (res1.isNull() ? "null\n" : "not null\n");
+	std::cout << "res2 is " << (res2.isNull() ? "null\n" : "not null\n");
+
+	return 0;
+}

@@ -2,7 +2,7 @@
  * @file R-ValueReferences.cpp
  * @author Abhishek
  * @brief here we discuss about the r-value references in cpp:
- * 1- prior ot c++11, only one type of reference existed which was renamed to l-value reference in c++11, which can only be initialized with modifyable
+ * 1- prior to c++11, only one type of reference existed which was renamed to l-value reference in c++11, which can only be initialized with modifyable
  * l-values.
  * L-Value References Initialization and assignments:
  * -----------------------------------------------------------------------------------
@@ -73,7 +73,7 @@ public:
 
 int main()
 {
-	auto &&rref{ Fraction{ 3, 5 } }; // r-value reference to temporary Fraction
+	Fraction&& rref{ Fraction{ 3, 5 } }; // r-value reference to temporary Fraction
 
 	// f1 of operator<< binds to the temporary, no copies are created.
 	std::cout << rref << '\n';
@@ -94,10 +94,10 @@ void fun(int &&rref) // r-value arguments will select this function
 int main(int argc, char const *argv[])
 {
     int x{5};
-    int&& ref{16};
+    int&& ref{16};	//this here is an l-value as it has a name and an address.
     fun(x); // l-value argument calls l-value version of function
 	fun(5); // r-value argument calls r-value version of function
-    fun(ref);   //calls l-value version of function
+    fun(ref);   //calls l-value version of function, since is it passing and l-value.
     return 0;
 } */
 //***********************************R-value references as function parameters***
@@ -111,7 +111,7 @@ int main()
 	/// int &ref2{ 5 }; // B    error: cannot bind non-const lvalue reference of type ‘int&’ to an rvalue of type ‘int’
 
 	const int &ref3{ x }; // C
-	const int &ref4{ 5 }; // D
+	const int &ref4{ 5 }; // D	takeaway from this is that a const l-value reference can be initialized with both l-values and r-values.
 
 	// r-value references
 	/// int &&ref5{ x }; // E   error: cannot bind rvalue reference of type ‘int&&’ to lvalue of type ‘int’
