@@ -24,6 +24,8 @@
 
 ---
 
+# PROCESS DEFINE
+
 ![Process Definition](images/proc-def01.png)
 
 ![Process Definition 2](images/proc-def02.png)
@@ -162,11 +164,6 @@ if (pid == 0) {
     wait(NULL);  // Wait for child
 }
 ```
-
-![Fetching PID](images/fetching-pid.png)
-
-![Process Exec Function](images/proc-exec-func.png)
-
 ---
 
 # POST PROCESS CREATION

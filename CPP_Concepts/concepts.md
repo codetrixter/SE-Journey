@@ -1,7 +1,7 @@
 # TOPICS IN SEQUENCE
 
 1.  [Scope-Duration-Linkage](Scope-Duration-Linkage/) - revisit 12sept25
-2.  [Type-Conversions-aliasing-and-deductions](TypeConversions-aliasingandDeductions/) - 12sept25 - relocate topics
+2.  [Type-Conversions-aliasing-and-deductions](TypeConversions-aliasingandDeductions/) - 12sept25 relocate topics
 3.  [L-Value-R-Value References](lValue-rValueReferences/)
 4.  [Function-Dynamics](FunctionDynamics/)
 5.  [Move-Semantics-and-Smart-pointers](MoveSemantics-SmartPointers/) -> skipped
