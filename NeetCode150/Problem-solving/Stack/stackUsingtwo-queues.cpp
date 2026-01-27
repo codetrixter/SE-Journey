@@ -63,7 +63,7 @@ public:
         } 
     }
 
-    //@TODO use queue of queues for constant time push() and pop().
+    //TODO : use queue of queues for constant time push() and pop().
 
     int pop()
     {

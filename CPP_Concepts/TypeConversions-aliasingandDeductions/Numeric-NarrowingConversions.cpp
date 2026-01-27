@@ -7,8 +7,8 @@
  *  b- wider integral to narrower integral.
  * 2- We should avoid such conversions in general, if needed we can use static_cast for explicit conversions.
  * 3- Brace initialization dis-allows marrowing conversion.
- * @todo Narrowing conversions of constexper values.
- * @todo List initialization with constexper initializers.
+ * //TODO : Narrowing conversions of constexper values.
+ * //TODO : List initialization with constexper initializers.
  * @version 0.1
  * @date 2022-07-01
  * 
