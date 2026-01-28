@@ -5,8 +5,8 @@
 3. [Move constructors and Move assignmenets](moveCtorAndassign.cpp)
 4. [std::move](STDmove.cpp)
 5. [std::unique_ptr](unique-pointer.cpp)
-6. [std::shared_ptr]()
-7. [Smart Pointers](smartPointers.cpp)->moderate understanding
+6. [std::shared_ptr](shared-ptr.cpp)
+7. [weak pointer and its use](weak-ptr-issues-with-sharedptr.cpp)
 
 # MOTIVATION/BENFITS OF MOVE SEMANTICS
 

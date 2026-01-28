@@ -130,7 +130,7 @@ int main()
 	std::cout << "Our dumb ptr is: " << ((dumb == nullptr) ? "nullptr\n" : "non-null\n");
 
 	auto weak{ getWeakPtr() };
-    // I we apply lock on an expired pointer, it will return shared_ptr to nullptr.
+    // If we apply lock on an expired pointer, it will return shared_ptr to nullptr.
 	std::cout << "Our weak ptr is: " << ((weak.expired()) ? "expired\n" : "valid\n");
 
 	return 0;
