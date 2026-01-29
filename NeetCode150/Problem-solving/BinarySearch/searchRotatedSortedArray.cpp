@@ -32,7 +32,8 @@ nums is guaranteed to be rotated at some pivot.
 
 using namespace std;
 
-/* bool binarySearch(vector<int> &vec, int start, int end, int target)
+//TODO, write a solution where pivot point is found and then binary search (with duplicates) is applied
+bool binarySearch(vector<int> &vec, int start, int end, int target)
 {
     int mid = 0;
 
@@ -53,7 +54,7 @@ using namespace std;
 
     return false;
 }
-
+/*
 bool search(vector<int> &nums, int target)
 {
     int start = 0, end = nums.size() - 1;
@@ -72,6 +73,7 @@ bool search(vector<int> &nums, int target)
 } */
 
 // Neet's approach...
+//TODO understand this solution.
 bool neetSearch(vector<int> &nums, int target)
 {
     int l = 0, r = nums.size() - 1;
@@ -118,10 +120,11 @@ bool neetSearch(vector<int> &nums, int target)
 
 int main(int argc, char const *argv[])
 {
-    vector<int> inp = {3, 4, 4, 5, 6, 1, 2, 2};
+    // vector<int> inp = {2, 4, 4, 5, 6, 1, 2, 2};
     // vector<int> inp = {6, 6, 1, 3, 3, 5, 5};
-    int target = 1;
-    cout << neetSearch(inp, target);
-    // cout << binarySearch(inp, 2, 6, target);
+    vector<int> inp = {1, 1, 2, 2, 2, 2, 3};
+    int target = 3;
+    // cout << neetSearch(inp, target);
+    cout << binarySearch(inp, 0, inp.size()-1, target);
     return 0;
 }
