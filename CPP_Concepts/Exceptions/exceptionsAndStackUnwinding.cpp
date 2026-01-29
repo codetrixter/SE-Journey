@@ -1,8 +1,7 @@
 /**
  * @file exceptionsAndStackUnwinding.cpp
  * @author Abhishek
- * @brief Here we discuss about the stack unwinding that happens when an exception is resolved:
- * 1- 
+ * @brief Here we discuss about the stack unwinding that happens when an exception is resolved.
  * @version 0.1
  * @date 2022-09-08
  * 

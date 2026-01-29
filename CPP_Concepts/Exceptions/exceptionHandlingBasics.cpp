@@ -2,7 +2,7 @@
  * @file exceptionHandlingBasics.cpp
  * @author Abhishek Mishra
  * @brief Here we discuss about the exception and how they are caught and thrown:
- * 1- Exceptions handling are just a way to handle errors during runtime, error handling is usually doen using return codes, however return codes
+ * 1- Exceptions handling are just a way to handle errors during runtime, error handling is usually done using return codes, however return codes
  * can be often cryptic and unclear.
  * 2- A throw statement acts like a signal, which tells that an error condition has occurred, an exption can be thrown using any variable:
  *  a. throw -1; // throw a literal integer value
@@ -38,6 +38,8 @@
             return index;
 
     // If no match was found, return -1
+    throw -1;
+    //std::cout << "Hi....";
     return -1;
 }
 
@@ -46,7 +48,8 @@ int main(int argc, char const *argv[])
     try
     {
         // Statements that may throw exceptions you want to handle go here
-        throw -1; // here's a trivial example
+        findFirstChar("abhishek", 'l');
+        //throw -1; // here's a trivial example
     }
     catch (int x)
     {

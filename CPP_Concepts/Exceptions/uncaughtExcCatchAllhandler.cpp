@@ -13,7 +13,7 @@
 #include <iostream>
 #include <cmath> // for sqrt() function
 
-/* // A modular square root function
+// A modular square root function
 double mySqrt(double x)
 {
     // If the user entered a negative number, this is an error condition
@@ -35,9 +35,9 @@ int main()
     std::cout << "The sqrt of " << x << " is " << mySqrt(x) << '\n';
 
     return 0;
-} */
+}
 //**********************Catch all handler***
-int main()
+/* int main()
 {
 	try
 	{
@@ -51,5 +51,5 @@ int main()
 	{
 		std::cout << "We caught an exception of an undetermined type\n";
 	}
-}
+} */
 //**********************Catch all handler***

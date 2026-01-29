@@ -2,7 +2,7 @@
  * @file classAndInheritanceExceptions.cpp
  * @author Abhishek
  * @brief Here we discuss about the exceptional scenarios related to following:
- * 1- member functions: Exceptions can be used to indiacate error conditions that may occur  during the execution of out member function.
+ * 1- member functions: Exceptions can be used to indicate error conditions that may occur during the execution of out member function.
  * 2- Inheritance: 
  * 3- User defined exceptions
  * 4- Exception can be caught of derived and base types.
@@ -74,7 +74,7 @@ int main()
 	return 0;
 } */
 //***************Excetion Inheritance***
-//***************User defined Excetion***
+//***************User defined Exceptions***
 #include <iostream>
 #include <string>
 #include <string_view>
