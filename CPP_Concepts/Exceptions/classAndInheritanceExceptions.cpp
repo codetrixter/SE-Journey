@@ -173,10 +173,10 @@ int main()
         s.resize(std::numeric_limits<std::size_t>::max()); // will trigger a std::length_error or allocation exception
     }
 	// This handler will catch std::length_error (and any exceptions derived from it) here
-	catch (const std::length_error& exception)
-	{
-		std::cerr << "You ran out of memory!" << '\n';
-	}
+	// catch (const std::length_error& exception)
+	// {
+	// 	std::cerr << "You ran out of memory!" << '\n';
+	// }
 	// This handler will catch std::exception (and any exception derived from it) that fall
 	// through here
 	catch (const std::exception& exception)
