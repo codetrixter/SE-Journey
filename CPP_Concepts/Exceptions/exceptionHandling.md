@@ -12,6 +12,8 @@
 
 6. [Function Try Blocks](functionTryBlock.cpp)
 
+6.1. [exception in destructors](exceptionsWithDestructors.cpp)
+
 7. ## Exception Dangers and Downsides:
     ### There are couple of downsides to using exceptions some of them are as follows:
     1. Cleaning up resources.

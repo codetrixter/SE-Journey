@@ -39,6 +39,7 @@ int main()
             std::cout << "Caught Base b, which is actually a ";
             b.print();
             std::cout << '\n';
+            //throw b;  this is an incorrect way of throwing exception since the object gets sliced here, since b is now copy-initialized from derived exception.
             throw; // note: We're now rethrowing the object here
         }
     }

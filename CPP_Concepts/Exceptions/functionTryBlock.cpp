@@ -10,6 +10,19 @@
  * clean up after a class.
  * SECOND: Function try is useful primarily for either logging failures before passing the exception up the stack, or for changing the type of 
  * exception thrown.
+ * 
+ *  ╔═══════════════════════════════╦═══════════════════════════╦═══════════════════════════╗
+	║ Function type                 ║ Can resolve exceptions    ║ Behavior at end of        ║
+	║                               ║ via return statement      ║ catch block               ║
+	╠═══════════════════════════════╬═══════════════════════════╬═══════════════════════════╣
+	║ Constructor                   ║ No, must throw or rethrow ║ Implicit rethrow          ║
+	╠═══════════════════════════════╬═══════════════════════════╬═══════════════════════════╣
+	║ Destructor                    ║ Yes                       ║ Implicit rethrow          ║
+	╠═══════════════════════════════╬═══════════════════════════╬═══════════════════════════╣
+	║ Non-value returning function  ║ Yes                       ║ Resolve exception         ║
+	╠═══════════════════════════════╬═══════════════════════════╬═══════════════════════════╣
+	║ Value-returning function      ║ Yes                       ║ Undefined behavior        ║
+	╚═══════════════════════════════╩═══════════════════════════╩═══════════════════════════╝
  * @version 0.1
  * @date 2022-09-16
  * 
