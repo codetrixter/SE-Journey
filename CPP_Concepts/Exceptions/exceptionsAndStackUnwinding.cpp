@@ -2,6 +2,13 @@
  * @file exceptionsAndStackUnwinding.cpp
  * @author Abhishek
  * @brief Here we discuss about the stack unwinding that happens when an exception is resolved.
+ * 
+ * //! When en exception is thrown, the program first check if it can be handled within the same function,
+ * //! if not, the the functions caller is checked to see if the handling is done there or not. This process of checking
+ * //! continues till a handler is found or stack is exhausted, if a match is found then the control jumps from
+ * //! the point of exception to the top of matching catch block. THis process involves unwinding of the
+ * //! stack and making sure the handling function is at the top of the stack.
+ * 
  * @version 0.1
  * @date 2022-09-08
  * 

@@ -1,10 +1,10 @@
 # TOPICS IN SEQUENCE
 
-1.  [Scope-Duration-Linkage](Scope-Duration-Linkage/) - revisit 12sept25
-2.  [Type-Conversions-aliasing-and-deductions](TypeConversions-aliasingandDeductions/) - 12sept25 relocate topics
+1.  [Scope-Duration-Linkage](Scope-Duration-Linkage/) 
+2.  [Type-Conversions-aliasing-and-deductions](TypeConversions-aliasingandDeductions/) 
 3.  [L-Value-R-Value References](lValue-rValueReferences/)
 4.  [Function-Dynamics](FunctionDynamics/)
-5.  [Move-Semantics-and-Smart-pointers](MoveSemantics-SmartPointers/) -> revisited around 26-Jan 2026
+5.  [Move-Semantics-and-Smart-pointers](MoveSemantics-SmartPointers/)
 6.  [Object-Relationships](ObjectRelationships/)
 7.  [Classes](OOPS-COncepts/Classes/)
 8.  [Inheritance](OOPS-COncepts/Inheritance/)
