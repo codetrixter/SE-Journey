@@ -9,18 +9,18 @@
  */
 
 // Standard C++ headers
-#include <iostream>   // For std::cout, std::cerr - console I/O
-#include <string>     // For std::string - string manipulation
-#include <cstring>    // For C-style string operations (if needed)
-#include <algorithm>  // For std::transform - used in uppercase conversion
-#include <cctype>     // For std::toupper - character case conversion
-#include <array>      // For std::array - fixed-size buffer container
+#include <iostream>  // For std::cout, std::cerr - console I/O
+#include <string>    // For std::string - string manipulation
+#include <cstring>   // For C-style string operations (if needed)
+#include <algorithm> // For std::transform - used in uppercase conversion
+#include <cctype>    // For std::toupper - character case conversion
+#include <array>     // For std::array - fixed-size buffer container
 
 // POSIX socket headers (standard on Linux/Unix systems)
-#include <sys/socket.h>  // For socket(), bind(), sendto(), recvfrom() - core socket operations
-#include <netinet/in.h>  // For sockaddr_in, INADDR_ANY - Internet address structures
-#include <arpa/inet.h>   // For inet_ntop(), htons(), ntohs() - IP address conversion functions
-#include <unistd.h>      // For close() - closing file descriptors/sockets
+#include <sys/socket.h> // For socket(), bind(), sendto(), recvfrom() - core socket operations
+#include <netinet/in.h> // For sockaddr_in, INADDR_ANY - Internet address structures
+#include <arpa/inet.h>  // For inet_ntop(), htons(), ntohs() - IP address conversion functions
+#include <unistd.h>     // For close() - closing file descriptors/sockets
 
 constexpr int BUFFER_SIZE = 1024;
 constexpr int SERVER_PORT = 8080;
