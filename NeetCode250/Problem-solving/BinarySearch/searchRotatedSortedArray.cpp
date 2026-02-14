@@ -118,6 +118,7 @@ bool neetSearch(vector<int> &nums, int target)
     return false;
 }
 
+
 int main(int argc, char const *argv[])
 {
     // vector<int> inp = {2, 4, 4, 5, 6, 1, 2, 2};
@@ -125,6 +126,7 @@ int main(int argc, char const *argv[])
     vector<int> inp = {1, 1, 2, 2, 2, 2, 3};
     int target = 3;
     // cout << neetSearch(inp, target);
+    cout << std::boolalpha ;
     cout << binarySearch(inp, 0, inp.size()-1, target);
     return 0;
 }
