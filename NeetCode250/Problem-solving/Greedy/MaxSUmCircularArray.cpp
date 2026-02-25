@@ -28,33 +28,76 @@ n == nums.length
 
 using namespace std;
 
-//Brute force
+// Brute force
+//  int maxSubarraySumCircular(vector<int> &nums)
+//  {
+//      int n = nums.size();
+//      int res = nums[0];
+
+//     for(int i{}; i < n; i++)
+//     {
+//         int curr = 0;
+//         for(int j = i; j < i+n; j++)
+//         {
+//             curr += nums[j%n];
+//             res = max(curr, res);
+//         }
+//     }
+//     return res;
+// }
+
+// Modified Kadane's Algorithm for Circular Array
+// Key Insight: Maximum subarray sum in a circular array can be in two cases:
+// Case 1: Maximum subarray is in the middle (doesn't wrap around) - use standard Kadane's
+// Case 2: Maximum subarray wraps around (uses end and beginning) - compute total - minimum subarray
 int maxSubarraySumCircular(vector<int> &nums)
 {
-    int n = nums.size();
-    int res = nums[0];
+        // globMax: Maximum subarray sum found so far (Case 1: no wrap-around)
+        // globMin: Minimum subarray sum found so far (used for Case 2: wrap-around)
+        int globMax = nums[0], globMin = nums[0];
+        
+        // curMax: Current maximum subarray sum ending at current position
+        // curMin: Current minimum subarray sum ending at current position
+        // total: Sum of all elements in the array
+        int curMax = 0, curMin = 0, total = 0;
 
-    for(int i{}; i < n; i++)
-    {
-        int curr = 0;
-        for(int j = i; j < i+n; j++)
-        {
-            curr += nums[j%n];
-            res = max(curr, res);
+        // Single pass through array - simultaneously find max subarray, min subarray, and total
+        for (int& num : nums) {
+            // Standard Kadane's for maximum subarray
+            // Either extend current subarray or start new one from current element
+            curMax = max(curMax + num, num);
+            
+            // Kadane's variation for minimum subarray
+            // Either extend current subarray or start new one from current element
+            curMin = min(curMin + num, num);
+            
+            // Accumulate total sum of all elements
+            total += num;
+            
+            // Update global maximum (best max subarray seen so far)
+            globMax = max(globMax, curMax);
+            
+            // Update global minimum (best min subarray seen so far)
+            globMin = min(globMin, curMin);
         }
+
+        // Return the maximum of two cases:
+        // Case 1: globMax (normal subarray, no wrap-around)
+        // Case 2: total - globMin (wrapped subarray = total - minimum middle part)
+        // 
+        // Edge case: If globMax <= 0, all numbers are negative
+        // In this case, total - globMin would give 0 (empty array), so return globMax (least negative)
+        // 
+        // Example: nums = [5, -3, 5]
+        // Case 1: globMax = 5 (just first or last element)
+        // Case 2: total = 7, globMin = -3, so 7 - (-3) = 10 (wraps: [5] + [5])
+        // Answer: max(5, 10) = 10 ✓
+        return globMax > 0 ? max(globMax, total - globMin) : globMax;
     }
-    return res;
-}
-
-// Kadane's Algorithm
-// int maxSubarraySumCircular(vector<int> & nums)
-// {
-
-// }
 
 int main(int argc, char const *argv[])
 {
-    vector<int> inp = {-2,4,-5,4,-5,9,4};
+    vector<int> inp = {2, -4, -1, 3, -2, 5};
     cout << maxSubarraySumCircular(inp);
     return 0;
 }

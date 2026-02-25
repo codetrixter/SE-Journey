@@ -28,11 +28,27 @@ Constraints:
 using namespace std;
 
 // Kadane's algo to be used for optimum output.
+
 int maxSubArray(vector<int> &nums)
 {
+    int currMax = 0, globalMax = nums[0], n = nums.size();
+
+    for (int i{}; i < n; i++)
+    {
+        /// The idea behind making subarray sum to 0 if sum is -ve is that anyting +ve added to a negative sum 
+        /// will only reduce the overall sum
+        if (currMax < 0)
+            currMax = 0;
+        currMax += nums[i];
+
+        globalMax = max(currMax, globalMax);
+    }
+    return globalMax;
 }
 
 int main(int argc, char const *argv[])
 {
+    vector<int> inp = {-5, -6, -3};
+    cout << maxSubArray(inp);
     return 0;
 }
