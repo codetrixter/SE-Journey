@@ -2,7 +2,25 @@
 
 ## Performance vs Scalability
 
-A service is **scalable** if it results in increased performance in a manner proportional to resources added. Generally, increasing performance means serving more units of work, but it can also be to handle larger units of work, such as when datasets grow.
+A service is **scalable** if it results in increased performance in a manner proportional to resources added. Generally, increasing performance means serving more units of work, but it can also be to handle larger u### Load Balancer vs Reverse Proxy
+
+Deploying a load balancer is useful when you have multiple servers. Often, load balancers route traffic to a set of servers serving the same function.
+
+Reverse proxies can be useful even with just one web server or application server, opening up the benefits described in the previous section.
+
+Solutions such as NGINX and HAProxy can support both layer 7 reverse proxying and load balancing.
+
+### Disadvantage(s): Reverse Proxy
+
+- Introducing a reverse proxy results in increased complexity.
+- A single reverse proxy is a single point of failure, configuring multiple reverse proxies (ie a failover) further increases complexity.
+
+### Source(s) and Further Reading
+
+- [Reverse proxy vs load balancer](https://www.nginx.com/resources/glossary/reverse-proxy-vs-load-balancer/)
+- [NGINX architecture](https://www.nginx.com/blog/inside-nginx-how-we-designed-for-performance-scale/)
+- [HAProxy architecture guide](http://www.haproxy.org/#docs)
+- [Wikipedia](https://en.wikipedia.org/wiki/Reverse_proxy), such as when datasets grow.
 
 ### Another Way to Look at Performance vs Scalability
 
@@ -107,7 +125,8 @@ In active-active, both servers are managing traffic, spreading the load between 
 
 ### Replication
 
-Master-slave and master-master replication patterns.
+1. Master-slave replication patterns.
+2. Master-master replication patterns.
 
 ---
 
@@ -173,42 +192,185 @@ DNS is hierarchical, with a few authoritative servers at the top level. Your rou
 
 Services such as CloudFlare and Route 53 provide managed DNS services. Some DNS services can route traffic through various methods:
 
-- Weighted round robin
-Prevent traffic from going to servers under maintenance
-Balance between varying cluster sizes
-A/B testing
-- Latency-based
-- Geolocation-based
+- **Weighted round robin**
+  - Prevent traffic from going to servers under maintenance
+  - Balance between varying cluster sizes
+  - A/B testing
+- **Latency-based**
+- **Geolocation-based**
 
-Disadvantage(s): DNS
-Accessing a DNS server introduces a slight delay, although mitigated by caching described above.
-DNS server management could be complex and is generally managed by governments, ISPs, and large companies.
-DNS services have recently come under DDoS attack, preventing users from accessing websites such as Twitter without knowing Twitter's IP address(es).
+### Disadvantage(s): DNS
+
+- Accessing a DNS server introduces a slight delay, although mitigated by caching described above.
+- DNS server management could be complex and is generally managed by governments, ISPs, and large companies.
+- DNS services have recently come under DDoS attack, preventing users from accessing websites such as Twitter without knowing Twitter's IP address(es).
 
 ---
 
-## CDN(Content Delivery Network)
+## CDN (Content Delivery Network)
 
 A content delivery network (CDN) is a globally distributed network of proxy servers, serving content from locations closer to the user. Generally, static files such as HTML/CSS/JS, photos, and videos are served from CDN, although some CDNs such as Amazon's CloudFront support dynamic content. The site's DNS resolution will tell clients which server to contact.
 
 Serving content from CDNs can significantly improve performance in two ways:
 
-Users receive content from data centers close to them
-Your servers do not have to serve requests that the CDN fulfills
+- Users receive content from data centers close to them
+- Your servers do not have to serve requests that the CDN fulfills
 
-Push CDNs
+### Push CDNs
+
 Push CDNs receive new content whenever changes occur on your server. You take full responsibility for providing content, uploading directly to the CDN and rewriting URLs to point to the CDN. You can configure when content expires and when it is updated. Content is uploaded only when it is new or changed, minimizing traffic, but maximizing storage.
 
-Sites with a small amount of traffic or sites with content that isn't often updated work well with push CDNs. Content is placed on the CDNs once, instead of being re-pulled at regular intervals.
+**Use case**: Sites with a small amount of traffic or sites with content that isn't often updated work well with push CDNs. Content is placed on the CDNs once, instead of being re-pulled at regular intervals.
 
-Pull CDNs
+### Pull CDNs
+
 Pull CDNs grab new content from your server when the first user requests the content. You leave the content on your server and rewrite URLs to point to the CDN. This results in a slower request until the content is cached on the CDN.
 
 A time-to-live (TTL) determines how long content is cached. Pull CDNs minimize storage space on the CDN, but can create redundant traffic if files expire and are pulled before they have actually changed.
 
-Sites with heavy traffic work well with pull CDNs, as traffic is spread out more evenly with only recently-requested content remaining on the CDN.
+**Use case**: Sites with heavy traffic work well with pull CDNs, as traffic is spread out more evenly with only recently-requested content remaining on the CDN.
 
-Disadvantage(s): CDN
-CDN costs could be significant depending on traffic, although this should be weighed with additional costs you would incur not using a CDN.
-Content might be stale if it is updated before the TTL expires it.
-CDNs require changing URLs for static content to point to the CDN.
+### Disadvantage(s): CDN
+
+- CDN costs could be significant depending on traffic, although this should be weighed with additional costs you would incur not using a CDN.
+- Content might be stale if it is updated before the TTL expires it.
+- CDNs require changing URLs for static content to point to the CDN.
+
+---
+
+## Load Balancer
+
+Load balancers distribute incoming client requests to computing resources such as application servers and databases. In each case, the load balancer returns the response from the computing resource to the appropriate client. 
+
+### Benefits
+
+Load balancers are effective at:
+
+- **Preventing requests from going to unhealthy servers**
+- **Preventing overloading resources**
+- **Helping to eliminate a single point of failure**
+
+Load balancers can be implemented with hardware (expensive) or with software such as HAProxy.
+
+### Additional Benefits
+
+- **SSL termination** - Decrypt incoming requests and encrypt server responses so backend servers do not have to perform these potentially expensive operations
+  - Removes the need to install X.509 certificates on each server
+  - **X.509 Certificates**: An ITU standard format for public key certificates that bind an identity (hostname, organization, or individual) to a public key using digital signatures. Used in TLS/SSL (HTTPS) and can be signed by a Certificate Authority (CA) or self-signed. Enables secure communication when validated.
+- **Session persistence** - Issue cookies and route a specific client's requests to same instance if the web apps do not keep track of sessions
+
+To protect against failures, it's common to set up multiple load balancers, either in active-passive or active-active mode.
+
+### Load Balancing Methods
+
+Load balancers can route traffic based on various metrics, including:
+
+- Random
+- Least loaded
+- Session/cookies
+- Round robin or weighted round robin
+- Layer 4
+- Layer 7
+
+### Layer 4 Load Balancing
+
+Layer 4 load balancers look at info at the transport layer to decide how to distribute requests. Generally, this involves the source, destination IP addresses, and ports in the header, but not the contents of the packet. Layer 4 load balancers forward network packets to and from the upstream server, performing Network Address Translation (NAT).
+
+### Layer 7 Load Balancing
+
+Layer 7 load balancers look at the application layer to decide how to distribute requests. This can involve contents of the header, message, and cookies. Layer 7 load balancers terminate network traffic, reads the message, makes a load-balancing decision, then opens a connection to the selected server. 
+
+**Example**: A layer 7 load balancer can direct video traffic to servers that host videos while directing more sensitive user billing traffic to security-hardened servers.
+
+At the cost of flexibility, layer 4 load balancing requires less time and computing resources than Layer 7, although the performance impact can be minimal on modern commodity hardware.
+
+### Horizontal Scaling
+
+Load balancers can also help with horizontal scaling, improving performance and availability. Scaling out using commodity machines is more cost efficient and results in higher availability than scaling up a single server on more expensive hardware, called Vertical Scaling. It is also easier to hire for talent working on commodity hardware than it is for specialized enterprise systems.
+
+### Disadvantage(s): Horizontal Scaling
+
+- Scaling horizontally introduces complexity and involves cloning servers
+- Servers should be stateless: they should not contain any user-related data like sessions or profile pictures
+- Sessions can be stored in a centralized data store such as a database (SQL, NoSQL) or a persistent cache (Redis, Memcached)
+- Downstream servers such as caches and databases need to handle more simultaneous connections as upstream servers scale out
+
+### Disadvantage(s): Load Balancer
+
+- The load balancer can become a performance bottleneck if it does not have enough resources or if it is not configured properly.
+- Introducing a load balancer to help eliminate a single point of failure results in increased complexity.
+- A single load balancer is a single point of failure, configuring multiple load balancers further increases complexity.
+
+### Source(s) and Further Reading
+
+- [NGINX architecture](https://www.nginx.com/blog/inside-nginx-how-we-designed-for-performance-scale/)
+- [HAProxy architecture guide](http://www.haproxy.org/#docs)
+- [Scalability](http://www.lecloud.net/post/7295452622/scalability-for-dummies-part-1-clones)
+- [Wikipedia](https://en.wikipedia.org/wiki/Load_balancing_(computing))
+- [Layer 4 load balancing](https://www.nginx.com/resources/glossary/layer-4-load-balancing/)
+- [Layer 7 load balancing](https://www.nginx.com/resources/glossary/layer-7-load-balancing/)
+- [ELB listener config](http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html)
+
+---
+
+## Reverse Proxy (Web Server)
+
+A reverse proxy is a web server that centralizes internal services and provides unified interfaces to the public. Requests from clients are forwarded to a server that can fulfill it before the reverse proxy returns the server's response to the client.
+
+### Additional Benefits
+
+- **Increased security** - Hide information about backend servers, blacklist IPs, limit number of connections per client
+- **Increased scalability and flexibility** - Clients only see the reverse proxy's IP, allowing you to scale servers or change their configuration
+- **SSL termination** - Decrypt incoming requests and encrypt server responses so backend servers do not have to perform these potentially expensive operations
+  - Removes the need to install X.509 certificates on each server
+  - **X.509 Certificates**: An ITU standard format for public key certificates that bind an identity (hostname, organization, or individual) to a public key using digital signatures. Used in TLS/SSL (HTTPS) and can be signed by a Certificate Authority (CA) or self-signed. Enables secure communication when validated.
+- **Compression** - Compress server responses
+- **Caching** - Return the response for cached requests
+- **Static content** - Serve static content directly
+  - HTML/CSS/JS
+  - Photos
+  - Videos
+
+### Load Balancer vs Reverse Proxy
+Deploying a load balancer is useful when you have multiple servers. Often, load balancers route traffic to a set of servers serving the same function.
+Reverse proxies can be useful even with just one web server or application server, opening up the benefits described in the previous section.
+Solutions such as NGINX and HAProxy can support both layer 7 reverse proxying and load balancing.
+Disadvantage(s): reverse proxy
+Introducing a reverse proxy results in increased complexity.
+A single reverse proxy is a single point of failure, configuring multiple reverse proxies (ie a failover) further increases complexity.
+Source(s) and further reading
+Reverse proxy vs load balancer
+NGINX architecture
+HAProxy architecture guide
+Wikipedia
+
+---
+
+## Application Layer
+
+Separating out the web layer from the application layer (also known as platform layer) allows you to scale and configure both layers independently. Adding a new API results in adding application servers without necessarily adding additional web servers. The single responsibility principle advocates for small and autonomous services that work together. Small teams with small services can plan more aggressively for rapid growth.
+
+Workers in the application layer also help enable asynchronism.
+
+### Microservices
+
+Related to this discussion are microservices, which can be described as a suite of independently deployable, small, modular services. Each service runs a unique process and communicates through a well-defined, lightweight mechanism to serve a business goal.
+
+Pinterest, for example, could have the following microservices: user profile, follower, feed, search, photo upload, etc.
+
+### Service Discovery
+
+Systems such as Consul, Etcd, and Zookeeper can help services find each other by keeping track of registered names, addresses, and ports. Health checks help verify service integrity and are often done using an HTTP endpoint. Both Consul and Etcd have a built in key-value store that can be useful for storing config values and other shared data.
+
+### Disadvantage(s): Application Layer
+
+- Adding an application layer with loosely coupled services requires a different approach from an architectural, operations, and process viewpoint (vs a monolithic system).
+- Microservices can add complexity in terms of deployments and operations.
+
+### Source(s) and Further Reading
+
+- [Intro to architecting systems for scale](http://lethain.com/introduction-to-architecting-systems-for-scale/)
+- [Crack the system design interview](http://www.puncsky.com/blog/2016-02-13-crack-the-system-design-interview)
+- [Service oriented architecture](https://en.wikipedia.org/wiki/Service-oriented_architecture)
+- [Introduction to Zookeeper](http://www.slideshare.net/sauravhaloi/introduction-to-apache-zookeeper)
+- [Here's what you need to know about building microservices](https://cloudncode.wordpress.com/2016/07/22/msa-getting-started/)
