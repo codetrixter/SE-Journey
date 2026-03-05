@@ -1,6 +1,11 @@
 /**
  * Here we are going to implement Pre-order traversal of the Binart tree Iteratively
  * Preorder Traversal technique : Root->Left->Right 
+ * 
+ * // !When you convert to iterative traversal, you're essentially simulating that call stack manually 
+ * // !using an explicit stack data structure. This is why:
+   // !Preorder/Inorder/Postorder traversals use a stack - they mimic the depth-first nature of recursion
+   // !Level-order traversal uses a queue - because it's breadth-first, not depth-first
 */
 
 #include <iostream>
@@ -51,6 +56,6 @@ int main(int argc, char const *argv[])
     root->right->left = new TreeNode(7); root->right->right = new TreeNode(2);
 
     preorder(root);
-    
+
     return 0;
 }
