@@ -300,13 +300,17 @@ int main(int argc, char const *argv[])
     root->right->left = new TreeNode(7);
     root->right->right = new TreeNode(2);
 
+    /// Preorder traversal algos
     preorder(root);
+    preorderSimple(root);
+    preorderRecursive(root);
+    preorderMorris(root);
 
     inorder(root);
 
     levelOrder(root);
 
-    // Iterative postorder traversal algos
+    // Postorder traversal algos
     postorder(root);
     postorderEasy(root);
     postorderSingleStack(root);
