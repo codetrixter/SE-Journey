@@ -36,29 +36,18 @@ private:
     int count = 0;
     TreeNode * temp = nullptr;
 public:
+
+    /// @brief recursive approach
+    /// @param root 
+    /// @return 
     int maxDepth(TreeNode *root)
     {
-        // Do the inorder traversal and update the static count whenever a left or right child is found.
-        traversalCount(root);
-        return count;
+        if (root)
+            return 1 + max(maxDepth(root->left), maxDepth(root->right));
+        else    
+            return 0;
     }
 
-    void traversalCount(TreeNode *root)
-    {
-        if(root == nullptr)
-            return;
-        else
-        {
-            if(temp != root || temp == nullptr)
-            {
-                temp = root;
-                count++;
-            }
-                
-            traversalCount(root->left);
-            traversalCount(root->right);
-        }
-    }
     /// @brief Iterative max depth
     /// @param root 
     /// @return 
@@ -87,6 +76,14 @@ public:
         }
         return maxd;
     }
+
+    /// @brief finding maximum depth of a tree using BFS approach.
+    /// @param root 
+    /// @return depth
+    int maxDepthBFS(TreeNode * root)
+    {
+        return 0;
+    }
 };
 
 int main(int argc, char const *argv[])
@@ -98,10 +95,6 @@ int main(int argc, char const *argv[])
 
     Solution ss;
     cout << ss.maxDepth(node);
-
-    /* for(auto& i :res)
-    {   
-        cout << i << " ";
-    } */
+    cout << ss.maxDepthIterative(node);
     return 0;
 }
