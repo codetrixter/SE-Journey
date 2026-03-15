@@ -1,1145 +1,1486 @@
-# Chapter 3: Transport Layer 🚀
+# 📘 Chapter 3 — The Transport Layer
 
-## Table of Contents
+### *Computer Networking: A Top‑Down Approach*
 
-- [Overview](#overview)
-- [3.1 Introduction and Transport-Layer Services 📡](#31-introduction-and-transport-layer-services-)
-  - [3.1.1 Relationship Between Transport and Network Layers](#311-relationship-between-transport-and-network-layers)
-  - [3.1.2 Overview of Transport Layer in the Internet](#312-overview-of-transport-layer-in-the-internet)
-- [3.2 Multiplexing and Demultiplexing 🔀](#32-multiplexing-and-demultiplexing-)
-  - [3.2.1 Connectionless Multiplexing and Demultiplexing (UDP)](#321-connectionless-multiplexing-and-demultiplexing-udp)
-  - [3.2.2 Connection-Oriented Multiplexing and Demultiplexing (TCP)](#322-connection-oriented-multiplexing-and-demultiplexing-tcp)
-- [3.3 Connectionless Transport: UDP 📦](#33-connectionless-transport-udp-)
-  - [3.3.1 UDP Segment Structure](#331-udp-segment-structure)
-  - [3.3.2 UDP Checksum](#332-udp-checksum)
-  - [Why UDP?](#why-udp)
-- [3.4 Principles of Reliable Data Transfer 🛡️](#34-principles-of-reliable-data-transfer-️)
-  - [3.4.1 Building a Reliable Data Transfer Protocol](#341-building-a-reliable-data-transfer-protocol)
-  - [3.4.2 Pipelined Reliable Data Transfer Protocols](#342-pipelined-reliable-data-transfer-protocols)
-- [3.5 Go-Back-N (GBN) Protocol ⏮️](#35-go-back-n-gbn-protocol-️)
-- [3.6 Selective Repeat (SR) Protocol 🎯](#36-selective-repeat-sr-protocol-)
-- [3.7 Connection-Oriented Transport: TCP 🔗](#37-connection-oriented-transport-tcp-)
-  - [3.7.1 TCP Connection](#371-tcp-connection)
-  - [3.7.2 TCP Segment Structure](#372-tcp-segment-structure)
-  - [3.7.3 Round-Trip Time Estimation and Timeout](#373-round-trip-time-estimation-and-timeout)
-- [3.8 Reliable Data Transfer in TCP 🔒](#38-reliable-data-transfer-in-tcp-)
-- [3.9 Flow Control 🌊](#39-flow-control-)
-- [3.10 TCP Connection Management 🤝](#310-tcp-connection-management-)
-  - [3.10.1 Connection Establishment: Three-Way Handshake](#3101-connection-establishment-three-way-handshake)
-  - [3.10.2 Connection Teardown: Four-Way Handshake](#3102-connection-teardown-four-way-handshake)
-- [3.11 Principles of Congestion Control 🚦](#311-principles-of-congestion-control-)
-  - [3.11.1 The Causes and Costs of Congestion](#3111-the-causes-and-costs-of-congestion)
-  - [3.11.2 Approaches to Congestion Control](#3112-approaches-to-congestion-control)
-- [3.12 TCP Congestion Control 🎛️](#312-tcp-congestion-control-️)
-  - [3.12.1 Classic TCP Congestion Control](#3121-classic-tcp-congestion-control)
-  - [3.12.2 TCP Throughput](#3122-tcp-throughput)
-  - [3.12.3 TCP Fairness](#3123-tcp-fairness)
-- [3.13 Evolution of Transport-Layer Functionality 🚀](#313-evolution-of-transport-layer-functionality-)
-  - [3.13.1 Explicit Congestion Notification (ECN)](#3131-explicit-congestion-notification-ecn)
-  - [3.13.2 QUIC: Quick UDP Internet Connections](#3132-quic-quick-udp-internet-connections)
-- [Summary 📝](#summary-)
+> **Goal:** Understand how the transport layer provides logical communication between
+> application processes running on different hosts, and master the design principles
+> behind UDP, reliable data transfer, TCP, flow control, and congestion control.
 
 ---
 
-## Overview
+## 📑 Table of Contents
 
-The **Transport Layer** provides logical communication between application processes running on different hosts. It sits between the application layer and the network layer, handling process-to-process communication while the network layer handles host-to-host communication.
+1. [Transport‑Layer Services & Overview](#1-transport-layer-services--overview)
+   - 1.1 [Relationship Between Transport and Network Layers](#11-relationship-between-transport-and-network-layers)
+   - 1.2 [Overview of the Transport Layer in the Internet](#12-overview-of-the-transport-layer-in-the-internet)
+2. [Multiplexing and Demultiplexing](#2-multiplexing-and-demultiplexing)
+   - 2.1 [How Demultiplexing Works](#21-how-demultiplexing-works)
+   - 2.2 [Connectionless (UDP) Demultiplexing](#22-connectionless-udp-demultiplexing)
+   - 2.3 [Connection‑Oriented (TCP) Demultiplexing](#23-connection-oriented-tcp-demultiplexing)
+3. [Connectionless Transport: UDP](#3-connectionless-transport-udp)
+   - 3.1 [Why Use UDP?](#31-why-use-udp)
+   - 3.2 [UDP Segment Structure](#32-udp-segment-structure)
+   - 3.3 [UDP Checksum](#33-udp-checksum)
+4. [Principles of Reliable Data Transfer](#4-principles-of-reliable-data-transfer)
+   - 4.1 [Building a Reliable Data Transfer Protocol](#41-building-a-reliable-data-transfer-protocol)
+   - 4.2 [rdt 1.0 — Reliable Transfer over a Perfectly Reliable Channel](#42-rdt-10--reliable-transfer-over-a-perfectly-reliable-channel)
+   - 4.3 [rdt 2.0 — Channel with Bit Errors (Stop‑and‑Wait with ACK/NAK)](#43-rdt-20--channel-with-bit-errors-stop-and-wait-with-acknak)
+   - 4.4 [rdt 2.1 — Handling Garbled ACKs/NAKs](#44-rdt-21--handling-garbled-acknaks)
+   - 4.5 [rdt 2.2 — NAK‑Free Protocol](#45-rdt-22--nak-free-protocol)
+   - 4.6 [rdt 3.0 — Channels with Errors AND Loss (Timeouts)](#46-rdt-30--channels-with-errors-and-loss-timeouts)
+   - 4.7 [Pipelined Reliable Data Transfer](#47-pipelined-reliable-data-transfer)
+   - 4.8 [Go‑Back‑N (GBN)](#48-go-back-n-gbn)
+   - 4.9 [Selective Repeat (SR)](#49-selective-repeat-sr)
+5. [Connection‑Oriented Transport: TCP](#5-connection-oriented-transport-tcp)
+   - 5.1 [The TCP Connection](#51-the-tcp-connection)
+   - 5.2 [TCP Segment Structure](#52-tcp-segment-structure)
+   - 5.3 [Sequence Numbers and Acknowledgment Numbers](#53-sequence-numbers-and-acknowledgment-numbers)
+   - 5.4 [Round‑Trip Time Estimation and Timeout](#54-round-trip-time-estimation-and-timeout)
+6. [Reliable Data Transfer in TCP](#6-reliable-data-transfer-in-tcp)
+   - 6.1 [Simplified TCP Sender](#61-simplified-tcp-sender)
+   - 6.2 [Doubling the Timeout Interval](#62-doubling-the-timeout-interval)
+   - 6.3 [Fast Retransmit](#63-fast-retransmit)
+7. [Flow Control](#7-flow-control)
+   - 7.1 [How TCP Flow Control Works](#71-how-tcp-flow-control-works)
+   - 7.2 [The Receive Window](#72-the-receive-window)
+8. [TCP Connection Management](#8-tcp-connection-management)
+   - 8.1 [Three‑Way Handshake](#81-three-way-handshake)
+   - 8.2 [Connection Teardown (Four‑Way)](#82-connection-teardown-four-way)
+   - 8.3 [TCP States (Lifecycle)](#83-tcp-states-lifecycle)
+   - 8.4 [SYN Flood Attack](#84-syn-flood-attack)
+9. [Congestion Control](#9-congestion-control)
+   - 9.1 [Causes and Costs of Congestion](#91-causes-and-costs-of-congestion)
+   - 9.2 [Approaches to Congestion Control](#92-approaches-to-congestion-control)
+   - 9.3 [TCP Congestion Control — AIMD](#93-tcp-congestion-control--aimd)
+   - 9.4 [Slow Start](#94-slow-start)
+   - 9.5 [Congestion Avoidance](#95-congestion-avoidance)
+   - 9.6 [Fast Recovery](#96-fast-recovery)
+   - 9.7 [TCP Congestion Control — State Machine](#97-tcp-congestion-control--state-machine)
+   - 9.8 [TCP Throughput](#98-tcp-throughput)
+10. [Fairness](#10-fairness)
+    - 10.1 [TCP Fairness](#101-tcp-fairness)
+    - 10.2 [Fairness and UDP](#102-fairness-and-udp)
+    - 10.3 [Fairness and Parallel TCP Connections](#103-fairness-and-parallel-tcp-connections)
+11. [TCP vs UDP — Mind Map & Comparison](#11-tcp-vs-udp--mind-map--comparison)
+12. [Chapter Summary & Quick Revision](#12-chapter-summary--quick-revision)
+13. [Additional References for In‑Depth Study](#13-additional-references-for-in-depth-study)
 
 ---
 
-## 3.1 Introduction and Transport-Layer Services 📡
+# 1. Transport‑Layer Services & Overview
 
-### 3.1.1 Relationship Between Transport and Network Layers
-
-**Key Distinction:**
-- **Network Layer**: Provides logical communication between *hosts*
-- **Transport Layer**: Provides logical communication between *processes*
-
-**Analogy**: 
-- Network layer = postal service delivering mail between houses
-- Transport layer = distributing mail to specific family members within houses
-
-### 3.1.2 Overview of Transport Layer in the Internet
-
-The Internet provides **two distinct transport-layer protocols**:
-
-| Protocol | Full Name | Characteristics |
-|----------|-----------|-----------------|
-| **TCP** | Transmission Control Protocol | Reliable, connection-oriented, congestion control, flow control |
-| **UDP** | User Datagram Protocol | Unreliable, connectionless, lightweight, no congestion control |
-
-**Important Note**: Transport-layer protocols run on end systems, not on network routers.
-
----
-
-## 3.2 Multiplexing and Demultiplexing 🔀
+## 1.1 Relationship Between Transport and Network Layers
 
 ### Definition
+> The **transport layer** provides **logical communication between processes** running on different hosts.
+> The **network layer** provides **logical communication between hosts**.
 
-- **Multiplexing** (at sender): Gathering data from multiple sockets, encapsulating with headers, and passing to network layer
-- **Demultiplexing** (at receiver): Delivering received segments to correct socket
+### Key Analogy 🏠✉️
+Imagine two houses (hosts) in different cities. The postal service (network layer) delivers
+mail between the two houses. Inside each house, a person (transport layer) takes the mail
+from the mailbox and hands each letter to the correct family member (process).
 
-### How Demultiplexing Works
+- **Network layer (IP)** = postal service — delivers to the *house*
+- **Transport layer (TCP/UDP)** = person inside the house — delivers to the *right family member*
 
-Transport layer examines fields in the segment to identify the receiving socket:
-- **Source port number field** (16 bits)
-- **Destination port number field** (16 bits)
+### Key Points
+| Aspect | Network Layer | Transport Layer |
+|---|---|---|
+| Communication | Host ↔ Host | Process ↔ Process |
+| Addressing | IP Addresses | Port Numbers |
+| Protocol examples | IP | TCP, UDP |
+| Analogy | Postal service between houses | Sorting mail to family members |
 
-**Port Number Ranges:**
-- **Well-known ports**: 0-1023 (e.g., HTTP=80, FTP=21, SSH=22)
-- **Registered ports**: 1024-49151
-- **Dynamic/Private ports**: 49152-65535
+> **Exam Tip:** The transport layer can provide services **beyond** what the network layer offers (e.g., reliable delivery, ordering), but it **cannot** guarantee delay or bandwidth — those are network‑layer limitations.
 
-### 3.2.1 Connectionless Multiplexing and Demultiplexing (UDP)
+## 1.2 Overview of the Transport Layer in the Internet
 
-🔹 **UDP socket** identified by: `(destination IP, destination port)`
+The Internet provides **two** transport‑layer protocols to the application layer:
 
-**Key Point**: UDP socket identified by 2-tuple (dest IP, dest port). All segments with same destination IP/port are directed to same socket, regardless of source.
+| | **TCP** | **UDP** |
+|---|---|---|
+| Full name | Transmission Control Protocol | User Datagram Protocol |
+| Connection | Connection‑oriented | Connectionless |
+| Reliability | Reliable, ordered delivery | Best‑effort, no guarantee |
+| Congestion control | Yes | No |
+| Flow control | Yes | No |
+| Overhead | Higher (20‑byte header min) | Lower (8‑byte header) |
 
-**Example:**
-```
-Host A (192.168.1.1:9157) → Host B (192.168.1.2:6428)
-Host C (192.168.1.3:5775) → Host B (192.168.1.2:6428)
-Both arrive at same socket on Host B!
-```
+### The IP Service Model
+IP (Internet Protocol) is a **best‑effort delivery** service:
+- No guarantee of segment delivery
+- No guarantee of orderly delivery
+- No guarantee of data integrity
 
-### 3.2.2 Connection-Oriented Multiplexing and Demultiplexing (TCP)
+> IP is **unreliable**. The transport layer builds reliability **on top of** IP.
 
-🔹 **TCP socket** identified by: `(source IP, source port, destination IP, destination port)`
-
-**Key Point**: TCP socket identified by 4-tuple. Server may support many simultaneous TCP connections, each with its own socket.
-
-**Web Server Example:**
-- Server listens on port 80
-- Each client connection creates a new socket
-- Multiple connections = multiple sockets, all using port 80
-
----
-
-## 3.3 Connectionless Transport: UDP 📦
-
-### 3.3.1 UDP Segment Structure
-
-**UDP Header Format (8 bytes total):**
-
-```
- 0      7 8     15 16    23 24    31
-+--------+--------+--------+--------+
-|   Source Port   |  Dest Port      |
-+--------+--------+--------+--------+
-|    Length       |   Checksum      |
-+--------+--------+--------+--------+
-|        Application Data           |
-|          (payload)                |
-+-----------------------------------+
-```
-
-**Fields:**
-- **Source Port** (16 bits): Optional, for return path
-- **Destination Port** (16 bits): Destination socket
-- **Length** (16 bits): Length of UDP segment (header + data) in bytes
-- **Checksum** (16 bits): Error detection
-
-### 3.3.2 UDP Checksum
-
-**Purpose**: Detect errors (flipped bits) in transmitted segment
-
-**Calculation Process:**
-1. Treat segment contents as 16-bit integers
-2. Compute 1's complement sum of all 16-bit words
-3. Take 1's complement of the sum
-4. Result is the checksum
-
-**Example:**
-```
-Word 1: 0110011001100000
-Word 2: 0101010101010101
-Sum:    1011101110110101
-Checksum: 0100010001001010 (1's complement of sum)
-```
-
-**At Receiver:**
-- Add all 16-bit words including checksum
-- If no errors: sum = 1111111111111111
-- If errors detected: sum ≠ 1111111111111111
-
-⚠️ **Limitation**: Checksum can detect some but not all errors (e.g., may miss errors when bits flip in compensating ways)
-
-### Why UDP?
-
-**Advantages of UDP:**
-1. ✅ **No connection establishment** - No RTT delay
-2. ✅ **No connection state** - More clients supported
-3. ✅ **Small header overhead** - Only 8 bytes vs TCP's 20 bytes
-4. ✅ **No congestion control** - Can blast data as fast as desired
-
-**Use Cases:**
-- 🎮 Gaming (real-time, loss-tolerant)
-- 📹 Streaming multimedia (loss-tolerant, rate-sensitive)
-- 🌐 DNS (simple request-response)
-- 📊 SNMP (network management)
-- 🎙️ VoIP (some implementations)
+### What Transport Layer Adds Over IP
+- **Multiplexing / Demultiplexing** — extending host‑to‑host delivery to process‑to‑process
+- **Integrity checking** — checksums (both UDP and TCP)
+- **Reliable data transfer** — TCP only
+- **Congestion control** — TCP only
 
 ---
 
-## 3.4 Principles of Reliable Data Transfer 🛡️
+# 2. Multiplexing and Demultiplexing
 
-### The Problem
+### Definition
+> **Multiplexing (at sender):** Gathering data from multiple sockets, encapsulating each with transport header → passing to network layer.
+>
+> **Demultiplexing (at receiver):** Delivering received segments to the correct socket.
 
-Network layer provides **unreliable service**: packets can be lost, corrupted, reordered, or duplicated.
+### Real‑World Analogy 🏢
+Think of a large office building (host) with many offices (processes). The building has
+one main entrance (IP address). The security guard (transport layer) reads the office number
+(port number) on each package and delivers it to the right office.
 
-**Goal**: Implement reliable data transfer over unreliable channel
-
-### 3.4.1 Building a Reliable Data Transfer Protocol
-
-#### rdt 1.0: Reliable Transfer over Reliable Channel
-
-**Assumption**: Underlying channel is perfectly reliable (no bit errors, no packet loss)
-
-**Mechanism**: Simple send and receive
-- Sender: `rdt_send()` → `make_pkt()` → `udt_send()`
-- Receiver: `rdt_rcv()` → `extract()` → `deliver_data()`
-
-#### rdt 2.0: Channel with Bit Errors
-
-**New Capability Needed**: Detect and recover from bit errors
-
-**Mechanisms Introduced:**
-1. 🔍 **Error detection**: Checksum
-2. 📢 **Feedback**: ACK (acknowledgment) and NAK (negative acknowledgment)
-3. 🔄 **Retransmission**: Resend packets received with errors
-
-**Problem with rdt 2.0**: ACK/NAK themselves can be corrupted!
-
-#### rdt 2.1: Handling Corrupted ACKs/NAKs
-
-**Solution**: Add **sequence numbers** to packets
-
-**Key Points:**
-- Sender numbers packets (0, 1, 0, 1, ...)
-- Receiver checks sequence number to detect duplicates
-- For stop-and-wait protocol, 1-bit sequence number suffices
-
-**Operation:**
 ```
-Sender sends Pkt0 → 
-Receiver gets Pkt0, sends ACK → 
-ACK corrupted →
-Sender retransmits Pkt0 →
-Receiver detects duplicate (seq=0), sends ACK
+                  MULTIPLEXING (Sender Side)
+  ┌─────────┐  ┌─────────┐  ┌─────────┐
+  │ Process  │  │ Process  │  │ Process  │
+  │ (P1)     │  │ (P2)     │  │ (P3)     │
+  └────┬─────┘  └────┬─────┘  └────┬─────┘
+       │              │              │
+       ▼              ▼              ▼
+  ╔═══════════════════════════════════════╗
+  ║     Transport Layer (MUX)            ║
+  ║  Add src port + dest port headers    ║
+  ╚══════════════════╤════════════════════╝
+                     ▼
+              Network Layer (IP)
+
+
+                  DEMULTIPLEXING (Receiver Side)
+              Network Layer (IP)
+                     │
+                     ▼
+  ╔═══════════════════════════════════════╗
+  ║     Transport Layer (DEMUX)          ║
+  ║  Read dest port → route to socket    ║
+  ╚══════════════════╤════════════════════╝
+       │              │              │
+       ▼              ▼              ▼
+  ┌─────────┐  ┌─────────┐  ┌─────────┐
+  │ Process  │  │ Process  │  │ Process  │
+  │ (P1)     │  │ (P2)     │  │ (P3)     │
+  └─────────┘  └─────────┘  └─────────┘
 ```
 
-#### rdt 2.2: NAK-Free Protocol
+## 2.1 How Demultiplexing Works
 
-**Improvement**: Eliminate NAKs by using **duplicate ACKs**
+Every transport‑layer segment has:
+- **Source port number** (16 bits → 0–65535)
+- **Destination port number** (16 bits → 0–65535)
 
-**Mechanism:**
-- Receiver sends ACK for last correctly received packet
-- Duplicate ACK indicates error (acts like NAK)
+**Well‑known ports:** 0–1023 (reserved for standard protocols like HTTP=80, DNS=53, HTTPS=443)
 
-**Example:**
+The host uses the **destination port** (and possibly more fields) to direct the segment to the appropriate socket.
+
+## 2.2 Connectionless (UDP) Demultiplexing
+
+A UDP socket is identified by a **2‑tuple**:
 ```
-Sender sends Pkt0 → Receiver sends ACK0
-Sender sends Pkt1 → Pkt1 corrupted
-Receiver sends ACK0 again (duplicate ACK)
-Sender interprets duplicate ACK0 as NAK, retransmits Pkt1
-```
-
-#### rdt 3.0: Channels with Errors and Loss
-
-**New Problem**: Packets can be lost (dropped) entirely
-
-**Solution**: **Timeout mechanism**
-
-**Countdown Timer:**
-- Sender starts timer when sending packet
-- If timeout occurs before ACK received → retransmit
-- Timer must be reasonably longer than RTT
-
-**Edge Cases:**
-1. **Premature timeout**: Packet/ACK delayed but not lost
-   - Solution: Sequence numbers handle duplicates
-2. **ACK lost**: Timeout causes retransmission
-   - Solution: Receiver discards duplicate
-
-**Performance Issue**: Stop-and-wait is inefficient!
-
-**Example:**
-```
-1 Gbps link, 15ms RTT, 8000-bit packet
-Transmission time: 8 μs
-Utilization: 8 μs / 30.008 ms = 0.027% 😱
+(destination IP address, destination port number)
 ```
 
-### 3.4.2 Pipelined Reliable Data Transfer Protocols
+> Two segments with the **same destination IP + destination port** but **different source IP/port** will be directed to the **same socket**.
 
-**Solution**: Allow multiple in-flight packets (pipelining)
+### Example
+```
+Host A (IP: 10.0.0.1)          Host B (IP: 10.0.0.2)
+  App sends to port 9876   ──►   UDP socket bound to port 9876
+Host C (IP: 10.0.0.3)
+  App sends to port 9876   ──►   SAME UDP socket on Host B
+```
 
-**Requirements:**
-1. ↗️ Increase sequence number range
-2. 🗃️ Buffer packets at sender/receiver
-3. 🎯 Define error recovery strategy
+## 2.3 Connection‑Oriented (TCP) Demultiplexing
 
-**Two Generic Approaches:**
-1. **Go-Back-N (GBN)**
-2. **Selective Repeat (SR)**
+A TCP socket is identified by a **4‑tuple**:
+```
+(source IP, source port, destination IP, destination port)
+```
+
+> Two segments with the **same destination IP + port** but **different source IP or port**
+> are directed to **different sockets**.
+
+### Why the Difference?
+TCP is connection‑oriented. Each connection is unique. A web server (e.g., port 80) may have
+hundreds of simultaneous connections — each gets its own socket, identified by the full 4‑tuple.
+
+> **Common Exam Mistake ⚠️:** Students often confuse UDP and TCP demultiplexing.
+> Remember: **UDP = 2‑tuple, TCP = 4‑tuple**.
+
+### Mnemonic: **"U‑2, T‑4"**
+- **U**DP → **2**‑tuple
+- **T**CP → **4**‑tuple
 
 ---
 
-## 3.5 Go-Back-N (GBN) Protocol ⏮️
+# 3. Connectionless Transport: UDP
 
-### Sliding Window Concept
+## 3.1 Why Use UDP?
 
-**Window**: Range of sequence numbers allowed to be in-flight
+UDP is "bare bones" — it does almost nothing beyond multiplexing/demultiplexing and error checking. So why use it?
 
-```
-[sent & ACK'd] [sent, not ACK'd] [usable, not sent] [not usable]
-               ^                 ^                  ^
-            send_base         nextseqnum       send_base + N
-```
+| Advantage | Explanation |
+|---|---|
+| **No connection setup** | No handshake delay → faster first byte |
+| **No connection state** | Server can support more active clients |
+| **Small header overhead** | 8 bytes vs TCP's 20+ bytes |
+| **No congestion control** | App can blast data as fast as desired |
+| **Finer application control** | App decides what/when to send |
 
-**Parameters:**
-- **N**: Window size
-- **send_base**: Oldest unacknowledged packet
-- **nextseqnum**: Next packet to send
+### Applications that use UDP
+| Application | Why UDP? |
+|---|---|
+| DNS | Quick query‑response, small messages |
+| SNMP | Network management, simple exchanges |
+| Streaming media | Tolerates some loss; low latency critical |
+| Online gaming | Real‑time, low latency essential |
+| VoIP | Real‑time voice, minor loss acceptable |
+| DHCP | Bootstrap — no TCP connection possible yet |
 
-### GBN Sender Operations
+> **Why this matters:** Understanding *when* to use UDP vs TCP is a common interview question. The key trade‑off is **speed/simplicity vs reliability**.
 
-1. **Send packet**: If window not full (`nextseqnum < send_base + N`)
-   - Create packet, send, start timer (if not running)
-   - Increment `nextseqnum`
-
-2. **Receive ACK(n)**: Cumulative acknowledgment
-   - All packets up to sequence number `n` acknowledged
-   - Move `send_base` to `n+1`
-
-3. **Timeout**: Retransmit ALL packets in window
-   - Restart timer
-
-### GBN Receiver Operations
-
-**Simplified Receiver:**
-- Only sends cumulative ACKs
-- Discards out-of-order packets
-- Maintains only `expectedseqnum`
-
-**Actions:**
-- If packet `n` received correctly and in-order:
-  - Send ACK(n)
-  - Deliver data to upper layer
-  - Increment `expectedseqnum`
-- Otherwise: Discard packet, resend ACK for last in-order packet
-
-### Example: GBN in Action
+## 3.2 UDP Segment Structure
 
 ```
-Window size N = 4
-
-Time  Sender                    Receiver
--------------------------------------------
-t0    Send Pkt0, Pkt1, Pkt2
-t1                              ACK0 (Pkt0 received)
-t2                              ACK1 (Pkt1 received)
-t3    Send Pkt3                 Pkt2 LOST
-t4                              Discard Pkt3, send ACK1
-t5    TIMEOUT! Resend Pkt2, Pkt3, ...
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          Source Port          |       Destination Port        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|            Length             |           Checksum            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+|                     Application Data                          |
+|                         (payload)                             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
-
-**Performance:**
-- ✅ Simple receiver (no buffering)
-- ⚠️ Retransmits correctly received packets when one lost
-
----
-
-## 3.6 Selective Repeat (SR) Protocol 🎯
-
-### Key Difference from GBN
-
-**SR** avoids unnecessary retransmissions by individually acknowledging correctly received packets.
-
-### SR Windows
-
-**Sender Window**: Packets sent but not yet ACK'd
-**Receiver Window**: Packets receiver is willing to receive
-
-**Critical Constraint**: Window size ≤ half the sequence number space
-- Prevents ambiguity from delayed packets/ACKs
-
-### SR Sender Operations
-
-1. **Data from above**: If next sequence number in window, send packet
-2. **Timeout(n)**: Resend packet `n`, restart timer
-3. **ACK(n) received**: 
-   - Mark packet `n` as received
-   - If `n` is `send_base`, move window forward to next unACK'd packet
-
-### SR Receiver Operations
-
-1. **Packet n in `[rcv_base, rcv_base+N-1]` received correctly:**
-   - Send ACK(n)
-   - If not previously received: buffer packet
-   - If `n == rcv_base`: deliver in-order packets, advance window
-
-2. **Packet n in `[rcv_base-N, rcv_base-1]` received:**
-   - Send ACK(n) (might be retransmitted ACK)
-
-3. **Otherwise:** Ignore packet
-
-### SR Example
-
-```
-Window size N = 4
-
-Sender Window: [0, 1, 2, 3]
-Receiver Window: [0, 1, 2, 3]
-
-Send Pkt0, Pkt1, Pkt2, Pkt3
-Pkt1 LOST
-Receiver gets: Pkt0 → ACK0, deliver
-               Pkt2 → ACK2, buffer
-               Pkt3 → ACK3, buffer
-Timeout(Pkt1)
-Sender resends only Pkt1
-Receiver gets Pkt1 → ACK1, deliver Pkt1,2,3
-```
-
-**Performance:**
-- ✅ Only retransmits packets that were lost
-- ⚠️ More complex (receiver buffering, individual timers)
-
-### Dilemma: Sequence Number Space
-
-**Problem**: Small sequence number space can cause ambiguity
-
-**Example:** Window size = 3, Seq numbers = {0,1,2,3}
-```
-Scenario: Receiver receives Pkt0
-Is this NEW Pkt0 or RETRANSMITTED old Pkt0?
-```
-
-**Solution**: Window size ≤ sequence number space / 2
-
----
-
-## 3.7 Connection-Oriented Transport: TCP 🔗
-
-### 3.7.1 TCP Connection
-
-**Key Characteristics:**
-- ✅ **Connection-oriented**: Handshaking before data exchange
-- ✅ **Full-duplex**: Bidirectional data flow
-- ✅ **Point-to-point**: One sender, one receiver (no multicast)
-- ✅ **Reliable, in-order byte stream**: No message boundaries
-- ✅ **Pipelined**: Window size controlled by flow/congestion control
-- ✅ **Send and receive buffers**: Both sides buffer data
-
-**Three-Way Handshake:**
-```
-Client → Server: SYN
-Server → Client: SYN-ACK
-Client → Server: ACK (connection established!)
-```
-
-### 3.7.2 TCP Segment Structure
-
-**TCP Header (20 bytes minimum):**
-
-```
- 0               16              31
-+----------------+----------------+
-|  Source Port   | Dest Port      |
-+----------------+----------------+
-|     Sequence Number             |
-+----------------+----------------+
-|  Acknowledgment Number          |
-+----------------+----------------+
-|Hlen|Rsv|Flags  | Receive Window |
-+----------------+----------------+
-|   Checksum     | Urgent Pointer |
-+----------------+----------------+
-|         Options (if any)        |
-+----------------+----------------+
-|           Data                  |
-```
-
-**Important Fields:**
 
 | Field | Size | Description |
-|-------|------|-------------|
-| **Sequence Number** | 32 bits | Byte-stream number of first data byte |
-| **Acknowledgment Number** | 32 bits | Next byte expected from other side |
-| **Receive Window** | 16 bits | Flow control - available buffer space |
-| **Header Length** | 4 bits | Length of TCP header in 32-bit words |
-| **Flags** | 6 bits | ACK, RST, SYN, FIN, PSH, URG |
-| **Checksum** | 16 bits | Error detection (mandatory) |
+|---|---|---|
+| Source Port | 16 bits | Sender's port |
+| Destination Port | 16 bits | Receiver's port |
+| Length | 16 bits | Total segment length (header + data) in bytes |
+| Checksum | 16 bits | Error detection |
 
-**TCP Flags:**
-- **SYN**: Synchronize sequence numbers (connection setup)
-- **ACK**: Acknowledgment field is valid
-- **FIN**: Sender finished sending data
-- **RST**: Reset connection
-- **PSH**: Push data immediately
-- **URG**: Urgent data (rarely used)
+> **Header size = 8 bytes** (4 fields × 2 bytes each)
 
-### 3.7.3 Round-Trip Time Estimation and Timeout
+## 3.3 UDP Checksum
 
-#### Estimating RTT
+### Purpose
+Detect errors (bit flips) in the transmitted segment.
 
-**Sample RTT** (`SampleRTT`): Time from segment transmission to ACK receipt
-- Measured for one segment at a time
-- Ignore retransmissions
+### How It's Computed
+1. Treat the segment (header + data + a pseudo‑header from IP) as a sequence of 16‑bit words.
+2. Sum all 16‑bit words using **one's complement arithmetic**.
+3. Take the **one's complement** of the sum → that's the checksum.
 
-**Exponential Weighted Moving Average (EWMA):**
+### Step‑by‑Step Example
 ```
-EstimatedRTT = (1 - α) × EstimatedRTT + α × SampleRTT
+Word 1:   0110 0110 0110 0000
+Word 2:   0101 0101 0101 0101
+Word 3:   1000 1111 0000 1100
+────────────────────────────────
+Sum:      carry bits are wrapped around
+          → one's complement of sum = CHECKSUM
 ```
-- Typical α = 0.125
-- Smooths out fluctuations
 
-**RTT Deviation:**
+At the receiver:
+- Add all words including the checksum
+- If result = `1111 1111 1111 1111` → no error detected
+- If any bit is 0 → error detected!
+
+> **Exam Tip:** UDP checksum can detect errors but **cannot correct** them. Also, it's **not 100% reliable** — some errors can go undetected (e.g., two complementary bit flips).
+
+> **Why does UDP have a checksum if it's "unreliable"?**
+> Because the underlying link layer may not provide error checking on every link, and because errors can be introduced in router memory. This is an **end‑to‑end** design principle.
+
+---
+
+# 4. Principles of Reliable Data Transfer
+
+This is one of the **most important** sections of the entire networking course.
+
+> **Core Problem:** How do we build a reliable communication protocol on top of an unreliable channel?
+
 ```
-DevRTT = (1 - β) × DevRTT + β × |SampleRTT - EstimatedRTT|
+  Application Layer
+       │  rdt_send(data)         deliver_data(data)  │
+       ▼                                              ▲
+  ╔════════════════════════════════════════════════════════╗
+  ║            Reliable Data Transfer Protocol            ║
+  ╚════════════════════════╤═══════════════════════════════╝
+       │  udt_send(packet)       rdt_rcv(packet)     │
+       ▼                                              ▲
+  ╔════════════════════════════════════════════════════════╗
+  ║              Unreliable Channel                       ║
+  ╚════════════════════════════════════════════════════════╝
 ```
-- Typical β = 0.25
-- Measures variability
 
-#### Setting Timeout
+- `rdt_send()` — called by app to hand data down
+- `udt_send()` — called by rdt protocol to send packet over unreliable channel
+- `rdt_rcv()` — called when packet arrives at receiver side
+- `deliver_data()` — called by rdt to deliver data up to app
 
-**Timeout Interval:**
+## 4.1 Building a Reliable Data Transfer Protocol
+
+We build up incrementally through versions **rdt 1.0 → 2.0 → 2.1 → 2.2 → 3.0**.
+
+### Mind Map: Building Reliable Data Transfer
+
+```
+Reliable Data Transfer
+├── rdt 1.0: Perfect channel
+│   └── Just send and receive (no mechanism needed)
+│
+├── rdt 2.0: Channel has BIT ERRORS
+│   ├── Add: Checksum (to detect errors)
+│   ├── Add: ACK / NAK (feedback)
+│   └── Problem: What if ACK/NAK is corrupted?
+│
+├── rdt 2.1: Handle corrupted ACK/NAK
+│   ├── Add: Sequence numbers (0 and 1)
+│   └── Sender retransmits on garbled ACK/NAK
+│
+├── rdt 2.2: NAK-free
+│   ├── Remove: NAK
+│   └── Use: Duplicate ACK (ACK with seq# of last good packet)
+│
+├── rdt 3.0: Channel has ERRORS + LOSS
+│   ├── Add: Timer (countdown for retransmission)
+│   ├── Still uses: seq#, checksum, ACKs
+│   └── Called: "Alternating‑bit protocol"
+│
+└── Pipelining (performance improvement)
+    ├── Go‑Back‑N (GBN)
+    └── Selective Repeat (SR)
+```
+
+## 4.2 rdt 1.0 — Reliable Transfer over a Perfectly Reliable Channel
+
+**Assumption:** The underlying channel is **perfectly reliable** — no bit errors, no loss.
+
+**Protocol:** Trivially simple:
+- Sender: `rdt_send(data)` → make packet → `udt_send(packet)`
+- Receiver: `rdt_rcv(packet)` → extract data → `deliver_data(data)`
+
+> No error detection, no feedback, no retransmission needed.
+
+## 4.3 rdt 2.0 — Channel with Bit Errors (Stop‑and‑Wait with ACK/NAK)
+
+**New Assumption:** Channel can **flip bits** (introduce errors), but no packet loss.
+
+### New Mechanisms
+1. **Checksum** — detect bit errors
+2. **ACK (Acknowledgment)** — receiver tells sender "got it correctly"
+3. **NAK (Negative Acknowledgment)** — receiver tells sender "got it, but it's corrupted"
+4. **Retransmission** — sender resends on NAK
+
+### How It Works
+```
+Sender                              Receiver
+  │                                    │
+  │─── packet ────────────────────────►│
+  │                                    │── checksum OK?
+  │                                    │   YES → send ACK
+  │◄──────────────────────── ACK ──────│
+  │  (send next packet)               │
+  │                                    │
+  │─── packet (corrupted!) ──────────►│
+  │                                    │── checksum OK?
+  │                                    │   NO → send NAK
+  │◄──────────────────────── NAK ──────│
+  │  (retransmit same packet)          │
+```
+
+### Fatal Flaw ⚠️
+> **What if the ACK or NAK itself is corrupted?**
+> The sender doesn't know if it should retransmit or move on. This leads to **rdt 2.1**.
+
+## 4.4 rdt 2.1 — Handling Garbled ACKs/NAKs
+
+### Solution: Add **Sequence Numbers**
+
+- Use sequence numbers **0** and **1** (alternating).
+- If sender receives a garbled ACK/NAK → **retransmit** the current packet.
+- Receiver uses sequence number to detect **duplicates** and discard them.
+
+### Sender FSM (Finite State Machine) — Simplified
+```
+State: Wait for call 0 from above
+  → rdt_send(data): make pkt(0, data, checksum) → send → go to "Wait for ACK/NAK 0"
+
+State: Wait for ACK/NAK 0
+  → rdt_rcv(rcvpkt) AND corrupt OR isNAK → resend pkt(0)
+  → rdt_rcv(rcvpkt) AND notcorrupt AND isACK → go to "Wait for call 1 from above"
+```
+
+### Receiver
+- If packet has **expected seq#** and **not corrupt** → deliver, send ACK
+- If packet has **wrong seq#** (duplicate) → discard, re‑send ACK for last correctly received
+- If **corrupt** → send NAK
+
+## 4.5 rdt 2.2 — NAK‑Free Protocol
+
+### Key Idea
+Instead of NAK, the receiver sends an **ACK for the last correctly received packet**.
+
+- If sender receives **duplicate ACK** (ACK for previous seq#) → same as receiving a NAK → retransmit.
+
+This simplification is important because TCP uses this approach!
+
+### Example
+```
+Sender sends pkt(1)  ──────────►  Receiver gets corrupt pkt
+                                   Sends ACK(0)   [ACK for last good = pkt 0]
+Sender gets ACK(0)   ◄──────────
+  "I expected ACK(1), got ACK(0) → duplicate ACK → retransmit pkt(1)"
+```
+
+## 4.6 rdt 3.0 — Channels with Errors AND Loss (Timeouts)
+
+**New Assumption:** Channel can **flip bits** AND **lose packets entirely** (data or ACKs).
+
+### New Mechanism: **Timer**
+- Sender starts a **countdown timer** after sending each packet.
+- If ACK not received before timer expires → **retransmit**.
+- Sequence numbers handle duplicates caused by premature timeouts.
+
+### Scenarios
+
+**Scenario A: No loss**
+```
+Sender              Receiver
+pkt(0) ──────────► receives → ACK(0)
+       ◄────────── ACK(0)
+pkt(1) ──────────► receives → ACK(1)
+       ◄────────── ACK(1)
+```
+
+**Scenario B: Packet loss**
+```
+Sender              Receiver
+pkt(0) ────X        (lost!)
+  ... timer expires ...
+pkt(0) ──────────► receives → ACK(0)
+       ◄────────── ACK(0)
+```
+
+**Scenario C: ACK loss**
+```
+Sender              Receiver
+pkt(0) ──────────► receives → ACK(0)
+       ◄────X      ACK(0) lost!
+  ... timer expires ...
+pkt(0) ──────────► duplicate! → discard → ACK(0)
+       ◄────────── ACK(0)
+```
+
+**Scenario D: Premature timeout**
+```
+Sender              Receiver
+pkt(0) ──────────► receives → ACK(0)
+  ... timer expires (ACK delayed) ...
+pkt(0) ──────────► duplicate! → discard → ACK(0)
+       ◄────────── ACK(0)  (first one, late)
+       ◄────────── ACK(0)  (second one)
+  Sender ignores duplicate ACK
+```
+
+> **This is called the "Alternating‑Bit Protocol"** because the sequence number alternates between 0 and 1.
+
+### Performance Problem 🐢
+rdt 3.0 is a **stop‑and‑wait** protocol. The sender sends ONE packet and waits for its ACK before sending the next. This is **extremely inefficient** on high‑bandwidth, high‑delay links.
+
+**Utilization calculation:**
+```
+U_sender = (L / R) / (RTT + L/R)
+
+Where:
+  L = packet size (bits)
+  R = link rate (bps)
+  RTT = round‑trip time
+
+Example: L = 8000 bits, R = 1 Gbps, RTT = 30 ms
+  L/R = 8 μs
+  U = 8 μs / 30.008 ms = 0.00027 = 0.027%
+```
+
+> Only 0.027% utilization! We're wasting the link. **Solution: Pipelining.**
+
+## 4.7 Pipelined Reliable Data Transfer
+
+### Key Idea
+Allow sender to have **multiple un‑ACKed packets** in flight simultaneously.
+
+### Consequences of Pipelining
+1. Sequence numbers must be **larger** (not just 0 and 1)
+2. Sender and receiver need **buffers** for multiple packets
+3. Two main approaches: **Go‑Back‑N** and **Selective Repeat**
+
+```
+Stop-and-Wait:          Pipelining:
+|pkt1|    |ACK1|        |pkt1|pkt2|pkt3|    |ACK1|ACK2|ACK3|
+|----|----|----|----|    |----|----|----|----|----|----|----|
+  ▲ idle time ▲           ▲ much less idle time ▲
+```
+
+## 4.8 Go‑Back‑N (GBN)
+
+### Overview
+- Sender can have up to **N** unacknowledged packets in the pipeline (window size = N).
+- Receiver sends **cumulative ACKs** — ACK(n) means "I've received everything up to and including n."
+- If a packet is lost, sender **retransmits that packet AND all subsequent packets** in the window.
+
+### Sender's View of Sequence Numbers
+```
+  ┌─────────────────────────────────────────────────────┐
+  │ Already ACKed │  Sent, not ACKed  │ Usable │ Not usable │
+  │ (green)       │  (yellow)         │ (blue) │ (grey)     │
+  └─────────────────────────────────────────────────────┘
+                  ▲                   ▲
+                  │                   │
+                base              nextseqnum
+                  │◄──── window N ───►│
+```
+
+### Receiver Behavior
+- Simple! Receiver only accepts **in‑order** packets.
+- Out‑of‑order packets are **discarded** (not buffered).
+- Re‑sends ACK for last correctly received in‑order packet.
+
+### Example (Window N = 4)
+```
+Sender sends: pkt0, pkt1, pkt2, pkt3
+                         pkt2 LOST!
+
+Receiver:
+  pkt0 → ACK(0) ✓
+  pkt1 → ACK(1) ✓
+  pkt2 → (never arrives)
+  pkt3 → out of order → discard → ACK(1)  [last in-order]
+
+Sender: timeout for pkt2
+  → retransmit pkt2, pkt3  (go back to pkt2!)
+```
+
+> **Why "Go‑Back‑N"?** Because the sender "goes back" N packets (or to the lost one) and resends from there.
+
+### Pros and Cons
+| ✅ Pros | ❌ Cons |
+|---|---|
+| Simple receiver (no buffering) | Wastes bandwidth retransmitting correct packets |
+| Easy to implement | Performance degrades with large windows or high loss |
+
+## 4.9 Selective Repeat (SR)
+
+### Overview
+- Sender can have up to **N** unacknowledged packets.
+- Receiver **individually ACKs** each packet (not cumulative).
+- Receiver **buffers** out‑of‑order packets.
+- Sender **only retransmits** the specific lost/timed‑out packets.
+
+### Sender & Receiver Windows
+```
+Sender window:
+  [0✓] [1✓] [2 sent] [3 sent] [4 avail] [5 avail]
+                ▲ timer       ▲ timer
+
+Receiver window:
+  [0 delivered] [1 delivered] [2 ???] [3 buffered] [4 ???] [5 ???]
+                               ▲ gap
+```
+
+### Example
+```
+Sender sends: pkt0, pkt1, pkt2, pkt3
+                         pkt2 LOST!
+
+Receiver:
+  pkt0 → ACK(0) ✓, deliver
+  pkt1 → ACK(1) ✓, deliver
+  pkt2 → (never arrives)
+  pkt3 → ACK(3) ✓, BUFFER (out of order)
+
+Sender: timeout for pkt2 only
+  → retransmit pkt2 ONLY
+
+Receiver gets pkt2:
+  → ACK(2), deliver pkt2, then deliver buffered pkt3
+```
+
+### Pros and Cons
+| ✅ Pros | ❌ Cons |
+|---|---|
+| Efficient: only retransmit lost packets | Complex receiver (buffering needed) |
+| Better bandwidth utilization | Larger sequence number space needed |
+
+### ⚠️ Important: Sequence Number Space for SR
+
+> **The sequence number space must be at least 2 × window size.**
+>
+> If `window size = N`, then `seq# space ≥ 2N`
+
+**Why?** With a smaller space, the receiver can't distinguish between new packets and retransmissions.
+
+> **Exam Trap:** For GBN, seq# space ≥ N + 1. For SR, seq# space ≥ 2N. Don't mix them up!
+
+### GBN vs SR Comparison
+
+| Feature | Go‑Back‑N | Selective Repeat |
+|---|---|---|
+| ACK type | Cumulative | Individual |
+| Receiver buffering | No | Yes |
+| Retransmission | All from lost packet onward | Only lost packet |
+| Timer | Single (for oldest unACKed) | Per‑packet |
+| Seq# space needed | ≥ N + 1 | ≥ 2N |
+| Efficiency on loss | Low (many retransmissions) | High |
+| Complexity | Simpler | More complex |
+
+---
+
+# 5. Connection‑Oriented Transport: TCP
+
+## 5.1 The TCP Connection
+
+### Key Properties
+- **Connection‑oriented:** Handshake required before data exchange
+- **Full‑duplex:** Data flows in both directions simultaneously
+- **Point‑to‑point:** One sender, one receiver (no multicast)
+- **Byte‑stream:** TCP sees data as an unstructured stream of bytes
+- **Reliable, in‑order:** Guaranteed delivery in the order sent
+- **Pipelined:** Sender can have multiple unACKed segments (uses window)
+
+### How a TCP Connection Works (Big Picture)
+```
+  Client                                Server
+    │                                      │
+    │──── SYN ────────────────────────────►│
+    │◄──────────────────────── SYN+ACK ────│
+    │──── ACK ────────────────────────────►│
+    │                                      │
+    │◄════ Full‑duplex data exchange ═════►│
+    │                                      │
+    │──── FIN ────────────────────────────►│
+    │◄──────────────────────────── ACK ────│
+    │◄──────────────────────────── FIN ────│
+    │──── ACK ────────────────────────────►│
+    │                                      │
+```
+
+### Buffers
+TCP maintains **send** and **receive buffers** at each end:
+
+```
+Application writes → [Send Buffer] → TCP segments → Network
+Network → TCP segments → [Receive Buffer] → Application reads
+```
+
+**Maximum Segment Size (MSS):** Maximum amount of application‑layer data in a segment (NOT including headers). Typically **1460 bytes** (to fit in a 1500‑byte Ethernet MTU with 20‑byte IP + 20‑byte TCP headers).
+
+## 5.2 TCP Segment Structure
+
+```
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          Source Port          |       Destination Port        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                        Sequence Number                        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Acknowledgment Number                      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  Data |       |C|E|U|A|P|R|S|F|                               |
+| Offset| Rsrvd |W|C|R|C|S|S|Y|I|         Window Size           |
+|       |       |R|E|G|K|H|T|N|N|                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Checksum            |         Urgent Pointer        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Options (variable)                         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+|                    Application Data (payload)                 |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+### Field Breakdown
+
+| Field | Size | Description |
+|---|---|---|
+| Source Port | 16 bits | Sender's port number |
+| Destination Port | 16 bits | Receiver's port number |
+| Sequence Number | 32 bits | Byte‑stream number of first data byte in segment |
+| Acknowledgment Number | 32 bits | Next byte expected from other side |
+| Data Offset (Header Length) | 4 bits | Number of 32‑bit words in header |
+| Reserved | 3 bits | Reserved for future use |
+| **Flags** | 9 bits | Control bits (see below) |
+| Window Size | 16 bits | Receiver's available buffer space (for flow control) |
+| Checksum | 16 bits | Error detection (mandatory) |
+| Urgent Pointer | 16 bits | Points to urgent data (rarely used) |
+| Options | Variable | e.g., MSS, Window Scale, Timestamps |
+
+### Important Flags
+
+| Flag | Meaning |
+|---|---|
+| **SYN** | Synchronize — connection setup |
+| **ACK** | Acknowledgment field is valid |
+| **FIN** | Finish — connection teardown |
+| **RST** | Reset — abort connection |
+| **PSH** | Push — deliver data to app immediately |
+| **URG** | Urgent pointer field is valid |
+| **CWR** | Congestion Window Reduced (ECN) |
+| **ECE** | ECN‑Echo (ECN) |
+
+> **Mnemonic for key flags: "SARA FiSh"** — **S**YN, **A**CK, **R**ST, **A**nd **Fi**N, p**S**H
+
+## 5.3 Sequence Numbers and Acknowledgment Numbers
+
+### Sequence Numbers
+- TCP numbers **every byte** of data in the stream.
+- The **sequence number** of a segment is the byte number of the **first byte** of data in that segment.
+
+### Example
+```
+Suppose data = 500,000 bytes, MSS = 1000 bytes
+  → 500 segments
+
+Segment 1: seq# = 0       (bytes 0–999)
+Segment 2: seq# = 1000    (bytes 1000–1999)
+Segment 3: seq# = 2000    (bytes 2000–2999)
+...
+Segment 500: seq# = 499000 (bytes 499000–499999)
+```
+
+### Acknowledgment Numbers
+- The ACK number indicates the **next byte the receiver expects**.
+- TCP uses **cumulative ACKs**: ACK(n) means "I have received all bytes up to byte n−1; send me byte n next."
+
+### Example
+```
+Host A sends segment with seq# = 42, carrying 10 bytes of data (bytes 42–51)
+Host B receives it and sends back: ACK# = 52
+  (meaning: "I got bytes up to 51; send me byte 52 next")
+```
+
+> **Exam Tip:** The ACK number is the **next expected byte**, NOT the last received byte.
+
+### Piggybacking
+Since TCP is full‑duplex, a segment from A → B can carry:
+- Data from A to B (with A's sequence number)
+- An ACK for B's data (with the ACK number)
+
+This is called **piggybacking**.
+
+## 5.4 Round‑Trip Time Estimation and Timeout
+
+### Why Does This Matter?
+TCP needs a good timeout value for retransmissions.
+- **Too short** → unnecessary retransmissions (wastes bandwidth)
+- **Too long** → slow reaction to loss (wastes time)
+
+### Step 1: Measuring Sample RTT
+`SampleRTT` = time from segment sent to ACK received (for segments sent only once — not retransmissions).
+
+### Step 2: Exponential Weighted Moving Average (EWMA)
+
+```
+EstimatedRTT = (1 − α) × EstimatedRTT + α × SampleRTT
+```
+- Typical α = **0.125** (= 1/8)
+- Gives more weight to recent samples but smooths out fluctuations.
+
+### Step 3: RTT Deviation
+
+```
+DevRTT = (1 − β) × DevRTT + β × |SampleRTT − EstimatedRTT|
+```
+- Typical β = **0.25** (= 1/4)
+
+### Step 4: Setting the Timeout
+
 ```
 TimeoutInterval = EstimatedRTT + 4 × DevRTT
 ```
 
-**Rationale:** 
-- Should be greater than RTT but not too much
-- Safety margin accounts for RTT variation
+> **Why 4 × DevRTT?** It provides a safety margin. If RTT varies a lot (high DevRTT), the timeout is larger. If RTT is stable (low DevRTT), the timeout is tighter.
 
-**Timeout Occurs:**
-- Double timeout interval (exponential backoff)
-- Retransmit earliest unACK'd segment
+### Step‑by‑Step Numerical Example
+```
+Given: EstimatedRTT = 100ms, DevRTT = 5ms
+New SampleRTT = 120ms
+
+New EstimatedRTT = 0.875 × 100 + 0.125 × 120 = 87.5 + 15 = 102.5 ms
+New DevRTT = 0.75 × 5 + 0.25 × |120 − 100| = 3.75 + 5 = 8.75 ms
+New Timeout = 102.5 + 4 × 8.75 = 102.5 + 35 = 137.5 ms
+```
+
+> **Mnemonic: "EST + 4 DEV"** — Timeout = Estimated + 4 × Deviation
+
+---
+
+# 6. Reliable Data Transfer in TCP
+
+TCP's reliability is built from the mechanisms we studied in Section 4, but with practical optimizations.
+
+## 6.1 Simplified TCP Sender
+
+TCP uses a **single retransmission timer** for the oldest unacknowledged segment.
+
+### Three Major Events at the Sender
+
+**Event 1: Data received from application**
+- Create segment with sequence number = `NextSeqNum`
+- Start timer if not already running
+- `NextSeqNum += length(data)`
+
+**Event 2: Timer timeout**
+- Retransmit the **oldest unACKed segment**
 - Restart timer
 
----
+**Event 3: ACK received**
+- If ACK acknowledges **new data** (ACK# > SendBase):
+  - Update `SendBase = ACK#`
+  - If there are still unACKed segments → restart timer
+  - Else → stop timer
 
-## 3.8 Reliable Data Transfer in TCP 🔒
+## 6.2 Doubling the Timeout Interval
 
-### TCP RDT Mechanisms
-
-**1. Sequence Numbers & ACKs:**
-- Sequence number = byte-stream number (not segment number!)
-- ACK number = next byte expected (cumulative ACK)
-
-**2. Timeout/Retransmission:**
-- Single retransmission timer
-- Retransmit on timeout
-
-**3. Fast Retransmit:**
-- If 3 duplicate ACKs received → retransmit immediately
-- Don't wait for timeout!
-
-### TCP Sender Events
-
-**Event 1: Data from Application**
-```
-1. Create segment with sequence number
-2. Start timer if not running
-3. Timer expiration interval = TimeoutInterval
-```
-
-**Event 2: Timer Timeout**
-```
-1. Retransmit segment that caused timeout
-2. Restart timer
-```
-
-**Event 3: ACK Received**
-```
-1. If ACK acknowledges new data:
-   - Update send_base
-   - Start timer if there are unACK'd segments
-```
-
-### TCP Receiver Events - Generating ACKs
-
-**TCP ACK Generation Policy:**
-
-| Event | TCP Receiver Action |
-|-------|---------------------|
-| In-order segment arrives, all prior data ACK'd | Delayed ACK: Wait 500ms for next segment. If none, send ACK |
-| In-order segment arrives, one delayed ACK pending | Immediately send single cumulative ACK |
-| Out-of-order segment arrives (gap detected) | Immediately send duplicate ACK indicating next expected byte |
-| Segment arrives that fills gap | Immediately send ACK if segment starts at lower end of gap |
-
-### Fast Retransmit Example
+After each timeout, TCP **doubles** the timeout interval (exponential backoff):
 
 ```
-Time  Event
------------------------------------
-t0    Send Pkt1 (seq=1)
-t1    Send Pkt2 (seq=2)
-t2    Send Pkt3 (seq=3)
-t3    Send Pkt4 (seq=4)
-t4    Receive ACK1
-t5    Pkt2 LOST
-t6    Receive ACK1 (duplicate, expects seq=2)
-t7    Receive ACK1 (duplicate)
-t8    Receive ACK1 (3rd duplicate)
-t9    FAST RETRANSMIT Pkt2 (don't wait for timeout!)
-```
-
-### TCP vs GBN vs SR
-
-| Feature | GBN | SR | TCP |
-|---------|-----|-----|-----|
-| **Cumulative ACK** | Yes | No | Yes |
-| **Selective ACK** | No | Yes | Optional (SACK) |
-| **Retransmit on timeout** | All in window | Only timed-out | Smallest unACK'd |
-| **Receiver buffering** | No | Yes | Yes |
-
-**TCP is a hybrid:**
-- Uses cumulative ACKs (like GBN)
-- Buffers out-of-order segments (like SR)
-- Retransmits only one segment on timeout
-- Fast retransmit for quick recovery
-
----
-
-## 3.9 Flow Control 🌊
-
-### The Problem
-
-**Scenario:** Fast sender overwhelming slow receiver
-- Sender sends data faster than receiver can process
-- Receiver's buffer overflows
-- Data lost!
-
-### TCP Flow Control Mechanism
-
-**Solution:** Sender maintains **receive window** (`rwnd`)
-
-**Receiver Advertises Available Buffer Space:**
-```
-rwnd = RcvBuffer - [LastByteRcvd - LastByteRead]
-```
-
-**Sender Limits Unacknowledged Data:**
-```
-LastByteSent - LastByteAcked ≤ rwnd
-```
-
-### Flow Control Example
-
-```
-Receiver buffer size: 4096 bytes
-Application reads 1000 bytes/sec
-Sender sends 2000 bytes/sec
-
-Initial: rwnd = 4096
-After 1s: rwnd = 4096 - (2000 - 1000) = 3096
-After 2s: rwnd = 3096 - (2000 - 1000) = 2096
+Timeout after 1st loss:  TimeoutInterval
+Timeout after 2nd loss:  2 × TimeoutInterval
+Timeout after 3rd loss:  4 × TimeoutInterval
 ...
-Eventually: rwnd → 0, sender stops!
 ```
 
-**Zero Window Probe:**
-- When `rwnd = 0`, sender still sends 1-byte segments
-- Forces receiver to send updated `rwnd`
-- Prevents deadlock
+> **Why?** If a segment is being lost, the network is probably congested. Backing off reduces load.
+> The timer is reset to its computed value (EstimatedRTT + 4×DevRTT) once a new ACK arrives.
+
+## 6.3 Fast Retransmit
+
+### The Problem with Timeouts
+Timeout periods can be **long**. Waiting for a timeout wastes time.
+
+### The Solution: Duplicate ACKs
+If the sender receives **3 duplicate ACKs** (i.e., 4 identical ACKs total), it assumes the segment is lost and retransmits **immediately** — without waiting for the timeout.
+
+### Why 3 Duplicate ACKs?
+```
+Sender sends: seg1, seg2, seg3, seg4, seg5
+                    seg2 LOST!
+
+Receiver:
+  seg1 → ACK(expected: byte after seg1) ✓
+  seg3 → out of order → re‑ACK(expected: byte after seg1)  [dup ACK #1]
+  seg4 → out of order → re‑ACK(expected: byte after seg1)  [dup ACK #2]
+  seg5 → out of order → re‑ACK(expected: byte after seg1)  [dup ACK #3]
+
+Sender gets 3 dup ACKs → FAST RETRANSMIT seg2!
+```
+
+> A single duplicate ACK might just mean a reordered packet. Three duplicate ACKs make it very likely the segment is actually **lost**.
+
+### Why This Matters
+Fast retransmit significantly improves TCP performance. Without it, TCP would have to wait for a timeout (potentially hundreds of milliseconds) to detect a single lost segment.
+
+> **Common Exam Question:** "How does TCP detect loss without waiting for timeout?" → **Three duplicate ACKs trigger fast retransmit.**
 
 ---
 
-## 3.10 TCP Connection Management 🤝
+# 7. Flow Control
 
-### 3.10.1 Connection Establishment: Three-Way Handshake
+## 7.1 How TCP Flow Control Works
 
-**Purpose:** 
-- Agree on initial sequence numbers
-- Allocate resources (buffers, variables)
+### Definition
+> **Flow control** ensures the sender does not overwhelm the receiver's buffer.
 
-**Steps:**
+### Real‑World Analogy 🚰
+Imagine filling a cup from a firehose. If you blast water too fast, the cup overflows.
+Flow control is like telling the firehose operator: "I only have *this much* room left in my cup."
 
-```
-1️⃣ Client → Server: SYN
-   - SYN bit = 1
-   - Initial sequence number = client_isn
-   
-2️⃣ Server → Client: SYN-ACK
-   - SYN bit = 1, ACK bit = 1
-   - Initial sequence number = server_isn
-   - ACK number = client_isn + 1
-   
-3️⃣ Client → Server: ACK
-   - ACK bit = 1
-   - ACK number = server_isn + 1
-   - Can contain payload data
-```
+### Key Distinction ⚠️
+| | Flow Control | Congestion Control |
+|---|---|---|
+| Protects | Receiver's buffer | Network (routers, links) |
+| Signal | Receive window (rwnd) | Packet loss / delay |
+| Controlled by | Receiver | Sender (inferred) |
 
-**State Transitions:**
-```
-Client: CLOSED → SYN_SENT → ESTABLISHED
-Server: CLOSED → LISTEN → SYN_RCVD → ESTABLISHED
-```
+> **Exam Trap:** Students frequently confuse flow control and congestion control. Remember: Flow control = **receiver protection**, Congestion control = **network protection**.
 
-**Why Three-Way? (Why not Two-Way?)**
-- Prevents old duplicate connection initiations
-- Both sides acknowledge each other's initial sequence numbers
+## 7.2 The Receive Window
 
-### 3.10.2 Connection Teardown: Four-Way Handshake
-
-**Steps:**
+The receiver advertises its available buffer space using the **receive window** (`rwnd`) field in the TCP header.
 
 ```
-1️⃣ Client → Server: FIN
-   - FIN bit = 1
-   - Client enters FIN_WAIT_1
-   
-2️⃣ Server → Client: ACK
-   - Server enters CLOSE_WAIT
-   - Client enters FIN_WAIT_2
-   
-3️⃣ Server → Client: FIN
-   - Server enters LAST_ACK
-   
-4️⃣ Client → Server: ACK
-   - Client enters TIME_WAIT
-   - Waits 2 × MSL (Maximum Segment Lifetime)
-   - Then enters CLOSED
+Receiver Buffer (RcvBuffer)
+┌──────────────────────────────────────────┐
+│  Delivered  │  Received but  │   Empty   │
+│  to app     │  not yet read  │  (rwnd)   │
+│             │  by app        │           │
+└──────────────────────────────────────────┘
+              ▲                ▲            ▲
+         LastByteRead    LastByteRcvd    RcvBuffer end
 ```
 
-**TIME_WAIT State:**
-- Duration: 2 × MSL (typically 30-120 seconds)
-- Ensures:
-  1. Final ACK received
-  2. Old duplicate segments expire
-
-### TCP State Transition Diagram
-
 ```
-                    +---------+
-         +--------->| CLOSED  |<----------+
-         |          +---------+           |
-         |               | passive open   | close
-         | close         | (listen)       |
-         |               v                |
-         |          +---------+           |
-         |     +--->| LISTEN  |           |
-         |     |    +---------+           |
-         |     | close    | rcv SYN       |
-         |     |          | send SYN,ACK  |
-         |     |          v               |
-         | +---+-----+---------+          |
-         | |         | SYN_RCVD|          |
-    FIN  | |         +---------+          |
-    received |       | rcv ACK            |
-         | |         v                    |
-active   | |    +-----------+             |
-open     | |    |ESTABLISHED|             |
-send SYN | |    +-----------+             |
-         | |         |                    |
-         v |         | close              |
-    +---------+      | send FIN           |
-    |SYN_SENT |      v                    |
-    +---------+ +-----------+        +---------+
-         |      | FIN_WAIT_1|        |CLOSE_WAIT
-         |      +-----------+        +---------+
-         |           |                    |
-         +---------->+                    | close
-          rcv SYN,ACK                     | send FIN
-          send ACK   |                    v
-                     |               +---------+
-                     |               |LAST_ACK |
-                     v               +---------+
-              +-----------+               |
-              | FIN_WAIT_2|               | rcv ACK
-              +-----------+               |
-                     |                    |
-                     | rcv FIN            |
-                     | send ACK           |
-                     v                    |
-              +-----------+               |
-              | TIME_WAIT |               |
-              +-----------+               |
-                     |                    |
-                     +--------------------+
-                          timeout
-                             |
-                             v
-                        +---------+
-                        | CLOSED  |
-                        +---------+
+rwnd = RcvBuffer − (LastByteRcvd − LastByteRead)
 ```
+
+### Sender's Constraint
+The sender ensures:
+```
+LastByteSent − LastByteAcked ≤ rwnd
+```
+(Amount of unACKed data in flight ≤ receiver's available buffer)
+
+### The Zero‑Window Problem
+If `rwnd = 0`, the sender stops sending. But how does it know when the receiver has space again?
+
+**Solution:** The sender continues to send **tiny probe segments** (1 byte) periodically. The receiver will respond with an ACK that contains the updated `rwnd`. This is the **persist timer** mechanism.
 
 ---
 
-## 3.11 Principles of Congestion Control 🚦
+# 8. TCP Connection Management
 
-### 3.11.1 The Causes and Costs of Congestion
+## 8.1 Three‑Way Handshake
 
-**Congestion**: Too many sources sending too much data too fast for network to handle
+### Step‑by‑Step
 
-#### Scenario 1: Two Senders, Infinite Buffers
+```
+  Client                                          Server
+    │                                                │
+    │  STEP 1: SYN                                   │
+    │  (SYN=1, seq=client_isn)                       │
+    │────────────────────────────────────────────────►│
+    │                                                │
+    │  STEP 2: SYN-ACK                               │
+    │  (SYN=1, ACK=1, seq=server_isn,                │
+    │   ack=client_isn+1)                            │
+    │◄────────────────────────────────────────────────│
+    │                                                │
+    │  STEP 3: ACK                                   │
+    │  (SYN=0, ACK=1, seq=client_isn+1,              │
+    │   ack=server_isn+1)                            │
+    │  [may carry data!]                             │
+    │────────────────────────────────────────────────►│
+    │                                                │
+    │  ═══════ CONNECTION ESTABLISHED ═══════        │
+```
 
-**Setup:**
-- Two hosts sending through router with capacity `R`
-- Router has infinite buffers (unrealistic)
+### Why Three Steps? (Why Not Two?)
 
-**Result:**
-- When λ_in > R/2: large queuing delays
-- Maximum throughput = R/2 per connection
+**Two‑way handshake problem:**
+- Old duplicate SYN arrives at server → server thinks it's a new connection → allocates resources → **half‑open connection** (wastes resources)
 
-**Cost of Congestion #1:** 📈 Large queuing delays
+**Three‑way handshake solves this:**
+- Server only fully opens the connection after receiving the third segment (ACK from client).
+- This confirms both sides are alive and synchronized.
 
-#### Scenario 2: Two Senders, Finite Buffers
+> **Mnemonic: "SYN → SYN‑ACK → ACK"** (like a phone call: "Hello?" → "Hello, I hear you!" → "Great, let's talk!")
 
-**Setup:**
-- Finite router buffers
-- Senders retransmit lost packets
+### ISN (Initial Sequence Number)
+- Each side picks a **random** ISN — not zero!
+- **Why random?** To prevent old segments from previous connections being confused with new ones, and for security against TCP hijacking attacks.
 
-**Result:**
-- Sender must send at rate λ_in' > λ_out due to retransmissions
-- Retransmissions include:
-  - Lost packets (dropped at full buffer)
-  - Timed-out but not lost packets (premature timeout)
+## 8.2 Connection Teardown (Four‑Way)
 
-**Cost of Congestion #2:** 🔄 Unnecessary retransmissions waste capacity
+Either side can initiate the close.
 
-#### Scenario 3: Four Senders, Multi-Hop Paths
+```
+  Client                                          Server
+    │                                                │
+    │  STEP 1: FIN                                   │
+    │  (FIN=1, seq=x)                                │
+    │────────────────────────────────────────────────►│
+    │                                                │
+    │  STEP 2: ACK                                   │
+    │  (ACK=1, ack=x+1)                              │
+    │◄────────────────────────────────────────────────│
+    │                                                │
+    │       [Server may still send data]             │
+    │                                                │
+    │  STEP 3: FIN                                   │
+    │  (FIN=1, seq=y)                                │
+    │◄────────────────────────────────────────────────│
+    │                                                │
+    │  STEP 4: ACK                                   │
+    │  (ACK=1, ack=y+1)                              │
+    │────────────────────────────────────────────────►│
+    │                                                │
+    │  [Client enters TIME_WAIT for 2×MSL]           │
+    │                                                │
+```
 
-**Setup:**
-- Four hosts, multi-hop paths
-- Finite buffers
+### Why TIME_WAIT?
+The client waits for **2 × MSL** (Maximum Segment Lifetime, typically 30 seconds each → 60 seconds total) before fully closing.
 
-**Result:**
-- Packets dropped after consuming resources on earlier hops
-- Wasted upstream transmission capacity
+**Two reasons:**
+1. If the final ACK is lost, the server will retransmit its FIN, and the client can re‑ACK.
+2. Ensures all old segments from this connection expire before the port can be reused.
 
-**Cost of Congestion #3:** 💀 Dropped packet = wasted work by all upstream routers
+## 8.3 TCP States (Lifecycle)
 
-### 3.11.2 Approaches to Congestion Control
+```
+Client States:                    Server States:
+─────────────                     ─────────────
+CLOSED                            CLOSED
+  │ (active open)                   │ (passive open)
+  ▼                                 ▼
+SYN_SENT                          LISTEN
+  │ (receive SYN-ACK, send ACK)     │ (receive SYN, send SYN-ACK)
+  ▼                                 ▼
+ESTABLISHED ◄═══════════════════► SYN_RCVD
+                                    │ (receive ACK)
+                                    ▼
+                                  ESTABLISHED
 
-| Approach | Description | Who Controls? | Examples |
-|----------|-------------|---------------|----------|
-| **End-to-End** | No explicit network feedback; congestion inferred from loss/delay | End systems | TCP (original) |
-| **Network-Assisted** | Routers provide explicit feedback (choke packets, ECN bits) | Network + End systems | ATM ABR, TCP ECN |
+  (closing)                        (closing)
+ESTABLISHED                       ESTABLISHED
+  │ (send FIN)                      │ (receive FIN, send ACK)
+  ▼                                 ▼
+FIN_WAIT_1                        CLOSE_WAIT
+  │ (receive ACK)                   │ (send FIN)
+  ▼                                 ▼
+FIN_WAIT_2                        LAST_ACK
+  │ (receive FIN, send ACK)         │ (receive ACK)
+  ▼                                 ▼
+TIME_WAIT                         CLOSED
+  │ (2 × MSL timeout)
+  ▼
+CLOSED
+```
 
-**TCP Uses End-to-End Congestion Control:**
-- Infers congestion from packet loss and delay
-- Adjusts sending rate accordingly
+## 8.4 SYN Flood Attack
+
+### What Is It?
+An attacker sends a flood of **SYN segments** (spoofed source IPs) to a server. The server allocates resources (half‑open connections) for each SYN and waits for the ACK (Step 3) — which never comes.
+
+Result: Server runs out of resources → **Denial of Service (DoS)**.
+
+### Defense: SYN Cookies
+- Server does NOT allocate resources on receiving SYN.
+- Instead, it encodes connection info into the **ISN** (using a hash).
+- Resources are only allocated when the valid ACK comes back with the correct value.
+
+> **Exam Tip:** SYN Cookies are a common exam topic — know how they work!
 
 ---
 
-## 3.12 TCP Congestion Control 🎛️
+# 9. Congestion Control
 
-### 3.12.1 Classic TCP Congestion Control
+> **This is arguably the most complex and important topic in Chapter 3.**
 
-**Goal:** Maximize throughput while avoiding congestion
+## 9.1 Causes and Costs of Congestion
 
-**Key Variable: `cwnd` (Congestion Window)**
-- Limits rate: `LastByteSent - LastByteAcked ≤ min(cwnd, rwnd)`
-- Sending rate ≈ `cwnd / RTT` bytes/sec
+### What Is Congestion?
+> Too many sources sending too much data too fast for the **network** to handle.
 
-### TCP Congestion Control Algorithm: AIMD
+### Costs of Congestion
+1. **Large queuing delays** — packets wait in router buffers
+2. **Packet loss** — router buffers overflow → packets dropped
+3. **Unnecessary retransmissions** — sender retransmits packets that are merely delayed, not lost → wastes bandwidth
+4. **Wasted upstream resources** — a packet dropped at hop 5 has already consumed resources at hops 1–4
 
-**AIMD (Additive Increase, Multiplicative Decrease):**
+### Scenarios (Conceptual)
 
-**Additive Increase (No Congestion):**
-- Increase `cwnd` by 1 MSS every RTT (linear increase)
-- Probing for available bandwidth
+**Scenario 1: Two senders, infinite buffer router**
+- Throughput increases up to R/2 (fair share), then plateaus
+- Delay goes to **infinity** as offered load → R/2
 
-**Multiplicative Decrease (Congestion Detected):**
-- Cut `cwnd` in half after loss event
-- Quick backoff from congestion
+**Scenario 2: Two senders, finite buffer router**
+- Some capacity is used for retransmissions → **goodput < throughput**
+- Unnecessary retransmissions waste even more capacity
+
+**Scenario 3: Multi‑hop paths**
+- When a packet is dropped downstream, all upstream transmission was **wasted**
+- This "upstream waste" effect makes congestion much worse
+
+## 9.2 Approaches to Congestion Control
+
+| Approach | Description | Used By |
+|---|---|---|
+| **End‑to‑end** | No explicit feedback from network; sender infers congestion from loss/delay | Classic TCP |
+| **Network‑assisted** | Routers provide explicit feedback (e.g., ECN bits, rate info) | TCP with ECN, ATM ABR |
+
+TCP primarily uses **end‑to‑end** congestion control — it detects congestion by observing **packet loss** (timeout or 3 duplicate ACKs).
+
+## 9.3 TCP Congestion Control — AIMD
+
+### The Core Principle: **Additive Increase, Multiplicative Decrease (AIMD)**
+
+- **Additive Increase:** Increase sending rate by **1 MSS per RTT** (linear growth) while no loss.
+- **Multiplicative Decrease:** On loss detection, cut sending rate **in half** (multiplicative reduction).
 
 ```
       cwnd
-       |     /\
-       |    /  \    /\
-       |   /    \  /  \
-       |  /      \/    \
-       | /              
-       +-------------------> time
-       Loss     Loss    Loss
+        ▲
+        │    /\      /\      /\
+        │   /  \    /  \    /  \     ← "sawtooth" pattern
+        │  /    \  /    \  /    \
+        │ /      \/      \/      \
+        └──────────────────────────► time
 ```
 
-### TCP Congestion Control States
-
-#### 1️⃣ Slow Start
-
-**When:** Connection begins, or after timeout
-
-**Behavior:**
-- Initial `cwnd` = 1 MSS
-- Increase `cwnd` by 1 MSS for each ACK received
-- **Exponential growth**: `cwnd` doubles every RTT
-
-**Example:**
-```
-RTT 0: cwnd = 1 MSS
-RTT 1: cwnd = 2 MSS
-RTT 2: cwnd = 4 MSS
-RTT 3: cwnd = 8 MSS
-```
-
-**Exit Conditions:**
-1. Timeout → Set `ssthresh = cwnd/2`, `cwnd = 1`, restart slow start
-2. `cwnd ≥ ssthresh` → Enter congestion avoidance
-3. 3 duplicate ACKs → Set `ssthresh = cwnd/2`, `cwnd = ssthresh`, enter fast recovery
-
-#### 2️⃣ Congestion Avoidance
-
-**When:** `cwnd ≥ ssthresh`
-
-**Behavior:**
-- Increase `cwnd` by 1 MSS per RTT (linear growth)
-- Implementation: Increase by `MSS × (MSS/cwnd)` per ACK
-
-**Exit Conditions:**
-1. Timeout → Set `ssthresh = cwnd/2`, `cwnd = 1`, enter slow start
-2. 3 duplicate ACKs → Set `ssthresh = cwnd/2`, `cwnd = ssthresh`, enter fast recovery
-
-#### 3️⃣ Fast Recovery (TCP Reno)
-
-**When:** 3 duplicate ACKs received
-
-**Behavior:**
-- `cwnd = ssthresh + 3 MSS` (inflate window)
-- Retransmit missing segment (fast retransmit)
-- Increase `cwnd` by 1 MSS for each additional duplicate ACK
-- When new ACK arrives: `cwnd = ssthresh`, enter congestion avoidance
-
-**Rationale:** Duplicate ACKs indicate packets still flowing
-
-### TCP Congestion Control Diagram
+### The Congestion Window (`cwnd`)
+- TCP maintains a variable called `cwnd` (congestion window).
+- Limits the amount of unACKed data:
 
 ```
-             +-------------+
-        +--->| Slow Start  |<----+
-        |    +-------------+     |
-        |        |    |          |
-        |        |    | cwnd >= ssthresh
-        | timeout|    v          | timeout
-        |        | +---------------+
-        |        | |   Congestion  |
-        |        | |   Avoidance   |
-        |        | +---------------+
-        |        |     |      |
-        |        |     |      | 3 dup ACKs
-        |        |     |      v
-        |        | +---+  +-----------+
-        |        | |      |   Fast    |
-        |        | | new  | Recovery  |
-        |        +-+ ACK  +-----------+
-        |          |          |
-        |          +----------+ new ACK
-        |                     (to Congestion Avoidance)
-        +---------------------+
-              timeout
+LastByteSent − LastByteAcked ≤ min(cwnd, rwnd)
 ```
 
-### TCP Variants Comparison
+- **Sending rate ≈ cwnd / RTT** (bytes per second)
 
-| Variant | Loss Detection | Cwnd Reduction | Recovery |
-|---------|---------------|----------------|----------|
-| **TCP Tahoe** | Timeout or 3 dup ACKs | cwnd = 1 | Slow start always |
-| **TCP Reno** | Timeout or 3 dup ACKs | Timeout: cwnd=1<br>3dupACK: cwnd=cwnd/2 | Fast recovery for 3dupACK |
-| **TCP NewReno** | Like Reno | Like Reno | Improved fast recovery |
-| **TCP CUBIC** | Like Reno | Like Reno | Cubic window growth |
+> **Key Insight:** TCP's effective window is `min(cwnd, rwnd)`. Flow control uses `rwnd`, congestion control uses `cwnd`. The actual usable window is the **minimum** of the two.
 
-### 3.12.2 TCP Throughput
+## 9.4 Slow Start
 
-**Average TCP Throughput:**
+### Definition
+> **Slow Start** is the initial phase of TCP congestion control. Despite its name, it grows the congestion window **exponentially** — doubling `cwnd` every RTT.
+
+### How It Works
+1. Start with `cwnd = 1 MSS`
+2. For every ACK received, `cwnd += 1 MSS`
+3. Since each RTT the sender gets ACKs for all packets sent, `cwnd` **doubles** each RTT.
+
 ```
-Average Throughput = (0.75 × W) / RTT
+RTT 1: cwnd = 1 MSS    → send 1 segment    → receive 1 ACK → cwnd = 2
+RTT 2: cwnd = 2 MSS    → send 2 segments   → receive 2 ACKs → cwnd = 4
+RTT 3: cwnd = 4 MSS    → send 4 segments   → receive 4 ACKs → cwnd = 8
+RTT 4: cwnd = 8 MSS    → send 8 segments   → receive 8 ACKs → cwnd = 16
+...
 ```
-Where `W` is window size when loss occurs
 
-**Simplified Model:**
+### When Does Slow Start End?
+
+1. **Loss via timeout:** `ssthresh = cwnd / 2`, `cwnd = 1 MSS`, restart slow start
+2. **cwnd ≥ ssthresh:** Switch to **Congestion Avoidance** (linear growth)
+3. **Loss via 3 duplicate ACKs:** `ssthresh = cwnd / 2`, `cwnd = ssthresh + 3 MSS`, enter **Fast Recovery**
+
+> **Why is it called "Slow Start" if it grows exponentially?**
+> Because it starts from **1 MSS** — which is very slow compared to blasting at full link rate. The "slow" refers to the starting point, not the growth rate!
+
+> **Exam Trap ⚠️:** Slow start is **exponential**, not linear. Many students get this wrong.
+
+## 9.5 Congestion Avoidance
+
+### Definition
+> Once `cwnd ≥ ssthresh`, TCP enters congestion avoidance and increases `cwnd` **linearly**: by 1 MSS per RTT.
+
+### How It Works
+- For each ACK: `cwnd += MSS × (MSS / cwnd)`
+- Net effect: `cwnd` increases by approximately **1 MSS per RTT** (additive increase).
+
+### On Loss Detection
+- **Timeout:** `ssthresh = cwnd/2`, `cwnd = 1 MSS`, go to **Slow Start**
+- **3 duplicate ACKs:** `ssthresh = cwnd/2`, `cwnd = ssthresh + 3 MSS`, go to **Fast Recovery** (TCP Reno)
+
+## 9.6 Fast Recovery
+
+### Definition
+> **Fast Recovery** (TCP Reno) is entered after detecting loss via 3 duplicate ACKs. It avoids going all the way back to slow start.
+
+### How It Works
+1. `ssthresh = cwnd / 2`
+2. `cwnd = ssthresh + 3 MSS` (inflate for 3 dup ACKs in flight)
+3. For each **additional duplicate ACK**: `cwnd += 1 MSS` (inflate further)
+4. When the **new ACK** arrives (acknowledging the retransmitted segment):
+   - `cwnd = ssthresh`
+   - Enter **Congestion Avoidance**
+
+### TCP Tahoe vs TCP Reno
+
+| Event | TCP Tahoe | TCP Reno |
+|---|---|---|
+| **Timeout** | `ssthresh = cwnd/2`, `cwnd = 1`, Slow Start | Same as Tahoe |
+| **3 dup ACKs** | `ssthresh = cwnd/2`, `cwnd = 1`, **Slow Start** | `ssthresh = cwnd/2`, `cwnd = ssthresh + 3`, **Fast Recovery** |
+
+> **TCP Tahoe** always goes back to slow start on any loss.
+> **TCP Reno** distinguishes between timeout (more severe) and 3 dup ACKs (less severe).
+
+## 9.7 TCP Congestion Control — State Machine
+
 ```
-Average Throughput ≈ 1.22 × MSS / (RTT × √L)
+                    ┌───────────────────┐
+                    │                   │
+                    ▼                   │ timeout:
+              ┌──────────┐             │ ssthresh = cwnd/2
+              │   SLOW    │             │ cwnd = 1 MSS
+     start───►│  START    │─────────────┘
+              │           │
+              └─────┬─────┘
+                    │ cwnd ≥ ssthresh
+                    ▼
+              ┌──────────────┐      timeout:
+              │  CONGESTION  │      ssthresh = cwnd/2
+              │  AVOIDANCE   │──────cwnd = 1 MSS ──► SLOW START
+              │              │
+              └──────┬───────┘
+                     │ 3 dup ACKs:
+                     │ ssthresh = cwnd/2
+                     │ cwnd = ssthresh + 3
+                     ▼
+              ┌──────────────┐
+              │    FAST      │
+              │   RECOVERY   │
+              │              │
+              └──────┬───────┘
+                     │ new ACK:
+                     │ cwnd = ssthresh
+                     ▼
+              CONGESTION AVOIDANCE
+
+     (timeout in Fast Recovery → cwnd = 1, go to SLOW START)
 ```
-Where `L` is loss rate
 
-**Implications:**
-- Throughput ∝ 1/RTT (shorter RTT = higher throughput)
-- Throughput ∝ 1/√L (less loss = higher throughput)
+### Mind Map: TCP Congestion Control States
 
-### 3.12.3 TCP Fairness
+```
+TCP Congestion Control
+│
+├── SLOW START
+│   ├── Initial: cwnd = 1 MSS
+│   ├── Growth: Exponential (double every RTT)
+│   ├── Exit conditions:
+│   │   ├── cwnd ≥ ssthresh → Congestion Avoidance
+│   │   ├── Timeout → ssthresh = cwnd/2, cwnd = 1, stay Slow Start
+│   │   └── 3 dup ACKs → ssthresh = cwnd/2, cwnd = ssthresh+3, Fast Recovery
+│   └── Remember: "Slow" start ≠ slow growth!
+│
+├── CONGESTION AVOIDANCE
+│   ├── Growth: Linear (add 1 MSS per RTT)
+│   ├── This is the AIMD "Additive Increase" phase
+│   ├── Exit conditions:
+│   │   ├── Timeout → ssthresh = cwnd/2, cwnd = 1, Slow Start
+│   │   └── 3 dup ACKs → ssthresh = cwnd/2, cwnd = ssthresh+3, Fast Recovery
+│   └── Remember: "Probing" for bandwidth carefully
+│
+└── FAST RECOVERY (Reno only)
+    ├── Entered after: 3 duplicate ACKs
+    ├── cwnd inflated for each additional dup ACK
+    ├── Exit conditions:
+    │   ├── New ACK → cwnd = ssthresh, Congestion Avoidance
+    │   └── Timeout → cwnd = 1, Slow Start
+    └── Remember: This is the "Multiplicative Decrease" that doesn't go to 1
+```
 
-**Question:** Do competing TCP connections get equal share of bandwidth?
+## 9.8 TCP Throughput
 
-**Idealized Analysis (Two Connections):**
-- Both connections converge to equal bandwidth share
-- AIMD ensures fairness
+### Average Throughput Formula (Simplified)
 
-**Reality:**
-- ⚠️ Connections with smaller RTT grab bandwidth faster
-- ⚠️ Parallel connections get more bandwidth (web browsers)
-- ⚠️ UDP doesn't back off; can crowd out TCP
+If window size oscillates between `W/2` and `W`:
 
-**Fairness and UDP:**
-- UDP has no congestion control
-- Can monopolize bandwidth
-- Applications need to implement their own congestion control
+```
+Average throughput ≈ (3/4) × (W / RTT)
+```
 
-**Fairness and Parallel TCP Connections:**
-- Application opens multiple connections
-- Gets N times more bandwidth than single connection
-- Example: Web browsers open 6-10 parallel connections
+Where W is the window size (in bytes) at which loss occurs.
+
+### TCP Throughput with Loss Rate
+
+```
+Average throughput ≈ (1.22 × MSS) / (RTT × √L)
+```
+
+Where **L** is the loss rate (probability of packet loss).
+
+> This formula shows TCP throughput is **inversely proportional** to RTT and √(loss rate). High RTT or high loss = poor throughput.
 
 ---
 
-## 3.13 Evolution of Transport-Layer Functionality 🚀
+# 10. Fairness
 
-### 3.13.1 Explicit Congestion Notification (ECN)
+## 10.1 TCP Fairness
 
-**Concept:** Network routers signal congestion explicitly
+### Definition
+> A congestion control mechanism is **fair** if K TCP connections sharing a bottleneck link of rate R each eventually get an average throughput of **R/K**.
 
-**Mechanism:**
-- Router sets ECN bits in IP header when experiencing congestion
-- Receiver echoes ECN notification in TCP ACK
-- Sender reduces `cwnd` without waiting for packet loss
+### Why TCP Is Fair (Under Ideal Conditions)
 
-**Benefits:**
-- ✅ Earlier congestion detection
-- ✅ Fewer packet drops
-- ✅ Better performance
+The AIMD mechanism converges to fairness:
 
-**IP Header ECN Field:**
-- `00`: Non ECN-capable transport
-- `01` or `10`: ECN-capable transport
-- `11`: Congestion experienced
-
-**TCP Header ECN Flags:**
-- **ECE (ECN-Echo)**: Receiver sets to notify sender of congestion
-- **CWR (Congestion Window Reduced)**: Sender sets to acknowledge ECE
-
-### 3.13.2 QUIC: Quick UDP Internet Connections
-
-**Motivation:** TCP ossification - hard to deploy TCP changes
-
-**QUIC Overview:**
-- Application-layer protocol on top of UDP
-- Provides reliability, congestion control, connection setup
-- Used by HTTP/3
-
-**Key Features:**
-
-| Feature | Description | Benefit |
-|---------|-------------|---------|
-| **Connection Multiplexing** | Multiple streams per connection | No head-of-line blocking |
-| **Improved Loss Recovery** | Per-stream loss recovery | One lost packet doesn't block all streams |
-| **Faster Connection Setup** | 0-RTT or 1-RTT handshake | Reduced latency |
-| **Connection Migration** | Survives IP address changes | Mobile resilience |
-| **Encrypted by Default** | TLS 1.3 integrated | Better security & privacy |
-
-**QUIC Connection Setup:**
 ```
-Traditional TCP + TLS:
-Client → Server: TCP SYN (1 RTT)
-Client ↔ Server: TLS handshake (1-2 RTT)
-Total: 2-3 RTT before data
-
-QUIC:
-Client → Server: Client Hello (includes data!) (0-1 RTT)
-Total: 0-1 RTT before data! ✨
+     Connection 2's throughput
+     ▲
+     │     /  Equal bandwidth line
+     │    /
+     │   /
+     │  •→ AIMD adjustments move toward the line
+     │ /
+     └────────────────────────► Connection 1's throughput
 ```
 
-**QUIC Streams:**
-- Each HTTP request/response on separate stream
-- Loss on one stream doesn't block others
-- Independent flow control per stream
+- **Additive increase:** Both connections increase at the same rate → move diagonally toward equal‑bandwidth line.
+- **Multiplicative decrease:** Both connections halve → move toward the origin, but the ratio improves.
+- Over time, they converge toward the **equal share** point.
 
-**Future:** HTTP/3 = HTTP over QUIC
+## 10.2 Fairness and UDP
+
+> UDP does **not** have congestion control. UDP applications can send at any rate they want.
+
+- UDP traffic can "steal" bandwidth from TCP connections.
+- TCP backs off when it detects congestion; UDP does not.
+- This is a fundamental fairness problem in the Internet.
+
+## 10.3 Fairness and Parallel TCP Connections
+
+An application can open **multiple parallel TCP connections** to the same server (e.g., web browsers).
+
+- If there are K total TCP connections sharing a link, each gets R/K.
+- An app with 11 parallel connections gets **11 × (R/K)** — unfairly more bandwidth than an app with 1 connection.
+
+> **Exam Tip:** HTTP/1.1 browsers commonly open 6 parallel connections. This is a workaround for TCP's fairness but undermines it at the same time.
 
 ---
 
-## Summary 📝
+# 11. TCP vs UDP — Mind Map & Comparison
 
-### Key Takeaways
+```
+┌─────────────────────────────────────────────────────────┐
+│                TRANSPORT LAYER PROTOCOLS                 │
+├────────────────────────┬────────────────────────────────┤
+│          TCP           │             UDP                │
+├────────────────────────┼────────────────────────────────┤
+│ Connection-oriented    │ Connectionless                 │
+│ Reliable delivery      │ Best-effort (unreliable)       │
+│ In-order delivery      │ No ordering guarantee          │
+│ Flow control (rwnd)    │ No flow control                │
+│ Congestion ctrl (cwnd) │ No congestion control          │
+│ Byte-stream            │ Message-oriented               │
+│ Full-duplex            │ Can be full-duplex             │
+│ Point-to-point only    │ Supports multicast/broadcast   │
+│ 20+ byte header        │ 8 byte header                  │
+│ 3-way handshake        │ No handshake                   │
+│ Slower setup           │ Faster (no setup)              │
+│ Checksum (mandatory)   │ Checksum (optional in IPv4,    │
+│                        │   mandatory in IPv6)           │
+├────────────────────────┼────────────────────────────────┤
+│ USES:                  │ USES:                          │
+│ HTTP, HTTPS, FTP,      │ DNS, DHCP, SNMP, VoIP,        │
+│ SMTP, SSH, Telnet      │ Video streaming, Gaming        │
+└────────────────────────┴────────────────────────────────┘
+```
 
-1. **🔀 Multiplexing & Demultiplexing**
-   - Transport layer directs data to correct application process
-   - UDP uses 2-tuple (dest IP, dest port), TCP uses 4-tuple (source IP, source port, dest IP, dest port)
-   - Port numbers identify processes (0-65535)
+### Decision Tree: When to Use What?
 
-2. **📦 UDP: Simple, Unreliable Transport**
-   - Connectionless, minimal overhead (8-byte header)
-   - No flow control, no congestion control, no reliability
-   - Best for real-time, loss-tolerant applications (gaming, streaming, DNS)
-   - Checksum provides basic error detection
-
-3. **🛡️ Reliable Data Transfer Principles**
-   - Built incrementally: checksums → ACKs/NAKs → sequence numbers → timeouts → pipelining
-   - Stop-and-wait is inefficient; pipelining improves utilization
-   - Two pipelining approaches: Go-Back-N (cumulative ACK, discard out-of-order) and Selective Repeat (individual ACK, buffer out-of-order)
-
-4. **🔗 TCP: Reliable, Connection-Oriented Transport**
-   - Three-way handshake establishes connection; four-way teardown closes it
-   - Provides reliable, in-order byte-stream delivery
-   - Sequence numbers track bytes (not segments); cumulative ACKs indicate next expected byte
-   - Fast retransmit: retransmit on 3 duplicate ACKs without waiting for timeout
-   - Adaptive timeout based on RTT estimation with variance
-
-5. **🌊 Flow Control vs Congestion Control**
-   - **Flow Control**: Prevents sender from overwhelming receiver (receive window `rwnd`)
-   - **Congestion Control**: Prevents sender from overwhelming network (congestion window `cwnd`)
-   - Sender rate limited by `min(cwnd, rwnd)`
-
-6. **🎛️ TCP Congestion Control**
-   - **AIMD**: Additive Increase (probe for bandwidth), Multiplicative Decrease (back off from congestion)
-   - **Three states**: Slow Start (exponential growth), Congestion Avoidance (linear growth), Fast Recovery (after 3 dup ACKs)
-   - `ssthresh` divides slow start from congestion avoidance
-   - Throughput depends on RTT and loss rate: shorter RTT and lower loss → higher throughput
-   - Fairness: competing flows converge to equal shares (ideally), but RTT and parallel connections affect real-world fairness
-
-7. **🚀 Modern Developments**
-   - **ECN**: Routers signal congestion explicitly → fewer drops, better performance
-   - **QUIC**: HTTP/3's transport protocol, runs over UDP, provides 0-RTT connection setup, stream multiplexing, and connection migration
-   - Evolution driven by need for flexibility (UDP-based), lower latency, and better mobile support
+```
+Need reliable, ordered delivery?
+├── YES → Use TCP
+│   ├── File transfer, web, email, remote login
+│   └── Any situation where every byte must arrive correctly
+│
+└── NO → Consider UDP
+    ├── Need low latency more than reliability?
+    │   ├── YES → UDP (gaming, VoIP, live streaming)
+    │   └── NO → TCP is probably fine
+    │
+    ├── Simple request-response (small messages)?
+    │   └── UDP (DNS, DHCP)
+    │
+    └── Need multicast/broadcast?
+        └── UDP (TCP is point-to-point only)
+```
 
 ---
 
-### Visual Summary: Transport Layer Stack
+# 12. Chapter Summary & Quick Revision
 
-```
-┌─────────────────────────────────────┐
-│      Application Layer              │
-│   (HTTP, SMTP, FTP, DNS, etc.)     │
-└─────────────────────────────────────┘
-                 ↕
-┌─────────────────────────────────────┐
-│      Transport Layer                │
-│  ┌─────────────┐  ┌──────────────┐ │
-│  │     TCP     │  │     UDP      │ │
-│  │  Reliable   │  │  Unreliable  │ │
-│  │ Connection  │  │ Connectionless│ │
-│  │ Flow Control│  │   Minimal    │ │
-│  │ Congestion  │  │   Overhead   │ │
-│  │  Control    │  │              │ │
-│  └─────────────┘  └──────────────┘ │
-└─────────────────────────────────────┘
-                 ↕
-┌─────────────────────────────────────┐
-│       Network Layer (IP)            │
-│   (Best-effort, unreliable)         │
-└─────────────────────────────────────┘
-```
+## Key Takeaways
 
-### Protocol Comparison Quick Reference
+1. The transport layer extends the network layer's **host‑to‑host** communication to **process‑to‑process** communication using **port numbers**.
 
-| Aspect | UDP | TCP |
-|--------|-----|-----|
-| **Connection** | ❌ Connectionless | ✅ Connection-oriented |
-| **Reliability** | ❌ Unreliable | ✅ Reliable |
-| **Ordering** | ❌ No guarantees | ✅ In-order delivery |
-| **Flow Control** | ❌ No | ✅ Yes (rwnd) |
-| **Congestion Control** | ❌ No | ✅ Yes (cwnd, AIMD) |
-| **Header Size** | 8 bytes | 20-60 bytes |
-| **Speed** | ⚡ Fast | 🐢 Slower (overhead) |
-| **Use Cases** | Streaming, gaming, DNS | Web, email, file transfer |
+2. **UDP** is a minimal, connectionless protocol offering multiplexing and error detection — nothing more.
+
+3. **Reliable data transfer** is built incrementally: checksums → ACKs/NAKs → sequence numbers → timers → pipelining (GBN, SR).
+
+4. **TCP** provides reliable, in‑order, byte‑stream delivery with flow control and congestion control.
+
+5. TCP's **three‑way handshake** (SYN → SYN‑ACK → ACK) establishes connections; **four‑way FIN exchange** closes them.
+
+6. TCP's **flow control** uses the receive window (`rwnd`) to prevent overwhelming the receiver.
+
+7. TCP's **congestion control** uses AIMD with three states: Slow Start (exponential), Congestion Avoidance (linear), and Fast Recovery (Reno).
+
+8. **Fast retransmit** (3 duplicate ACKs) avoids waiting for timeout to detect loss.
+
+9. TCP's congestion control creates a **sawtooth** pattern in `cwnd` over time.
+
+10. TCP is **fair** under ideal conditions (AIMD converges), but UDP and parallel connections undermine fairness.
+
+## Important Terms
+
+| Term | Definition |
+|---|---|
+| **MSS** | Maximum Segment Size — max data in one TCP segment |
+| **MTU** | Maximum Transmission Unit — max frame size at link layer |
+| **RTT** | Round‑Trip Time — time for a segment to reach destination and ACK to return |
+| **cwnd** | Congestion Window — sender's self‑imposed limit based on congestion |
+| **rwnd** | Receive Window — receiver's advertised available buffer |
+| **ssthresh** | Slow Start Threshold — point where slow start transitions to congestion avoidance |
+| **AIMD** | Additive Increase, Multiplicative Decrease — TCP's congestion control paradigm |
+| **ISN** | Initial Sequence Number — random starting sequence number |
+| **MSL** | Maximum Segment Lifetime — max time a segment can exist in the network |
+| **ECN** | Explicit Congestion Notification — network‑assisted congestion signaling |
+| **SYN Cookie** | Defense against SYN flood — encode state in ISN |
+
+## Quick Revision Bullets 🚀
+
+1. **Transport layer = process‑to‑process delivery** (vs network layer = host‑to‑host)
+2. **UDP demux = 2‑tuple** (dest IP + dest port); **TCP demux = 4‑tuple**
+3. **UDP header = 8 bytes**; **TCP header = 20+ bytes**
+4. **rdt 3.0** = alternating‑bit protocol (seq# 0/1, checksum, ACK, timer)
+5. **GBN** = cumulative ACK, no receiver buffering, retransmit from lost packet onward
+6. **SR** = individual ACK, receiver buffers, retransmit only lost packets, seq# ≥ 2N
+7. **TCP ACK number = next expected byte** (not last received byte!)
+8. **Timeout = EstimatedRTT + 4 × DevRTT**
+9. **3 duplicate ACKs → fast retransmit** (don't wait for timeout)
+10. **Slow Start = exponential growth**, **Congestion Avoidance = linear growth**
 
 ---
 
-**End of Chapter 3: Transport Layer** 🎓
+# 13. Additional References for In‑Depth Study
 
-*These notes cover the fundamental concepts of the Transport Layer, focusing on UDP and TCP protocols, reliable data transfer mechanisms, flow control, congestion control, and modern developments like ECN and QUIC. Master these concepts to understand how applications communicate reliably over unreliable networks!*
+## Relevant RFCs
+
+| RFC | Title | Why It's Useful |
+|---|---|---|
+| [RFC 768](https://tools.ietf.org/html/rfc768) | User Datagram Protocol | The original UDP specification — very short (3 pages). Excellent for understanding UDP's simplicity. |
+| [RFC 793](https://tools.ietf.org/html/rfc793) | Transmission Control Protocol | The foundational TCP specification. Essential for understanding segment format, state machine, and connection management. |
+| [RFC 5681](https://tools.ietf.org/html/rfc5681) | TCP Congestion Control | Defines slow start, congestion avoidance, fast retransmit, and fast recovery. The most important RFC for congestion control. |
+| [RFC 6298](https://tools.ietf.org/html/rfc6298) | Computing TCP's Retransmission Timer | Specifies the EWMA algorithm for EstimatedRTT, DevRTT, and timeout calculation. |
+| [RFC 2581](https://tools.ietf.org/html/rfc2581) | TCP Congestion Control (older) | Predecessor to RFC 5681. Some textbooks still reference this. |
+| [RFC 3168](https://tools.ietf.org/html/rfc3168) | Explicit Congestion Notification (ECN) | Network‑assisted congestion control using IP header bits. Good for understanding modern TCP enhancements. |
+| [RFC 4987](https://tools.ietf.org/html/rfc4987) | TCP SYN Flooding Attacks | Describes SYN flood attacks and SYN cookie defenses. Useful for security‑related exam questions. |
+
+## Online Resources
+
+| Resource | Link | Why It's Useful |
+|---|---|---|
+| **Jim Kurose's Lectures** | [gaia.cs.umass.edu](https://gaia.cs.umass.edu/kurose_ross/lectures.php) | The textbook author's own lecture slides and animations. Best primary supplement. |
+| **Ben Eater's Networking** | [YouTube](https://www.youtube.com/c/BenEater) | Hardware‑level networking intuition with excellent visuals. |
+| **Computer Networking Course (Neso Academy)** | [YouTube](https://www.youtube.com/playlist?list=PLBlnK6fEyqRgMCUAG0XRw78UA8qnv6jEx) | Structured playlist covering all major networking topics at exam level. |
+| **Computerphile TCP/IP Videos** | [YouTube](https://www.youtube.com/user/Computerphile) | Short, accessible explanations of individual concepts like TCP handshake, congestion control, etc. |
+| **Stanford CS144** | [cs144.github.io](https://cs144.github.io/) | Stanford's networking course with hands‑on labs. Excellent for building deeper understanding through implementation. |
+| **Wireshark Labs** | [gaia.cs.umass.edu/kurose_ross/wireshark.php](https://gaia.cs.umass.edu/kurose_ross/wireshark.php) | Official Wireshark labs accompanying the textbook. See TCP, UDP, and DNS in action through packet captures. |
+
+## Video Lecture Recommendations
+
+| Topic | Recommended Video | Why Watch It |
+|---|---|---|
+| TCP 3‑Way Handshake | Kurose Lecture Chapter 3.5 | Author's own explanation with animations |
+| Congestion Control | Kurose Lecture Chapter 3.7 | Clear walkthrough of AIMD, slow start, and the state machine |
+| Reliable Data Transfer | Kurose Lecture Chapter 3.4 | Step‑by‑step build‑up from rdt 1.0 to pipelining |
+| GBN vs SR | Neso Academy — GBN and SR | Animated examples with numerical walkthroughs |
+| TCP vs UDP | Computerphile — TCP vs UDP | Concise, intuitive comparison for quick review |
+
+---
+
+> 📝 **Last Updated:** March 2026
+>
+> 💡 **Study Tip:** After reading these notes, try the Wireshark TCP lab. Seeing real TCP segments, three‑way handshakes, retransmissions, and window changes in a packet capture will solidify everything you've learned here.
+>
+> 🎯 **Exam Strategy:** Focus on: (1) TCP segment structure, (2) reliable data transfer FSMs (especially rdt 3.0), (3) three‑way handshake, (4) congestion control state machine (slow start → congestion avoidance → fast recovery), and (5) the difference between flow control and congestion control.
