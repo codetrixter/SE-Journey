@@ -34,53 +34,54 @@ class Solution
 {
 private:
     int count = 0;
-    TreeNode * temp = nullptr;
-public:
+    TreeNode *temp = nullptr;
 
-    /// @brief recursive approach
-    /// @param root 
-    /// @return 
+public:
+    /// @brief recursive approach to finding the height of the binary tree.
+    /// @param root
+    /// @return
     int maxDepth(TreeNode *root)
     {
         if (root)
             return 1 + max(maxDepth(root->left), maxDepth(root->right));
-        else    
+        else
             return 0;
     }
 
     /// @brief Iterative max depth
-    /// @param root 
-    /// @return 
-    int maxDepthIterative(TreeNode* root) {
-        
-        stack<pair<TreeNode*, int>> st1;
+    /// @param root
+    /// @return
+    int maxDepthIterative(TreeNode *root)
+    {
+
+        stack<pair<TreeNode *, int>> st1;
         int maxd = 0;
 
-        if(root == nullptr)
+        if (root == nullptr)
             return 0;
 
         st1.push(make_pair(root, 1));
-        
-        while(!st1.empty())
+
+        while (!st1.empty())
         {
-            TreeNode* currentNode = st1.top().first;
+            TreeNode *currentNode = st1.top().first;
             int currentDepth = st1.top().second;
             st1.pop();
-            
+
             maxd = max(maxd, currentDepth);
 
-            if(currentNode->left)
+            if (currentNode->left)
                 st1.push(make_pair(currentNode->left, currentDepth + 1));
-            if(currentNode->right)
+            if (currentNode->right)
                 st1.push(make_pair(currentNode->right, currentDepth + 1));
         }
         return maxd;
     }
 
-    /// @brief //TODO: finding maximum depth of a tree using BFS approach.
-    /// @param root 
-    /// @return depth
-    int maxDepthBFS(TreeNode * root)
+    /// @brief //TODO: finding maximum depth of a tree using BFS .
+    /// @param root
+    /// @return depth/height of a tree
+    int maxDepthBFS(TreeNode *root)
     {
         return 0;
     }
@@ -88,8 +89,9 @@ public:
 
 int main(int argc, char const *argv[])
 {
-    TreeNode* node = new TreeNode(1);
-    node->left = new TreeNode(2); node->right = new TreeNode(3);
+    TreeNode *node = new TreeNode(1);
+    node->left = new TreeNode(2);
+    node->right = new TreeNode(3);
     // node->left->right = new TreeNode(4);
     node->right->left = new TreeNode(5);
 
