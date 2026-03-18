@@ -24,8 +24,8 @@ class SingletonDatabase
         std::cout << "Initializing database" << std::endl;
 
         std::ifstream ifs("capitals.txt");
-
         std::string s, s2;
+
         //fetches value line by line from the txt file.
         while (getline(ifs, s))
         {

@@ -3,7 +3,7 @@ Creational Pattern | Structural Pattern | Behavioral Pattern
 | :--- | :--- | :---:
 Builder    | Adapter   | Chain of Resposibility
 Factories  | Bridge    | Command
-prototype  | Composite | Inetrpreter
+prototype  | Composite | Interpreter
 Singleton  | Decorator | Terator
 --         | Facade    | Mediator
 --         | Flyweight | Memento
