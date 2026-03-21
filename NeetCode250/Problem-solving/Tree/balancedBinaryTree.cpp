@@ -58,6 +58,11 @@ bool isBalanced(TreeNode *root)
         return isBalanced(root->left) && isBalanced(root->right);
 }
 
+
+///TODO: Write a recursive DFS with O(n) solution.
+
+///TODO: Write an iterative DFS soultion.
+
 int main(int argc, char const *argv[])
 {
     TreeNode *root1 = new TreeNode(1);
