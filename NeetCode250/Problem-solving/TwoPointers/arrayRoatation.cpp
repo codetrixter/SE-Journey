@@ -48,6 +48,13 @@ void rotate(vector<int> &nums, int k)
      nums.assign(rota.begin(), rota.end());
 }
 
+/// @brief //TODO: in O(1) space complexity
+/// @param nums 
+/// @param k 
+void rotate(vector<int> &nums, int k)
+{
+}
+
 int main(int argc, char const *argv[])
 {
     vector<int> inp = {1000,2,4,-3};
