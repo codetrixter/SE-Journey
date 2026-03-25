@@ -33,6 +33,10 @@ Constraints:
 
 using namespace std;
 
+/// @brief sorting+2pointers
+/// @param people 
+/// @param limit 
+/// @return 
 int numRescueBoats(vector<int> &people, int limit)
 {
   sort(people.begin(), people.end());
@@ -47,6 +51,14 @@ int numRescueBoats(vector<int> &people, int limit)
     }
   }
   return res;
+}
+
+/// @brief //TODO: counting sort technique
+/// @param people 
+/// @param limit 
+/// @return 
+int numRescueBoats(vector<int> &people, int limit)
+{
 }
 
 int main(int argc, char const *argv[])
