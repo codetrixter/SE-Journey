@@ -25,7 +25,7 @@ double myPow(double x, int n)
     while(count > 0)
     {
         if(isNegative)
-            eval *= 1.0d/x;
+            eval *= static_cast<double>(1.0)/x;
         else
             eval *= x;
         count--;

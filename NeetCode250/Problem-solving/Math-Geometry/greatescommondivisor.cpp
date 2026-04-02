@@ -21,6 +21,10 @@ str1 and str2 consist of English uppercase letters.
 
 using namespace std;
 
+/// @brief trivial solution
+/// @param str1 
+/// @param str2 
+/// @return 
 string gcdOfStrings(string str1, string str2)
 {
     int len1 = str1.size(), len2 = str2.size();
@@ -50,6 +54,14 @@ string gcdOfStrings(string str1, string str2)
     }
 
     return "";
+}
+
+/// @brief //TODO: explore other solutions...
+/// @param str1 
+/// @param str2 
+/// @return 
+string gcdOfStrings(string str1, string str2)
+{
 }
 
 int main(int argc, char const *argv[])
