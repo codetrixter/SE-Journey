@@ -63,8 +63,6 @@ bool isSubtree(TreeNode *root, TreeNode *subRoot)
            isSubtree(root->right, subRoot);
 }
 
-
-
 int main(int argc, char const *argv[])
 {
     TreeNode *root1 = new TreeNode(1);
