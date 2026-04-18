@@ -21,7 +21,10 @@ Constraints:
 #include <iostream>
 
 using namespace std;
-
+/// @brief O(n) complexity solution
+/// @param n 
+/// @param x 
+/// @return 
 long long minEnd(int n, int x)
 {
     long long res = x;
@@ -30,6 +33,17 @@ long long minEnd(int n, int x)
     {
         res = res + 1 | x;
     }
+    return res;
+}
+
+/// @brief //TODO: O(log n) complexity solution
+/// @param n 
+/// @param x 
+/// @return 
+long long minEndII(int n, int x)
+{
+    long long res = x;
+
     return res;
 }
 
