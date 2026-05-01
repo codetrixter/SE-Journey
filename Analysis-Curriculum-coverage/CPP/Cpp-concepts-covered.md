@@ -36,6 +36,13 @@
 - [ ] **Should Know:** Ref-qualifiers on member functions
 - [ ] **Should Know:** Moved-from state — valid but unspecified
 
+> 🛠 **Project: `SmartString` — A custom string class**
+> - *Size: Small (~200 LOC)*
+> - Implement a `String` class with Rule of 5 (copy ctor, copy assign, move ctor, move assign, destructor)
+> - Add ref-qualified `data()` method (lvalue returns `const char*`, rvalue returns moved buffer)
+> - Write tests demonstrating copy elision / NRVO by logging constructors
+> - **Covers:** Rule of 5, copy elision, ref-qualifiers, moved-from state
+
 ### 1.2 RAII & Ownership Models [C++11+]
 - [x] **Must Know:** RAII principle — *Covered in `OOPS-COncepts/Classes/RAIIDestructor.cpp`*
 - [x] **Must Know:** Scope-based resource management — *Covered in `Scope-Duration-Linkage/` folder*
@@ -45,6 +52,13 @@
 - [ ] **Should Know:** Aliasing constructor of `shared_ptr`
 - [ ] **Should Know:** `enable_shared_from_this`
 - [ ] **Nice to Have:** Custom allocators for smart pointers
+
+> 🛠 **Project: `ResourcePool` — A generic object pool**
+> - *Size: Small (~150 LOC)*
+> - Implement an object pool that returns `shared_ptr` with custom deleters (return-to-pool instead of delete)
+> - Use `enable_shared_from_this` for pooled objects to hand out references to themselves
+> - Demonstrate aliasing constructor for sub-object access
+> - **Covers:** Aliasing constructor, `enable_shared_from_this`, custom deleters
 
 ### 1.3 Templates & Metaprogramming [C++11/14/17/20]
 - [x] **Must Know:** Function templates, class templates, template argument deduction — *Covered in `Templates-generics/tempateClasses.cpp`*
@@ -61,6 +75,16 @@
 - [ ] **Nice to Have:** Template template parameters
 - [ ] **Nice to Have:** Expression templates
 
+> 🛠 **Project: `TypeSafeUnits` — A compile-time units library**
+> - *Size: Medium (~400 LOC)*
+> - Use class templates with partial specialization for units (meters, seconds, kg)
+> - `constexpr` conversion functions between compatible units
+> - Variadic templates for compound units (e.g., m/s²)
+> - Concepts to constrain arithmetic only between compatible dimensions
+> - SFINAE/`enable_if` for backward-compatible overloads
+> - CRTP base for shared operator logic
+> - **Covers:** Specialization, `constexpr`, `if constexpr`, variadic templates, fold expressions, concepts, SFINAE, type traits, CRTP, tag dispatch
+
 ### 1.4 Error Handling [C++11/17/23]
 - [x] **Must Know:** Exceptions — throw, catch, exception hierarchy, `noexcept` — *Covered in `Exceptions/` folder (8+ files: basics, stack unwinding, rethrow, no-except, destructors, class/inheritance, function try block, catch-all)*
 - [ ] **Must Know:** `std::optional` [C++17] — nullable value semantics
@@ -70,6 +94,14 @@
 - [ ] **Should Know:** Error codes vs exceptions — trade-offs
 - [ ] **Should Know:** `std::error_code`, `std::error_category` [C++11]
 - [ ] **Nice to Have:** Monadic operations on `optional`/`expected` [C++23]
+
+> 🛠 **Project: `ConfigParser` — A configuration file parser**
+> - *Size: Small (~250 LOC)*
+> - Parse key-value config files; return `std::optional<Value>` for missing keys
+> - Use `std::variant<int, double, string, bool>` for heterogeneous values with `std::visit`
+> - Provide both error-code and exception-based APIs to compare trade-offs
+> - Define exception safety guarantees (strong guarantee on parse failure)
+> - **Covers:** `optional`, `variant`, `std::visit`, exception safety, error codes vs exceptions, `std::error_code`
 
 ### 1.5 Ranges, Iterators & Algorithms [C++17/20/23]
 - [ ] **Must Know:** Iterator categories
@@ -81,6 +113,14 @@
 - [ ] **Should Know:** Custom iterators, sentinel types [C++20]
 - [ ] **Nice to Have:** Range adaptors closure objects
 
+> 🛠 **Project: `DataPipeline` — A CSV data processing pipeline**
+> - *Size: Medium (~350 LOC)*
+> - Read CSV, filter/transform/sort rows using STL algorithms and ranges
+> - Implement a custom iterator for streaming rows from file (lazy I/O)
+> - Use projections for sorting by specific columns
+> - Chain range views: `filter | transform | take`
+> - **Covers:** Iterator categories, STL algorithms, ranges, projections, custom iterators, sentinels
+
 ### 1.6 Coroutines [C++20]
 - [ ] **Should Know:** `co_await`, `co_yield`, `co_return`
 - [ ] **Should Know:** Promise type, coroutine handle, coroutine frame
@@ -88,11 +128,24 @@
 - [ ] **Nice to Have:** Async coroutine patterns, cancellation
 - [ ] **Nice to Have:** Coroutine-based task systems
 
+> 🛠 **Project: `LazyGenerator` — A coroutine-based sequence generator**
+> - *Size: Small (~200 LOC)*
+> - Implement a `Generator<T>` type with `co_yield`
+> - Build lazy Fibonacci, prime sieve, and file-line-reader generators
+> - Add a simple `Task<T>` type with `co_await` for async composition
+> - **Covers:** `co_await`, `co_yield`, `co_return`, promise type, coroutine handle, generator pattern
+
 ### 1.7 Modules [C++20]
 - [ ] **Should Know:** Module units, interface units, implementation units
 - [ ] **Should Know:** `export`, `import`, module partitions
 - [ ] **Should Know:** Modules vs headers — trade-offs, migration
 - [ ] **Nice to Have:** Build system integration
+
+> 🛠 **Project: `MathLib-Modules` — Refactor a math library to use modules**
+> - *Size: Small (~150 LOC)*
+> - Create a `math` module with interface/implementation units and partitions (`math:linear`, `math:stats`)
+> - Set up CMake with module support; compare compile times vs header-based version
+> - **Covers:** Module units, `export`/`import`, partitions, build system integration
 
 ### 1.8 Modern Vocabulary Types & Utilities [C++17/20/23]
 - [ ] **Must Know:** `std::string_view` [C++17]
@@ -105,6 +158,14 @@
 - [ ] **Nice to Have:** `std::mdspan` [C++23]
 - [ ] **Nice to Have:** `std::stacktrace` [C++23]
 
+> 🛠 **Project: `MiniFileManager` — A CLI file manager**
+> - *Size: Medium (~300 LOC)*
+> - Use `std::filesystem` to list/copy/move/search files
+> - Accept commands as `string_view`, parse with structured bindings
+> - Display file sizes/dates with `std::chrono` and `std::format`
+> - Use `std::span` to pass directory entry batches to display functions
+> - **Covers:** `string_view`, `span`, structured bindings, `filesystem`, `chrono`, `format`
+
 ### 1.9 Containers & Data Structures
 - [x] **Must Know:** `vector`, `array` — *Covered in `STL-IMPL/` (myInt) and `FunctionDynamics/vector-stackBehaviour.cpp`*
 - [ ] **Must Know:** `deque`, `list`, `forward_list`
@@ -113,6 +174,13 @@
 - [ ] **Should Know:** `flat_map`, `flat_set` [C++23]
 - [ ] **Should Know:** Container adaptors: `stack`, `queue`, `priority_queue`
 - [ ] **Should Know:** Node-based vs contiguous containers — performance trade-offs
+
+> 🛠 **Project: `ContainerBenchmark` — Performance comparison tool**
+> - *Size: Small (~250 LOC)*
+> - Benchmark insert/find/erase on `vector`, `list`, `deque`, `map`, `unordered_map`, `set`
+> - Use `std::chrono` for timing; output results as a table
+> - Implement a simple LRU cache using `list` + `unordered_map`
+> - **Covers:** All container types, container adaptors, node-based vs contiguous trade-offs
 
 ### ✅ Checklist – Core Language & STL
 - [x] Value categories & move semantics mastered [C++11]
@@ -141,11 +209,23 @@
 - [ ] **Should Know:** `std::call_once`, `std::once_flag`
 - [x] **Should Know:** Lock ordering, deadlock avoidance strategies — *Covered in `Section_Two/deadLocks.cpp`*
 
+> 🛠 **Project: `ReadWriteCache` — A thread-safe read-heavy cache**
+> - *Size: Small (~200 LOC)*
+> - Implement a concurrent cache with `shared_mutex` (many readers, exclusive writer)
+> - Use `scoped_lock` for multi-lock operations, `call_once` for lazy initialization
+> - **Covers:** `scoped_lock`, `shared_mutex`, `shared_lock`, `call_once`
+
 ### 2.3 Condition Variables & Synchronization [C++11/20]
 - [x] **Must Know:** `std::condition_variable` — wait, notify_one, notify_all — *Covered in `Section_Three/conditionVariables.cpp`*
 - [x] **Must Know:** Spurious wakeups, predicate-based waiting — *Covered in `Section_Three/introduction.cpp`*
 - [ ] **Should Know:** `std::barrier`, `std::latch` [C++20]
 - [ ] **Should Know:** `std::counting_semaphore`, `std::binary_semaphore` [C++20]
+
+> 🛠 **Project: `ParallelMapReduce` — A multi-phase computation**
+> - *Size: Small (~200 LOC)*
+> - Split work into phases; use `std::latch` for one-shot synchronization and `std::barrier` for iterative phases
+> - Use semaphores to limit concurrent access to a resource (e.g., max 3 DB connections)
+> - **Covers:** `barrier`, `latch`, `counting_semaphore`, `binary_semaphore`
 
 ### 2.4 Atomics & Memory Model [C++11]
 - [ ] **Must Know:** `std::atomic<T>` — load, store, exchange, compare_exchange
@@ -154,6 +234,14 @@
 - [ ] **Should Know:** False sharing, cache line alignment
 - [ ] **Nice to Have:** Lock-free data structures, ABA problem
 
+> 🛠 **Project: `LockFreeCounter` — Atomic operations & a lock-free stack**
+> - *Size: Medium (~350 LOC)*
+> - Build a multi-threaded stats counter using `std::atomic` with different memory orderings
+> - Benchmark `relaxed` vs `seq_cst` to observe performance differences
+> - Implement a lock-free stack with `compare_exchange_weak`
+> - Demonstrate false sharing and fix with `alignas(64)`
+> - **Covers:** `atomic`, all memory orderings, `atomic_ref`, false sharing, lock-free structures
+
 ### 2.5 Futures, Promises & Async [C++11]
 - [x] **Must Know:** `std::future`, `std::promise` — *Covered in `Section_Three/futures.cpp`*
 - [x] **Must Know:** `std::async` — launch policies — *Covered in `Section_Three/async.cpp`*
@@ -161,9 +249,22 @@
 - [ ] **Should Know:** Thread pools
 - [ ] **Nice to Have:** Work stealing, fork-join patterns
 
+> 🛠 **Project: `ThreadPool` — A general-purpose thread pool**
+> - *Size: Medium (~300 LOC)*
+> - Accept callables via `std::packaged_task`, return `std::future` for results
+> - Support task priorities and graceful shutdown
+> - Bonus: implement work-stealing between worker threads
+> - **Covers:** `packaged_task`, thread pools, work stealing, `jthread` with stop tokens
+
 ### 2.6 Parallel STL [C++17]
 - [ ] **Should Know:** Execution policies: `seq`, `par`, `par_unseq`, `unseq`
 - [ ] **Should Know:** Parallel algorithms
+
+> 🛠 **Project: `ImageProcessor` — Parallel image transformations**
+> - *Size: Small (~200 LOC)*
+> - Load a PPM image, apply grayscale/blur/edge-detect using `std::transform` and `std::for_each` with execution policies (`par`, `par_unseq`)
+> - Compare sequential vs parallel performance
+> - **Covers:** Execution policies, parallel algorithms
 
 ### 2.7 Coroutines vs Threads [C++20]
 - [ ] **Should Know:** Cooperative vs preemptive multitasking trade-offs
@@ -186,12 +287,26 @@
 - [ ] Compiler Optimizations — **Not Started**
 - [ ] SIMD & Vectorization — **Not Started**
 
+> 🛠 **Project: `MatrixMul` — Optimized matrix multiplication**
+> - *Size: Medium (~400 LOC)*
+> - Naive → cache-friendly (loop tiling) → SIMD-intrinsics → compiler auto-vectorization
+> - Profile with `perf`/`valgrind --tool=cachegrind`; analyze with `-O2` vs `-O3` vs `-march=native`
+> - **Covers:** Profiling, cache optimization, compiler flags, SIMD basics
+
 ---
 
 ## 4. Memory Management
 - [ ] Allocators & Memory Strategies — **Not Started**
 - [ ] Memory Layout & Alignment — **Not Started**
 - [ ] Memory Diagnostics — **Not Started**
+
+> 🛠 **Project: `ArenaAllocator` — A custom memory arena**
+> - *Size: Medium (~300 LOC)*
+> - Implement a linear/arena allocator conforming to the `Allocator` concept
+> - Use it with `std::vector<T, ArenaAlloc<T>>`
+> - Add alignment support (`alignas`, `std::align`)
+> - Run under AddressSanitizer and Valgrind to validate correctness
+> - **Covers:** Custom allocators, memory layout, alignment, memory diagnostics
 
 ---
 
@@ -200,12 +315,27 @@
 - [ ] ABI Stability & Versioning — **Not Started**
 - [ ] Exception Safety & Contracts — **Not Started**
 
+> 🛠 **Project: `PluginSystem` — A shared library plugin framework**
+> - *Size: Medium (~400 LOC)*
+> - Define a stable C ABI plugin interface with versioning
+> - Use pImpl idiom to hide implementation details and maintain ABI stability
+> - Document exception safety guarantees; use `noexcept` boundaries at ABI edges
+> - Load plugins with `dlopen`/`dlsym`
+> - **Covers:** Interface design, ABI stability, pImpl, exception safety, versioning
+
 ---
 
 ## 6. Tooling & Build Systems
 - [ ] Compilers — **Not Started**
 - [ ] Static Analysis & Formatting — **Not Started**
 - [ ] Build Systems & Package Managers — **Not Started**
+
+> 🛠 **Project: `CMakeStarter` — A modern CMake project template**
+> - *Size: Small (~100 LOC config + existing code)*
+> - Set up CMake with targets, presets, `FetchContent` for dependencies
+> - Integrate `clang-tidy`, `clang-format`, and compiler warnings (`-Wall -Wextra -Werror`)
+> - Add Conan/vcpkg for a third-party library
+> - **Covers:** CMake, static analysis, formatting, package managers, compiler options
 
 ---
 
@@ -214,12 +344,26 @@
 - [ ] Advanced Testing — **Not Started**
 - [ ] Test Infrastructure — **Not Started**
 
+> 🛠 **Project: `TestThePool` — Unit-test the ThreadPool project**
+> - *Size: Small (~250 LOC)*
+> - Use Google Test + Google Mock for unit/integration tests
+> - Add fuzz testing with libFuzzer for the ConfigParser
+> - Set up CTest and code coverage with `gcov`/`lcov`
+> - **Covers:** Unit testing, mocking, fuzz testing, coverage, CTest integration
+
 ---
 
 ## 8. Security & Reliability
 - [ ] Undefined Behavior & Safety — **Not Started**
 - [ ] Secure Coding Practices — **Not Started**
 - [ ] Hardening — **Not Started**
+
+> 🛠 **Project: `SafeBuffer` — A bounds-checked buffer class**
+> - *Size: Small (~200 LOC)*
+> - Implement a buffer with bounds checking, overflow protection, and sanitizer annotations
+> - Compile with UBSan, ASan, and `-fstack-protector`
+> - Write tests that intentionally trigger UB and verify sanitizers catch them
+> - **Covers:** UB detection, secure coding, hardening flags, sanitizers
 
 ---
 
@@ -236,11 +380,25 @@
 
 > **Note:** SOLID principles and some design patterns are covered in the `DesignPatterns/` folder — see `design-patterns-covered.md` for full details.
 
+> 🛠 **Project: `EventBus` — A type-safe event system**
+> - *Size: Medium (~350 LOC)*
+> - Use type erasure (`std::any` or `std::function`) for handlers
+> - Implement Observer for subscriptions, Strategy for dispatch policies, Visitor for event processing
+> - Use pImpl to hide internals; apply policy-based design for threading (single vs multi-threaded bus)
+> - **Covers:** pImpl, Observer, Strategy, Visitor, type erasure, policy-based design
+
 ---
 
 ## 10. Cross-Platform & Systems
 - [ ] Platform Abstractions — **Not Started**
 - [ ] Systems Programming — **Not Started**
+
+> 🛠 **Project: `MiniShell` — A simple cross-platform command shell**
+> - *Size: Medium (~500 LOC)*
+> - Implement command parsing, process spawning (`fork/exec` on Linux, `CreateProcess` on Windows)
+> - Abstract platform differences behind interfaces; use `#ifdef` and CMake platform detection
+> - Add pipe support and signal handling
+> - **Covers:** Platform abstractions, process management, system calls, cross-platform build
 
 ---
 
@@ -249,11 +407,24 @@
 - [ ] Serialization — **Not Started**
 - [ ] Utility Libraries — **Not Started**
 
+> 🛠 **Project: `ChatServer` — A TCP chat application**
+> - *Size: Medium (~400 LOC)*
+> - Use Boost.Asio (or standalone asio) for async TCP I/O
+> - Serialize messages with Protocol Buffers or nlohmann/json
+> - Support multiple clients with async accept/read/write
+> - **Covers:** Networking, async I/O, serialization, third-party libraries
+
 ---
 
 ## 12. DevEx & Scale
 - [ ] Code Review & Collaboration — **Not Started**
 - [ ] CI/CD & Infrastructure — **Not Started**
+
+> 🛠 **Project: `CI-Pipeline` — Set up CI/CD for the above projects**
+> - *Size: Small (config files)*
+> - GitHub Actions workflow: build matrix (GCC/Clang, Debug/Release), run tests, coverage upload
+> - Add pre-commit hooks for `clang-format` and `clang-tidy`
+> - **Covers:** CI/CD, code review automation, build infrastructure
 
 ---
 

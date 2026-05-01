@@ -420,3 +420,93 @@ Modern operating systems employ sophisticated techniques like multiprogramming, 
 ---
 
 *Notes based on "Operating System Concepts" by Abraham Silberschatz, Peter B. Galvin, and Greg Gagne*
+
+---
+
+## 🧠 Detailed Recall Summary
+
+### What is an OS?
+- An OS is the **intermediary** between user/applications and hardware — it manages resources (CPU, memory, I/O, storage) and provides services (file systems, networking, security)
+- The **kernel** is the one program running at all times; everything else is either a system program or application program
+- The OS acts as both a **resource allocator** (decides who gets what) and a **control program** (prevents errors and misuse)
+
+### Computer System Organization
+- **Device controllers** are hardware managing specific devices; each has local buffers and registers
+- **Device drivers** are software providing a uniform interface between the OS and controllers — one driver per controller type
+- Communication flow: Application → OS (system call) → Driver → Controller → Hardware
+
+### Interrupts
+- **Interrupts** are the backbone of modern OS — they're how hardware/software signals the CPU that something needs attention
+- **Hardware interrupts**: triggered by devices (disk completed read, keyboard press, timer tick)
+- **Software interrupts (traps)**: triggered by programs (system calls, division by zero, page faults)
+- **Interrupt handling**: save current state → determine interrupt type (via interrupt vector table) → execute ISR → restore state → resume
+- **Interrupt vector table**: array of pointers to ISRs indexed by interrupt number — provides O(1) dispatch
+
+### Storage Hierarchy
+- Speed/cost trade-off: Registers > Cache (L1/L2/L3) > RAM > SSD > HDD > Tape
+- **Caching principle**: copy frequently used data from slower to faster storage; effective because of **temporal & spatial locality**
+- **Volatile** (registers, cache, RAM) vs **non-volatile** (SSD, HDD) — volatile loses data on power loss
+- **DMA (Direct Memory Access)**: device controller transfers blocks directly to/from memory without CPU intervention — frees CPU from byte-by-byte I/O
+
+### Dual-Mode Operation
+- **User mode** (bit=1): restricted instruction set, no direct hardware access — applications run here
+- **Kernel mode** (bit=0): full access to all instructions and hardware — OS kernel runs here
+- **Mode switch** happens on: system call (trap), interrupt, or exception — transitions user→kernel; return from ISR transitions kernel→user
+- **Privileged instructions** (I/O, halt, interrupt disable, timer set) can ONLY execute in kernel mode — attempting in user mode causes a trap
+
+### Protection & Security
+- **Timer**: prevents infinite loops; OS sets timer before giving CPU to a process; timer interrupt returns control to OS
+- **Memory protection**: base and limit registers prevent a process from accessing memory outside its allocated range
+- **I/O protection**: all I/O instructions are privileged — user programs must request I/O through system calls
+
+### System Types
+- **Batch systems**: jobs queued and executed without user interaction; maximize throughput
+- **Multiprogramming**: multiple jobs in memory; when one waits (I/O), CPU switches to another — keeps CPU busy
+- **Multitasking (time-sharing)**: rapid context switching gives illusion of simultaneous execution; focuses on response time
+- **Real-time systems**: strict timing guarantees — hard real-time (deadlines must be met) vs soft real-time (best effort)
+- **Distributed systems**: multiple independent computers appear as a single system; share resources, provide fault tolerance
+- **Clustered systems**: multiple systems working together; high availability (failover) and high performance (parallel computing)
+
+---
+
+## 🛠 C++ Project Suggestions
+
+### Project 1: `InterruptSimulator` — Interrupt-driven I/O simulation
+
+- **Size:** Medium (~350 LOC)
+- **Concepts Reinforced:** Interrupt handling, interrupt vector table, ISR dispatch, priority levels, saving/restoring state, DMA concept
+- **Approach:**
+  - Model a simple CPU with registers (PC, accumulator, status) and a device controller queue
+  - Devices (keyboard, disk, timer) generate interrupts at random intervals
+  - Implement an interrupt vector table mapping interrupt numbers → handler functions (`std::function`)
+  - On interrupt: save CPU state to a stack, dispatch to correct ISR, restore state on return
+  - Add priority levels: higher-priority interrupt can preempt lower-priority ISR (nested interrupts)
+  - Timer interrupt triggers a "scheduler" that prints which process would run next
+  - DMA simulation: disk controller transfers data block without CPU intervention (just signals completion)
+- **Libraries:** Standard C++, `<random>` for interrupt generation, `<chrono>` for timing, `<functional>` for ISR table
+
+### Project 2: `StorageHierarchySim` — Cache/RAM/Disk access simulator
+
+- **Size:** Small (~250 LOC)
+- **Concepts Reinforced:** Storage hierarchy, caching, locality (temporal/spatial), hit ratios, access time computation, volatile vs non-volatile trade-offs
+- **Approach:**
+  - Model three storage levels: L1 Cache (1ns, 64 entries), RAM (100ns, 4096 entries), Disk (10ms, unlimited)
+  - Implement LRU cache eviction policy for L1
+  - Generate memory access patterns: sequential (spatial locality), loop (temporal locality), random (worst case)
+  - Track and report: hit rates at each level, average access time, total time for N accesses
+  - Compare access patterns and show why caching works (sequential: 95%+ hit rate vs random: much lower)
+  - Bonus: add a write-back vs write-through policy comparison
+- **Libraries:** Standard C++, `<list>` + `<unordered_map>` for LRU, `<chrono>` for simulated timing
+
+### Project 3: `DualModeDemo` — User/kernel mode simulation with protection
+
+- **Size:** Small (~200 LOC)
+- **Concepts Reinforced:** Dual-mode operation, privileged instructions, system calls as trap mechanism, memory protection (base/limit), timer protection
+- **Approach:**
+  - Simulate a "CPU" with a mode bit (user=1, kernel=0), base/limit registers, and a timer
+  - Define instructions: some privileged (halt, I/O, set_timer, disable_interrupts), some unprivileged (add, load, store)
+  - In user mode, attempting a privileged instruction triggers a "trap" → switch to kernel mode → OS handler decides action (execute or terminate process)
+  - System call mechanism: user program sets syscall number in register → executes `trap` instruction → kernel handles it
+  - Memory protection: any memory access outside [base, base+limit) in user mode triggers a segfault trap
+  - Timer: decrement each cycle; when 0 → timer interrupt → OS regains control
+- **Libraries:** Standard C++, simple instruction set as an enum

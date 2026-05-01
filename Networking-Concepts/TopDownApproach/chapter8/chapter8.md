@@ -305,10 +305,10 @@ Digital signatures use **asymmetric cryptography** to provide:
 ```
   Alice (signing)                          Bob (verifying)
   ─────────────                            ────────────────
-  m ──► H(m) = h                           Receive (m, sig)
-  h ──► Encrypt(privA, h) = sig            sig ──► Decrypt(pubA, sig) = h'
-  Send (m, sig) ──────────────────────►    m ──► H(m) = h''
-                                           h' == h'' ? ✅ Valid : ❌ Forged
+  m ──► H(m) ──► Sign(K_A_priv, h) ──► sig  Receive (m, sig)
+  sig ──► Decrypt(K_A_public, sig) ──► h'
+  m ──► H(m) ──► h''
+  h' == h'' ? ✅ Valid : ❌ Forged
 ```
 
 > 🧠 **Memory Tip**: "**Sign** with **private**, **verify** with **public**" — the opposite direction from encryption.
@@ -940,10 +940,10 @@ An IPS is essentially an IDS that can also **take action** — it can **block** 
 | **Digital Signatures** | Sign with private, verify with public → non‑repudiation |
 | **Certificates & CAs** | Bind public key to identity; chain of trust |
 | **TLS/SSL** | Secures TCP; handshake + record protocol; TLS 1.3 = forward secrecy |
-| **IPsec** | Network‑layer security; ESP preferred; tunnel mode for VPNs |
-| **Wireless Security** | WEP broken → WPA2 (AES‑CCMP) → WPA3 (SAE, forward secrecy) |
-| **Firewalls** | Stateless → Stateful → Application Gateway (increasing depth) |
-| **IDS/IPS** | Signature‑based vs anomaly‑based; IPS blocks in‑line |
+| **IPsec** | Network‑layer security; **AH** = integrity only; **ESP** = integrity + confidentiality; **tunnel mode** (new IP header) for VPNs; **transport mode** (original IP header) for host-to-host |
+| **IKE** | Negotiates Security Associations (SAs) for IPsec — establishes shared keys and algorithms |
+| **Firewalls** | Packet filter (stateless, rules on headers), stateful (tracks connections), application gateway (proxy, deep inspection) |
+| **IDS/IPS** | Signature‑based (known attacks) vs anomaly‑based (statistical deviation); IDS detects, IPS blocks |
 | **DoS/DDoS** | SYN flood, amplification; defense = SYN cookies, rate limiting |
 | **Malware** | Viruses (user action), worms (self‑propagating), botnets (coordinated) |
 
@@ -1022,3 +1022,67 @@ An IPS is essentially an IDS that can also **take action** — it can **block** 
 ---
 
 *Last updated: March 2026*
+
+---
+
+## 🧠 Quick Recall Summary
+
+- **CIA-AN**: Confidentiality (encrypt), Integrity (hash/MAC), Availability (DoS protection), Authentication (verify identity), Non-repudiation (digital signatures)
+- **Symmetric-key crypto**: same key for encrypt & decrypt; fast; problem = key distribution (e.g., AES, DES, 3DES)
+- **Public-key crypto**: public key encrypts, private key decrypts (or vice versa for signing); slow; solves key distribution (e.g., RSA, Diffie-Hellman)
+- **Session key pattern**: use public-key to securely exchange a symmetric session key, then use symmetric for bulk data (best of both worlds)
+- **Hash functions**: fixed-size output, one-way, collision-resistant; MD5 (broken), SHA-1 (deprecated), SHA-256 (current)
+- **MAC** (Message Authentication Code): hash(message + shared secret) → integrity + authentication (but not non-repudiation)
+- **Digital signatures**: encrypt hash with sender's private key → provides integrity + authentication + non-repudiation
+- **Certificates & CAs**: CA signs (binds) a public key to an identity; browsers trust root CAs; chain of trust
+- **Nonces**: random numbers used once to prevent replay attacks in authentication protocols
+- **TLS handshake**: ClientHello → ServerHello + Certificate → Key Exchange → Finished; establishes shared secret, then symmetric encryption for data
+- **TLS 1.3**: 1-RTT handshake (vs 2-RTT in 1.2), removed weak ciphers, forward secrecy mandatory
+- **IPsec**: network-layer security; **AH** = integrity only; **ESP** = integrity + confidentiality; **tunnel mode** (new IP header) for VPNs; **transport mode** (original IP header) for host-to-host
+- **IKE**: negotiates Security Associations (SAs) for IPsec — establishes shared keys and algorithms
+- **Firewalls**: packet filter (stateless, rules on headers), stateful (tracks connections), application gateway (proxy, deep inspection)
+- **IDS/IPS**: signature-based (known attacks) vs anomaly-based (statistical deviation); IDS detects, IPS blocks
+- **DoS/DDoS**: SYN flood, amplification; defense = SYN cookies, rate limiting
+- **Malware**: Viruses (user action), worms (self‑propagating), botnets (coordinated)
+
+---
+
+## 🛠 C++ Project Suggestions
+
+### Project 1: `CryptoToolkit` — Implement core crypto primitives
+
+- **Size:** Medium (~400 LOC)
+- **Concepts Reinforced:** Symmetric encryption (XOR, AES rounds conceptually), asymmetric (RSA math), hashing, MAC, digital signatures
+- **Approach:**
+  - Implement XOR cipher and Caesar cipher (demonstrate weakness)
+  - Implement simplified RSA: key generation (pick primes, compute n, φ(n), e, d), encrypt/decrypt small messages
+  - Implement SHA-256 hash (or use a library) and build HMAC on top
+  - Demonstrate digital signature: hash message → sign with private key → verify with public key
+  - Show how tampering with the message breaks the MAC/signature
+- **Libraries:** `<cstdint>`, big number arithmetic (or `__int128` for small demos); optionally OpenSSL for real AES/SHA
+
+### Project 2: `TLSHandshakeSim` — Simulate the TLS 1.3 handshake
+
+- **Size:** Medium (~350 LOC)
+- **Concepts Reinforced:** TLS handshake steps, key exchange (Diffie-Hellman), certificate verification, session keys, record protocol
+- **Approach:**
+  - Simulate client and server as two objects exchanging messages
+  - ClientHello: supported ciphers + key share (DH public value)
+  - ServerHello: chosen cipher + key share + certificate (simulate CA verification)
+  - Both derive session keys from shared DH secret
+  - Exchange encrypted application data using derived keys (XOR or AES)
+  - Show how MITM fails if certificate verification is done correctly
+- **Libraries:** Standard C++; simplified DH with small primes for demonstration; optionally OpenSSL for real crypto
+
+### Project 3: `MiniFirewall` — A packet filter firewall
+
+- **Size:** Medium (~300 LOC)
+- **Concepts Reinforced:** Packet filtering rules, stateless vs stateful inspection, IP/TCP header parsing, access control lists
+- **Approach:**
+  - Read raw packets (from pcap file or simulated stream)
+  - Parse IP and TCP/UDP headers (src/dst IP, src/dst port, protocol, flags)
+  - Apply configurable rules (allow/deny based on IP ranges, ports, protocols)
+  - **Stateless mode**: evaluate each packet independently against rules
+  - **Stateful mode**: track TCP connections (SYN/ACK/FIN); only allow packets belonging to established connections
+  - Log blocked packets with reason
+- **Libraries:** `<pcap.h>` (libpcap) for reading packet captures, or simulate packets as byte arrays

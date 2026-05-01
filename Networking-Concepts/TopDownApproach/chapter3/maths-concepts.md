@@ -372,3 +372,44 @@ public:
 - Kalman Filter: Optimal estimation with noise models
 - Low-pass Filter: Signal processing equivalent
 
+---
+
+## 🧠 Quick Recall Summary
+
+- **EWMA** = Exponential Weighted Moving Average: recent data weighted more, older data decays exponentially
+- **Formula**: `Estimate = (1-α) × OldEstimate + α × NewSample`
+- **α close to 0** (e.g., 0.125): smooth, slow to adapt — good for stable environments
+- **α close to 1** (e.g., 0.9): reactive, noisy — good for rapidly changing values
+- **Weight of a sample k steps old** = `(1-α)^k × α` — exponential decay, hence the name
+- **TCP uses EWMA twice**: EstimatedRTT (α=0.125) and DevRTT (β=0.25)
+- **Timeout = EstimatedRTT + 4×DevRTT** — adapts to both mean and variance of RTT
+- **Memory efficient**: only stores one value (the current estimate), not a window of samples
+- **Trade-off**: smoothness vs responsiveness — choose α based on signal stability
+
+---
+
+## 🛠 C++ Project Suggestions
+
+### Project 1: `RTTEstimator` — TCP timeout calculator with visualization
+
+- **Size:** Small (~150 LOC)
+- **Concepts Reinforced:** EWMA, DevRTT, adaptive timeout computation, effect of α/β
+- **Approach:**
+  - Read a sequence of RTT samples (from file or generated with noise)
+  - Compute EstimatedRTT, DevRTT, and TimeoutInterval at each step
+  - Experiment with different α (0.05, 0.125, 0.5) and show how estimates differ
+  - Output CSV with columns: sample#, SampleRTT, EstimatedRTT, DevRTT, Timeout
+  - Bonus: inject a sudden RTT spike and observe how quickly each α adapts
+- **Libraries:** Standard C++, `<random>` for noise, `<fstream>` for CSV
+
+### Project 2: `EWMACompare` — Compare EWMA vs SMA vs raw samples
+
+- **Size:** Small (~100 LOC)
+- **Concepts Reinforced:** Why EWMA over simple average, trade-offs of smoothing, memory efficiency
+- **Approach:**
+  - Generate a synthetic signal (e.g., sine wave + Gaussian noise + step change)
+  - Apply: raw samples, SMA (window=10), EWMA (α=0.1), EWMA (α=0.5)
+  - Output all four series to CSV; plot to compare smoothness and lag
+  - Measure how many samples each method takes to converge after a step change
+- **Libraries:** Standard C++, `<cmath>`, `<random>`
+

@@ -937,3 +937,62 @@ bye                   # Exit
 ---
 
 **📝 Note**: These comprehensive notes cover all major topics from Chapter 2: Application Layer in "Computer Networking: A Top-Down Approach" by Kurose and Ross. For deeper understanding, refer to the textbook, experiment with the practical exercises, and explore the RFC documents listed in the Additional Resources section.
+
+---
+
+## 🧠 Quick Recall Summary
+
+- **Client-Server** = always-on server with fixed IP; **P2P** = peers are both clients and servers, self-scaling
+- **Sockets** = the API between application and transport layer; identified by (IP, port)
+- **Transport needs**: reliable delivery, throughput, timing, security — TCP gives reliability, UDP gives speed
+- **HTTP**: stateless, request/response over TCP; persistent (HTTP/1.1) vs non-persistent connections
+  - Methods: GET, POST, PUT, DELETE, HEAD
+  - Status codes: 200 OK, 301 Moved, 304 Not Modified, 404 Not Found, 505 Version Not Supported
+- **HTTP/2**: multiplexed streams over single TCP, server push, header compression; **HTTP/3**: QUIC over UDP
+- **Cookies**: 4 components — cookie header in response, cookie header in request, cookie file on client, back-end DB on server
+- **Web caching (proxy)**: serves cached responses; reduces response time and ISP bandwidth; uses conditional GET (If-Modified-Since)
+- **DNS**: distributed hierarchical database; maps hostnames → IPs
+  - Hierarchy: Root → TLD (.com, .org) → Authoritative
+  - Record types: A (IPv4), AAAA (IPv6), CNAME (alias), MX (mail), NS (nameserver)
+  - Iterative vs recursive queries; local DNS caches results with TTL
+- **SMTP**: push protocol for email; commands (HELO, MAIL FROM, RCPT TO, DATA, QUIT); uses TCP port 25
+- **POP3** (download & delete) vs **IMAP** (server-side folders, stateful) vs **Web-based** (HTTP)
+- **CDNs**: bring content close to users; enter deep (inside access ISPs) or bring home (IXPs); DNS redirect selects closest server
+- **Socket programming**: UDP = connectionless (`sendto`/`recvfrom`); TCP = connection-oriented (`connect`/`accept`/`send`/`recv`)
+
+---
+
+## 🛠 C++ Project Suggestions
+
+### Project 1: `MiniHTTP` — A basic HTTP/1.1 client and server
+
+- **Size:** Medium (~400 LOC)
+- **Concepts Reinforced:** HTTP request/response format, persistent connections, status codes, headers, cookies, conditional GET
+- **Approach:**
+  - **Server**: Listen on TCP socket, parse HTTP requests, serve static files from a directory, support GET/HEAD, return proper status codes, handle persistent connections (Connection: keep-alive)
+  - **Client**: Build and send HTTP GET requests, parse response headers and body, support cookies (store & resend), implement conditional GET with If-Modified-Since
+  - Add a simple cache (respond with 304 if file unchanged)
+- **Libraries:** POSIX sockets (`<sys/socket.h>`, `<netinet/in.h>`) or Boost.Asio; `<filesystem>` for serving files
+
+### Project 2: `DNSResolver` — A recursive DNS lookup tool
+
+- **Size:** Medium (~350 LOC)
+- **Concepts Reinforced:** DNS hierarchy, iterative/recursive queries, record types (A, AAAA, CNAME, MX, NS), DNS message format, caching with TTL
+- **Approach:**
+  - Send raw UDP packets to DNS servers (port 53)
+  - Parse DNS response format (header, question, answer, authority, additional sections)
+  - Implement iterative resolution: query root → TLD → authoritative
+  - Cache responses with TTL; show full resolution path
+  - Support querying different record types (A, MX, CNAME)
+- **Libraries:** POSIX sockets (UDP), manual byte packing/unpacking for DNS wire format
+
+### Project 3: `ChatApp` — TCP & UDP socket programming
+
+- **Size:** Medium (~350 LOC)
+- **Concepts Reinforced:** TCP vs UDP sockets, client-server model, concurrent connections, socket API lifecycle
+- **Approach:**
+  - **TCP version**: Multi-client chat server using `select()`/`poll()`/`epoll`; clients connect, send messages, server broadcasts to all
+  - **UDP version**: Connectionless chat — clients send datagrams to server, server forwards to registered clients
+  - Compare: reliability (TCP guarantees delivery), ordering, overhead
+  - Add a `/whisper` command for direct messaging (addressing by port)
+- **Libraries:** POSIX sockets; `<thread>` or `<poll.h>` for concurrency

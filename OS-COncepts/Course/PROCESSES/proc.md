@@ -459,3 +459,110 @@ After `fork()`:
 | IPC | Communication between processes (shared memory/message passing) |
 | Pipe | Unidirectional conduit for parent-child communication |
 | Schedulers | Long-term (jobs), Short-term (CPU), Medium-term (swapping) |
+
+---
+
+## 🧠 Detailed Recall Summary
+
+### Process Fundamentals
+- A **process** = program in execution; a program is a passive file on disk, a process is active with its own address space, PC, registers, and state
+- **Process memory layout** (low→high): Text (code) → Data (globals) → Heap (grows ↑, dynamic allocation) → ... free space ... → Stack (grows ↓, function calls)
+- A single program can be multiple processes (e.g., multiple Chrome tabs = multiple processes from same binary)
+
+### Process States & Transitions
+- **5 states**: New → Ready → Running → Waiting → Terminated
+- Key transitions to memorize:
+  - Ready → Running: **scheduler dispatch** (CPU is free, process is chosen)
+  - Running → Ready: **interrupt** (time quantum expired — preemption)
+  - Running → Waiting: **I/O request or event wait** (process blocks itself voluntarily)
+  - Waiting → Ready: **I/O completion** (event occurred, process can run again)
+- Only ONE process can be Running per CPU core at any time; many can be Ready or Waiting simultaneously
+
+### Process Control Block (PCB)
+- The PCB is the OS's representation of a process — it's a struct/record in kernel memory containing:
+  - Process state, PID, program counter, CPU registers, memory management info (page tables, base/limit)
+  - Scheduling info (priority, queue pointers), I/O status (open files, devices), accounting info
+- The PCB is what gets **saved during context switch** and **restored when the process resumes**
+- Linux implementation: `task_struct` in the kernel (very large struct with hundreds of fields)
+
+### Context Switching
+- **Context switch** = saving the PCB of the current process + loading the PCB of the next process
+- It's **pure overhead** — the system does no useful work during a switch
+- Cost: typically 1–10 microseconds on modern hardware; depends on memory management complexity (TLB flush is expensive)
+- Triggered by: timer interrupt (preemption), syscall that blocks, higher-priority process becomes ready
+
+### Process Creation
+- **`fork()`**: creates a child process as an exact copy of parent (copy-on-write optimization in practice)
+  - Returns child PID to parent, returns 0 to child
+  - Child inherits: open files, environment, memory (CoW), signal handlers
+  - Child gets new: PID, PPID, own PCB
+- **`exec()`**: replaces the current process's memory space with a new program (same PID, new code/data)
+- Common pattern: `fork()` → child calls `exec()` → parent calls `wait()` to collect exit status
+- **Process tree**: init/systemd (PID 1) is the ancestor of all processes; orphaned processes are re-parented to init
+
+### Process Termination
+- **`exit()`**: process terminates voluntarily; OS reclaims resources (memory, open files, etc.)
+- **`wait()`/`waitpid()`**: parent collects child's exit status; without this, child becomes a **zombie** (terminated but PCB still exists)
+- **Orphan process**: parent terminated before child; child gets re-parented to init (which periodically waits on orphans)
+- **Cascading termination**: some systems kill all children when parent exits (not default on Unix)
+
+### Inter-Process Communication (IPC)
+- Processes are **isolated by default** (separate address spaces) — they need explicit IPC mechanisms to communicate
+- **Two fundamental models**:
+  1. **Shared memory**: processes map a common memory region; fast (no kernel involvement after setup) but requires synchronization (race conditions)
+  2. **Message passing**: processes send/receive messages via kernel; slower (syscalls per message) but no synchronization needed; works across machines
+- **Pipes**: unidirectional byte stream between related processes; `pipe()` creates two file descriptors (read end, write end); used heavily in shells (`ls | grep`)
+- **Named pipes (FIFOs)**: pipes accessible by unrelated processes via filesystem path
+- **Message queues**: kernel-managed queue; messages have type/priority; `msgget()`, `msgsnd()`, `msgrcv()`
+
+### Scheduling Queues & Schedulers
+- **Job queue**: all processes in the system
+- **Ready queue**: processes in memory, ready to execute (linked list of PCBs)
+- **Device queues**: processes waiting for specific I/O devices (one queue per device)
+- **Long-term scheduler (job scheduler)**: controls degree of multiprogramming; selects processes from disk → memory (important for batch systems; less relevant in modern time-sharing)
+- **Short-term scheduler (CPU scheduler)**: selects from ready queue → CPU; runs very frequently (every few ms), must be fast
+- **Medium-term scheduler**: swaps processes in/out of memory to manage multiprogramming level and memory pressure
+
+### Types of Processes
+- **I/O-bound**: spends more time doing I/O than computation; many short CPU bursts (e.g., text editor, web browser)
+- **CPU-bound**: spends more time computing; few very long CPU bursts (e.g., matrix multiplication, compilation)
+- Good scheduling requires a **mix** of both types to keep both CPU and I/O devices busy
+
+---
+
+## 🛠 C++ Project Suggestions
+
+### Project 1: `ProcessSimulator` — Process lifecycle & scheduling queue simulator
+
+- **Size:** Medium (~400 LOC)
+- **Concepts Reinforced:** Process states, transitions, PCB, context switching, ready/waiting/device queues, schedulers (long/short/medium-term)
+- **Approach:**
+  - Define a `PCB` struct: PID, state (enum), priority, burst times (CPU/IO), registers (simulated), arrival time
+  - Maintain queues: `ready_queue`, `waiting_queue` (per device), `job_queue`
+  - Simulate a **clock tick loop**: at each tick, handle events (I/O completions, timer expiry, new arrivals)
+  - Implement state transitions: New→Ready (admit), Ready→Running (dispatch), Running→Waiting (I/O request), Waiting→Ready (I/O done), Running→Terminated (exit)
+  - **Context switch**: print "saving PCB of P1... loading PCB of P2..." with overhead cost (skip N ticks)
+  - Display: Gantt chart of execution, queue contents at each tick, turnaround/waiting times
+  - Support: configurable number of processes, mix of I/O-bound and CPU-bound
+- **Libraries:** Standard C++, `<queue>`, `<vector>`, `<chrono>` for simulated time
+
+### Project 2: `ForkExecLab` — Process creation & management with real system calls
+
+- **Size:** Small (~250 LOC)
+- **Concepts Reinforced:** `fork()`, `exec()`, `wait()`, `exit()`, process tree, orphans, zombies, process relationships
+- **Approach:**
+  - **Part A — Fork bomb (controlled)**: Create a process tree of depth 3; each process prints its PID and PPID, showing the tree structure
+  - **Part B — Shell executor**: fork a child, exec a user-specified command, parent waits and reports exit status
+  - **Part C — Zombie demo**: fork a child that exits immediately; parent sleeps without waiting — use `ps` to observe the zombie; then call `wait()` to reap it
+  - **Part D — Orphan demo**: fork a child that sleeps; parent exits immediately — observe child's PPID changes to 1 (init)
+  - **Part E — exec variants**: demonstrate `execl`, `execv`, `execvp`, `execve` with different argument styles
+  - Print PID/PPID at each step; trace the process tree with `pstree`
+- **Libraries:** POSIX (`<unistd.h>`, `<sys/wait.h>`, `<sys/types.h>`)
+
+### Project 3: `IPCBenchmark` — Compare IPC mechanisms
+
+- **Size:** Medium (~350 LOC)
+- **Concepts Reinforced:** Shared memory, message passing, pipes, named pipes, message queues; trade-offs (speed, complexity, synchronization needs)
+- **Approach:**
+  - Transfer a large block of data (e.g., 100MB) between two processes using each IPC method:
+    1. **Pipe** (`pipe()` + `fork()`)

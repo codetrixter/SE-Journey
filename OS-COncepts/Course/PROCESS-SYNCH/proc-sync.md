@@ -754,7 +754,7 @@ When process Q calls `x.signal()` and process P is waiting on `x`, two strategie
 | Strategy | Description |
 |----------|-------------|
 | **Signal and Wait** | Q waits until P leaves or waits again |
-| **Signal and Continue** | Q continues; P resumes when Q leaves monitor |
+| **Signal and Continue** | Q continues; P resumes when Q leaves |
 | **Hoare semantics** | Signal and Wait — P immediately resumes |
 | **Mesa semantics** | Signal and Continue — P may need to re-check condition |
 
@@ -898,7 +898,7 @@ If P0 executes `wait(S)` and P1 executes `wait(Q)` simultaneously:
 - [ ] Not suitable for long critical sections (wastes CPU)
 
 #### Semaphores
-- [ ] **Binary** (0 or 1) ≡ mutex; **Counting** (0 to N) for resource pools
+- [ ] **Binary** (0 or 1) ≡ mutex; **Counting** (0..N) for resource pools
 - [ ] Operations: `wait()` (P, decrement) and `signal()` (V, increment)
 - [ ] Blocking implementation uses queues — avoids busy waiting
 - [ ] Negative value = number of waiting processes
@@ -1028,3 +1028,124 @@ SYNCHRONIZATION
 
 ---
 > 💡 **Pro Tip for Exams:** Draw diagrams! A timeline showing interleaved execution of two processes, or the state transitions of the Dining Philosophers, is worth more than a paragraph of text when explaining these concepts.
+
+---
+
+## 🧠 Detailed Recall Summary
+
+### Why Synchronization?
+- When multiple threads/processes share data and execute concurrently, **race conditions** arise — the outcome depends on the exact interleaving of operations
+- Even simple operations like `counter++` are NOT atomic — they compile to load→modify→store (3 instructions); any interleaving between threads can corrupt the value
+- Synchronization ensures **correctness** by controlling access to shared data
+
+### The Critical Section Problem
+- **Critical section (CS)**: a code segment where a process accesses shared resources — only ONE process should be in its CS at a time
+- **Three requirements for a valid solution**:
+  1. **Mutual Exclusion**: if P1 is in CS, no other process can be in CS
+  2. **Progress**: if no process is in CS and some want to enter, only those NOT in their remainder section participate in deciding who enters next — and the decision cannot be postponed forever
+  3. **Bounded Waiting**: there's a limit on how many times other processes can enter CS before a waiting process gets its turn (no starvation)
+- General structure: `entry_section → CRITICAL_SECTION → exit_section → remainder_section`
+
+### Peterson's Solution
+- Software-only solution for **2 processes**; uses two variables: `flag[2]` (intent to enter) and `turn` (whose turn if both want in)
+- Process i: `flag[i]=true; turn=j; while(flag[j] && turn==j);` — enter CS — `flag[i]=false;`
+- **Satisfies all 3 requirements** but only works with 2 processes and requires **no instruction reordering** (fails on modern CPUs without memory barriers)
+- Important for understanding the logic, but NOT used in practice
+
+### Hardware Synchronization
+- Modern CPUs provide **atomic instructions** that solve the CS problem:
+  - **Test-and-Set**: atomically read old value and set to TRUE; use in spin loop: `while(test_and_set(&lock));`
+  - **Compare-and-Swap (CAS)**: atomically compare value with expected; if equal, swap to new value; return old value — foundation of lock-free programming
+- **Memory barriers/fences**: prevent CPU from reordering memory operations across the barrier — required for Peterson's to work on modern hardware
+- Hardware solutions are **fast** but still need higher-level abstractions for usability
+
+### Mutex Locks
+- Simplest synchronization tool: `acquire()` before CS, `release()` after CS
+- **Spinlock**: busy-waits in a loop (`while(locked);`) — wastes CPU but avoids context switch; good for very short critical sections on multiprocessors
+- **Blocking lock**: puts thread to sleep if lock unavailable; woken when lock released — better for long critical sections (no CPU waste while waiting)
+- C++: `std::mutex` with `lock()`/`unlock()` or RAII-based `std::lock_guard`/`std::unique_lock`
+
+### Semaphores
+- **Counting semaphore** (value: 0 to N): `wait(S)` decrements S (blocks if S≤0); `signal(S)` increments S (wakes one blocked process)
+- **Binary semaphore** (value: 0 or 1): functionally equivalent to a mutex lock
+- **Key insight**: semaphores can solve both mutual exclusion AND ordering/signaling problems
+  - Mutual exclusion: init S=1; `wait(S) → CS → signal(S)`
+  - Ordering/signaling: init S=0; P1 does work then `signal(S)`; P2 does `wait(S)` then uses result — P2 guaranteed to run after P1
+- **Common pitfalls**: forgetting signal (deadlock), signaling too many times (violates mutual exclusion), wrong order of waits on multiple semaphores (deadlock)
+
+### Classic Synchronization Problems
+1. **Producer-Consumer (Bounded Buffer)**:
+   - Shared buffer of size N; producer adds items, consumer removes items
+   - 3 semaphores: `mutex=1` (protect buffer access), `empty=N` (count empty slots), `full=0` (count full slots)
+   - Producer: `wait(empty) → wait(mutex) → add item → signal(mutex) → signal(full)`
+   - Consumer: `wait(full) → wait(mutex) → remove item → signal(mutex) → signal(empty)`
+
+2. **Readers-Writers Problem**:
+   - Multiple readers can read simultaneously; writers need exclusive access
+   - First readers-writers: readers have priority (writers may starve)
+   - Use: `read_count` variable + `mutex` (protect read_count) + `rw_mutex` (exclusive for writers, first/last reader acquires/releases it)
+
+3. **Dining Philosophers**:
+   - 5 philosophers, 5 chopsticks; each needs 2 adjacent chopsticks to eat
+   - Naive solution (pick left then right) → **deadlock** if all pick left simultaneously
+   - Solutions: limit to 4 seated, pick both atomically, asymmetric (odd picks left-first, even picks right-first)
+
+### Monitors
+- High-level synchronization construct: a class/module where only ONE thread can be active inside at any time (compiler/language enforces mutual exclusion)
+- **Condition variables** within monitors: `wait()` releases monitor lock and suspends; `signal()` wakes one waiting thread
+- `signal()` semantics: **Hoare** (signaler immediately suspends, signaled runs) vs **Mesa** (signaler continues, signaled put on ready queue — must re-check condition with `while`)
+- C++: `std::condition_variable` uses Mesa semantics — always use `while` loop or predicate version of `wait()`
+- Monitors = mutex + condition variables combined into a clean abstraction
+
+### Deadlock (Brief)
+- **Four necessary conditions** (all must hold): Mutual Exclusion, Hold & Wait, No Preemption, Circular Wait
+- **Prevention**: break one condition (e.g., impose ordering on lock acquisition → no circular wait)
+- **Starvation**: a process waits indefinitely because others keep getting priority — different from deadlock (in deadlock, NO process progresses)
+
+---
+
+## 🛠 C++ Project Suggestions
+
+### Project 1: `DiningPhilosophers` — All solution variants
+
+- **Size:** Medium (~400 LOC)
+- **Concepts Reinforced:** Deadlock, mutex, semaphores, monitor (condition_variable), starvation, resource ordering, all three classic solutions
+- **Approach:**
+  - Define 5 philosopher threads and 5 chopstick resources
+  - **Version A — Deadlock**: each philosopher picks left then right chopstick (demonstrate deadlock detection by timeout)
+  - **Version B — Resource ordering**: philosophers always pick lower-numbered chopstick first → no circular wait → no deadlock
+  - **Version C — Semaphore limit**: allow at most 4 philosophers to sit (counting semaphore) → at least one can always eat
+  - **Version D — Monitor/condition variable**: philosopher checks if both chopsticks free; if not, waits on condition variable; on putting down, signals neighbors
+  - Print state transitions: THINKING → HUNGRY → EATING; detect and report starvation (philosopher hasn't eaten in N rounds)
+  - Measure fairness: count how many times each philosopher eats over 1000 iterations
+- **Libraries:** `<thread>`, `<mutex>`, `<condition_variable>`, `<semaphore>` (C++20), `<chrono>`
+
+### Project 2: `ProducerConsumerBuffer` — Bounded buffer with multiple synchronization approaches
+
+- **Size:** Medium (~350 LOC)
+- **Concepts Reinforced:** Producer-consumer pattern, bounded buffer, semaphores (counting + binary), mutex + condition_variable, busy-waiting vs blocking
+- **Approach:**
+  - Shared circular buffer of size N (configurable: 5, 10, 100)
+  - **Version A — Semaphores**: use `std::counting_semaphore<N>` for empty/full slots + `std::binary_semaphore` for mutex
+  - **Version B — Mutex + CV**: `std::mutex` + two `std::condition_variable`s (not_full, not_empty) with predicate waits
+  - **Version C — Lock-free** (bonus): use `std::atomic` for head/tail pointers (single-producer single-consumer ring buffer)
+  - Run with M producers and N consumers; vary buffer size and producer/consumer speeds
+  - Measure: throughput (items/sec), average wait time, buffer utilization (avg fullness)
+  - Verify correctness: no item lost, no item consumed twice (use sequential item IDs and verify at consumer)
+- **Libraries:** `<thread>`, `<mutex>`, `<condition_variable>`, `<semaphore>`, `<atomic>`, `<chrono>`
+
+### Project 3: `ReadersWritersLock` — Custom shared_mutex implementation
+
+- **Size:** Small (~250 LOC)
+- **Concepts Reinforced:** Readers-writers problem, shared locks, starvation prevention, read_count tracking, writer priority vs reader priority
+- **Approach:**
+  - Implement a `RWLock` class from scratch using only `std::mutex` and `std::condition_variable`:
+    - `read_lock()` / `read_unlock()`: multiple readers allowed concurrently
+    - `write_lock()` / `write_unlock()`: exclusive access, blocks all readers and writers
+  - **Version A — Reader priority**: readers can always enter if no writer is in CS (writers may starve)
+  - **Version B — Writer priority**: once a writer is waiting, no new readers admitted (readers may starve)
+  - **Version C — Fair**: alternate between readers and writers (e.g., ticket-based ordering)
+  - Test with: multiple reader threads (read a shared map), occasional writer threads (modify the map)
+  - Verify: no data corruption, measure read throughput under each policy, demonstrate starvation scenarios
+  - Compare performance against `std::shared_mutex` (your implementation vs standard)
+- **Libraries:** `<thread>`, `<mutex>`, `<condition_variable>`, `<shared_mutex>` (for comparison), `<chrono>`

@@ -654,3 +654,87 @@ Modern operating systems typically use hybrid approaches with loadable kernel mo
 ---
 
 *Notes based on "Operating System Concepts" by Abraham Silberschatz, Peter B. Galvin, and Greg Gagne*
+
+---
+
+## 🧠 Detailed Recall Summary
+
+### OS Interfaces
+- Users interact with the OS via **CLI** (shells: bash, zsh), **GUI** (windows, icons), or **batch** (scripts)
+- CLI shells are either part of the kernel or separate programs; they interpret commands by either executing built-in code or loading external programs via `fork()+exec()`
+- The shell is NOT the OS — it's a user-space program that makes system calls on your behalf
+
+### System Calls
+- **System calls** are the ONLY way user programs can request kernel services — they're the boundary between user mode and kernel mode
+- A system call triggers a **trap** (software interrupt): user mode → kernel mode, execute service, return result, switch back to user mode
+- Programs rarely call system calls directly; they use **API wrappers** (POSIX API on Unix, Win32 API on Windows, Java API) for portability
+- **System call number**: each syscall has a unique number; the OS maintains a table (syscall dispatch table) indexed by this number
+- **Parameter passing** to kernel: via registers (fast, limited), stack (flexible), or memory block pointed to by a register
+- **Categories**: Process control (fork, exec, exit, wait), File management (open, read, write, close), Device management (ioctl, read, write), Information maintenance (getpid, time), Communication (pipe, shmget, socket), Protection (chmod, chown)
+
+### Kernel Architectures
+- **Monolithic kernel**: entire OS runs in kernel space as one large binary; fast (no mode switches between OS components) but complex and hard to maintain; a bug anywhere crashes everything. Examples: Linux, early Unix
+- **Layered approach**: OS divided into layers (0=hardware, N=user); each layer only uses services of lower layers; easy to debug/verify but hard to define layers properly and slower due to layer overhead
+- **Microkernel**: minimal kernel (IPC, scheduling, memory) with most services in user space as servers; more reliable (one service crash doesn't kill OS), easier to extend, but **slower** due to frequent user↔kernel message passing. Examples: Mach, QNX, MINIX
+- **Loadable Kernel Modules (LKM)**: monolithic core + dynamically loadable modules; best of both worlds — performance of monolithic with flexibility of microkernel; used by modern Linux for device drivers and filesystems
+- **Hybrid kernels**: pragmatic mix; macOS (Mach microkernel + BSD monolithic components), Windows NT (monolithic core with microkernel ideas)
+
+### Key Architecture Trade-offs
+| Concern | Monolithic wins | Microkernel wins |
+|---------|----------------|------------------|
+| Performance | ✅ No IPC overhead | ❌ Message passing cost |
+| Reliability | ❌ One bug crashes all | ✅ Fault isolation |
+| Extensibility | ❌ Recompile kernel | ✅ Add user-space servers |
+| Security | ❌ Large attack surface | ✅ Minimal trusted code |
+
+### System Boot Process
+- **BIOS/UEFI** → finds boot device → loads **bootloader** (GRUB) → bootloader loads **kernel** into memory → kernel initializes hardware, mounts root filesystem → starts **init/systemd** (PID 1) → starts user-space services
+- The bootloader knows just enough to find and load the kernel; the kernel knows just enough to initialize everything else
+
+### System Programs
+- System programs provide a convenient environment for program development and execution
+- Categories: file manipulation, status information, programming language support, program loading/execution, communications, background services (daemons/services)
+
+---
+
+## 🛠 C++ Project Suggestions
+
+### Project 1: `MiniShell` — A Unix-like command interpreter
+
+- **Size:** Medium (~400 LOC)
+- **Concepts Reinforced:** System calls (fork, exec, wait, pipe, dup2), process creation, CLI interface, user→kernel boundary, built-in vs external commands
+- **Approach:**
+  - Read-eval-print loop: display prompt → read command → parse into tokens → execute
+  - **Built-in commands**: `cd`, `exit`, `help`, `history` (handled within shell process)
+  - **External commands**: `fork()` child → `execvp()` the program → parent `wait()`s for child
+  - **Piping**: `cmd1 | cmd2` — create pipe, fork twice, redirect stdout/stdin with `dup2()`
+  - **I/O redirection**: `>`, `<`, `>>` — open files and redirect with `dup2()`
+  - **Background execution**: `cmd &` — don't wait for child; handle SIGCHLD to reap zombies
+  - **Signal handling**: catch Ctrl+C (SIGINT) — kill foreground child but not the shell itself
+- **Libraries:** POSIX (`<unistd.h>`, `<sys/wait.h>`, `<fcntl.h>`), `<signal.h>`, `<readline/readline.h>` for line editing (optional)
+
+### Project 2: `SyscallTracer` — Trace system calls of a child process
+
+- **Size:** Small (~200 LOC)
+- **Concepts Reinforced:** System call mechanism, syscall numbers, user↔kernel transitions, `ptrace()`, process control
+- **Approach:**
+  - Fork a child process that runs a target program
+  - Parent uses `ptrace(PTRACE_SYSCALL)` to stop child at every syscall entry/exit
+  - Read syscall number from registers (`orig_rax` on x86_64)
+  - Map syscall number → name (from a lookup table or `/usr/include/asm/unistd_64.h`)
+  - Print: syscall name, arguments (from registers), return value
+  - Count total syscalls and display summary (like a mini `strace`)
+- **Libraries:** `<sys/ptrace.h>`, `<sys/user.h>`, `<sys/wait.h>`, POSIX
+
+### Project 3: `KernelModuleSim` — Simulated loadable module system
+
+- **Size:** Small (~250 LOC)
+- **Concepts Reinforced:** Loadable kernel modules, modular OS design, dynamic dispatch, interface contracts
+- **Approach:**
+  - Define a `Module` interface (pure virtual class) with `init()`, `cleanup()`, `handle_request()`
+  - Implement "modules" as shared libraries (`.so` files) conforming to the interface
+  - "Kernel" loads modules at runtime with `dlopen()`/`dlsym()`, registers them in a dispatch table
+  - Route requests to the appropriate loaded module
+  - Support `load_module`, `unload_module`, `list_modules` commands
+  - Demonstrate: adding new functionality without recompiling the "kernel"
+- **Libraries:** `<dlfcn.h>` (dlopen/dlsym), polymorphism, `<map>` for module registry

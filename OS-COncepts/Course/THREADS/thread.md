@@ -595,10 +595,113 @@ Cancellation points are specific locations in code where a thread checks for pen
 | **User Threads** | Managed by library, fast but cannot use multiple cores |
 | **Kernel Threads** | Managed by OS, slower but supports true parallelism |
 | **Data Parallelism** | Same operation on different data subsets |
-| **Task Parallelism** | Different operations potentially on same data |
+| **Task Parallelism** | Different operations/tasks run concurrently |
 | **Synchronous Threading** | Parent waits for children (fork-join) |
 | **Asynchronous Threading** | Parent continues without waiting |
 | **Deferred Cancellation** | Safe thread termination at cancellation points |
+
+---
+
+## 🧠 Detailed Recall Summary
+
+### What is a Thread?
+- A **thread** is the smallest unit of CPU scheduling — it has its own: thread ID, program counter, register set, and stack
+- Threads within the same process **share**: code section, data section (globals), heap, open files, signals, and other OS resources
+- A traditional (single-threaded) process = 1 thread of control; a multi-threaded process = multiple threads executing concurrently within the same address space
+- Threads are called **lightweight processes** because creating/switching them is much cheaper than processes (no address space duplication, no TLB flush)
+
+### Thread vs Process
+| Aspect | Thread | Process |
+|--------|--------|---------|
+| Memory | Shares with sibling threads | Own address space (isolated) |
+| Creation cost | Low (just allocate stack + TCB) | High (duplicate entire address space) |
+| Context switch | Fast (no TLB flush, shared page table) | Slow (TLB flush, page table switch) |
+| Communication | Direct (shared memory — just read/write globals) | Requires explicit IPC (pipe, socket, shm) |
+| Crash impact | One thread crash can kill entire process | One process crash doesn't affect others |
+
+### Why Multithreading? (4 Benefits)
+1. **Responsiveness**: UI thread stays responsive while worker threads do heavy computation/I/O (e.g., browser renders page while downloading images)
+2. **Resource sharing**: threads share process memory by default — no need for IPC setup; efficient communication
+3. **Economy**: thread creation ~10-100× faster than process creation; thread context switch ~5-10× faster
+4. **Scalability**: threads can run in parallel on multiple cores — a single-threaded process can never use more than one core
+
+### Multithreading Models (User threads ↔ Kernel threads mapping)
+- **Many-to-One**: many user threads → one kernel thread; fast thread management (no syscalls) but NO parallelism (one blocks = all block); obsolete (green threads, old Solaris)
+- **One-to-One**: each user thread → one kernel thread; true parallelism, but creating too many threads is expensive (thread = kernel resource). Used by: **Linux (pthreads), Windows**
+- **Many-to-Many**: M user threads → N kernel threads (M≥N); best of both worlds but complex to implement; rare in practice
+- **Two-Level**: many-to-many + allows binding a user thread to a specific kernel thread for real-time needs
+
+### Thread Libraries
+- **POSIX Pthreads**: standard on Unix/Linux; `pthread_create()`, `pthread_join()`, `pthread_mutex_*`; can be user or kernel level
+- **Windows Threads**: `CreateThread()`, `WaitForSingleObject()`; always kernel-level (one-to-one)
+- **Java Threads**: `Thread` class / `Runnable` interface; maps to underlying OS threads (one-to-one on Linux/Windows)
+- **C++ `std::thread`** (C++11+): portable wrapper; maps to pthreads on Linux, Windows threads on Windows
+
+### Types of Parallelism
+- **Data parallelism**: same operation on different subsets of data (e.g., add 1 to each element of array — split array across threads)
+- **Task parallelism**: different operations/tasks run concurrently (e.g., one thread downloads, another compresses, another writes to disk)
+- Real applications use a **mix** of both
+
+### Threading Issues
+- **Thread creation with `fork()`**: if a multi-threaded process calls `fork()`, does the child get all threads or just the calling thread? POSIX: only the calling thread is duplicated. If followed by `exec()`, it doesn't matter (memory replaced)
+- **Signal handling in threads**: which thread receives a signal? Options: deliver to target thread, deliver to all, deliver to specific thread (`pthread_kill()`), designate one thread as signal handler
+- **Thread cancellation**:
+  - **Asynchronous**: target thread killed immediately — dangerous (may leave shared data inconsistent, resources leaked)
+  - **Deferred** (default): target thread checks cancellation points periodically — safe, allows cleanup
+- **Thread-Local Storage (TLS)**: each thread gets its own copy of a variable (`thread_local` in C++11, `__thread` in GCC) — useful for per-thread state without synchronization
+
+### Thread Scheduling
+- **Process-Contention Scope (PCS)**: scheduling competition among threads within the same process (many-to-many model — user-level scheduler decides which user thread gets a kernel thread)
+- **System-Contention Scope (SCS)**: scheduling competition among all threads in the system (one-to-one model — OS scheduler decides; Linux and Windows use this)
+
+### Thread Pools
+- Creating a new thread for every request is expensive and unbounded (can exhaust resources)
+- **Thread pool**: pre-create a fixed number of worker threads; tasks are submitted to a queue; workers pick tasks from queue
+- Benefits: bounded resource usage, no thread creation overhead per request, automatic load balancing
+
+---
+
+## 🛠 C++ Project Suggestions
+
+### Project 1: `ThreadPoolExecutor` — A general-purpose thread pool
+
+- **Size:** Medium (~350 LOC)
+- **Concepts Reinforced:** Thread pools, work queue, thread creation/joining, mutex+condition variable for synchronization, task parallelism
+- **Approach:**
+  - Pool of N worker `std::thread`s that sleep on a condition variable waiting for work
+  - Thread-safe task queue (mutex-protected `std::queue<std::function<void()>>`)
+  - `submit(callable)` pushes a task and notifies one worker; returns `std::future` for result
+  - Graceful shutdown: set a flag, notify all workers, join all threads
+  - Test with: parallel file processing, parallel HTTP request simulation, compute-bound tasks
+  - Measure: throughput vs number of threads (find optimal pool size = hardware_concurrency)
+- **Libraries:** `<thread>`, `<mutex>`, `<condition_variable>`, `<future>`, `<functional>`, `<queue>`
+
+### Project 2: `ParallelMergeSort` — Data parallelism demonstration
+
+- **Size:** Small (~200 LOC)
+- **Concepts Reinforced:** Data parallelism, fork-join pattern, thread overhead vs speedup, Amdahl's law in practice
+- **Approach:**
+  - Recursive merge sort where each recursive call below a depth threshold spawns a new thread
+  - Control parallelism: split array → spawn thread for left half → current thread does right half → join → merge
+  - Add a depth limit (don't create threads for small subarrays — overhead > benefit)
+  - Benchmark: 1 thread vs 2 vs 4 vs 8 vs hardware_concurrency; plot speedup curve
+  - Observe diminishing returns and compare to theoretical Amdahl's law prediction
+  - Bonus: compare `std::thread`-per-split vs thread pool approach (show pool is better for many small tasks)
+- **Libraries:** `<thread>`, `<vector>`, `<chrono>`, `<algorithm>`
+
+### Project 3: `MultiThreadedWebServer` — Handle concurrent HTTP requests
+
+- **Size:** Medium (~400 LOC)
+- **Concepts Reinforced:** One-to-one threading model, thread-per-request vs thread pool, responsiveness, resource sharing (shared log file), thread-local storage, threading issues (signals, cancellation)
+- **Approach:**
+  - Listen on a TCP socket; for each incoming connection, dispatch to a worker thread
+  - **Version A — Thread-per-request**: spawn a new `std::thread` for each client (demonstrate unbounded thread creation problem under load)
+  - **Version B — Thread pool**: submit connection handling to a fixed thread pool (demonstrate bounded, stable behavior)
+  - Shared state: hit counter (atomic), access log (mutex-protected file write)
+  - Use `thread_local` for per-thread request context (client IP, request start time)
+  - Handle SIGINT gracefully: set shutdown flag, stop accepting, wait for workers to finish current requests
+  - Measure: max concurrent clients, requests/second, latency under load
+- **Libraries:** POSIX sockets, `<thread>`, `<mutex>`, `<atomic>`, `<condition_variable>`
 
 
 

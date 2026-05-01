@@ -394,3 +394,57 @@ Throughput:             min{R₁, R₂, ..., Rₙ} (bottleneck link)
 ---
 
 *Notes compiled from "Computer Networking: A Top-Down Approach" by Kurose and Ross*
+
+---
+
+## 🧠 Quick Recall Summary
+
+- The Internet is a network of networks: end systems connected via communication links and packet switches (routers, switches)
+- **Protocols** define the format, order, and actions for message exchange — everything in networking is governed by protocols
+- **Packet switching** (store-and-forward): the entire packet must arrive at a router before it's forwarded — introduces transmission delay
+- **Circuit switching** reserves a dedicated path (FDM or TDM); packet switching shares resources statistically (more efficient for bursty traffic)
+- **Access networks** connect end systems to the first router: DSL (phone line), Cable/HFC (shared), FTTH (fiber), WiFi, 5G
+- **Physical media**: guided (copper, fiber, coax) vs unguided (wireless, satellite)
+- **Four sources of delay**: processing (check errors), queuing (wait in buffer), transmission (L/R), propagation (d/s)
+- **Traffic intensity** La/R ≥ 1 → queue grows without bound; keep it < 1
+- **Throughput** = bottleneck link rate: min(R₁, R₂, ..., Rₙ)
+- **Protocol layering** (top→bottom): Application → Transport → Network → Link → Physical — each layer provides services to the layer above
+- **Encapsulation**: each layer wraps the data from above with its own header → message → segment → datagram → frame → bits
+- **Internet structure**: end systems → access ISPs → regional ISPs → Tier-1 ISPs → IXPs/peering; content providers (Google, Netflix) build their own networks
+- **Security threats**: malware, DoS/DDoS, sniffing, spoofing, MITM — defense via encryption, authentication, firewalls
+
+---
+
+## 🛠 C++ Project Suggestions
+
+### Project 1: `DelayCalculator` — Network delay & throughput simulator
+
+- **Size:** Small (~150 LOC)
+- **Concepts Reinforced:** Transmission delay, propagation delay, queuing delay, end-to-end delay, traffic intensity, bottleneck throughput
+- **Approach:**
+  - Accept parameters: packet size (L), link rates (R), distances (d), propagation speed (s), number of hops
+  - Compute and display: d_trans, d_prop, d_queue (M/M/1 model), total e2e delay
+  - Simulate varying traffic intensity (La/R from 0.1 to 0.99) and show how queuing delay explodes
+- **Libraries:** Standard C++ (no external deps), `<chrono>` for timing simulations
+
+### Project 2: `PacketSwitchSim` — Store-and-forward vs circuit switching simulator
+
+- **Size:** Medium (~300 LOC)
+- **Concepts Reinforced:** Packet switching vs circuit switching, multiplexing (TDM/FDM), statistical multiplexing, queueing
+- **Approach:**
+  - Simulate N users generating bursty traffic (active 10% of time)
+  - Compare: circuit switching (each user gets 1/N bandwidth) vs packet switching (shared, queued)
+  - Show probability of congestion for packet switching (binomial distribution)
+  - Output stats: avg delay, packet loss rate, link utilization
+- **Libraries:** `<random>` for traffic generation, `<queue>` for packet buffers
+
+### Project 3: `LayeredProtocolSim` — Encapsulation/decapsulation visualizer
+
+- **Size:** Small (~200 LOC)
+- **Concepts Reinforced:** Protocol layering, encapsulation, headers at each layer, PDU naming
+- **Approach:**
+  - Define structs for each layer's header (AppHeader, TCPHeader, IPHeader, EthernetHeader)
+  - Simulate sending a message: show bytes added at each layer (encapsulation)
+  - At receiver, strip headers layer by layer (decapsulation) and print contents
+  - Display total overhead vs payload ratio
+- **Libraries:** Standard C++, bitwise operations for header fields

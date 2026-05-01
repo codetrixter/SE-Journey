@@ -1087,9 +1087,9 @@ IPv4 Addressing
 │   ├── Route Aggregation (supernetting)
 │   └── Prevents address waste
 ├── Subnetting
-│   ├── Borrow host bits for subnet ID
-│   ├── VLSM = variable subnet sizes
-│   └── Formula: 2^n subnets, 2^h - 2 hosts
+│   ├── Borrow bits from host portion to create sub-networks
+│   ├── Each subnet has its own network address and broadcast
+│   └── VLSM = variable subnet sizes
 ├── Special Addresses
 │   ├── 0.0.0.0     → "This host"
 │   ├── 127.0.0.1   → Loopback
@@ -1116,7 +1116,6 @@ IPv4                              IPv6
 Variable header              Fixed 40-byte header
 Has checksum                 No checksum
 Supports fragmentation       Source-only fragmentation
-  at routers                 
 Has broadcast                No broadcast (multicast only)
 NAT needed                   NAT not needed
 DHCP for config              SLAAC or DHCPv6
@@ -1253,27 +1252,134 @@ Optional IPSec               Built-in IPSec
 
 ---
 
-### 📖 Companion Books for Deeper Understanding
+## 🧠 Quick Recall Summary
 
-| Book | Why Useful |
-|---|---|
-| *TCP/IP Illustrated, Vol. 1* — W. Richard Stevens | The most detailed reference for TCP/IP protocols with real packet traces |
-| *Internetworking with TCP/IP* — Comer | Classic textbook — excellent parallel reading to Kurose & Ross |
-| *IPv6 Fundamentals* — Rick Graziani | Focused, comprehensive IPv6 guide with Cisco-based examples |
+- **Network layer** moves packets from source host to destination host across multiple routers; two planes: **data plane** (forwarding) and **control plane** (routing)
+- **Forwarding** = local, per-router decision (lookup in forwarding table, nanoseconds, hardware); **Routing** = global, network-wide path computation (algorithms, seconds, software)
+- **Datagram network** (Internet): each packet routed independently, no connection setup, best-effort; **VC network** (ATM): path established first, packets follow same path, QoS guarantees
+- **Router architecture**: input ports → switching fabric → output ports; routing processor runs control plane
+  - Switching: memory (slow), bus (bottleneck), crossbar (parallel, fast)
+  - **HOL blocking**: packet at head of input queue blocks others behind it
+- **IPv4 header** (20 bytes min): version, IHL, TOS, total length, ID, flags (DF/MF), fragment offset, TTL, protocol, checksum, src IP, dest IP
+- **Fragmentation**: when datagram > link MTU; fragments reassembled at destination; offset in units of 8 bytes; MF=1 for all but last fragment
+- **IPv4 addressing**: 32-bit, dotted decimal; **subnet** = interfaces with same network prefix (can communicate without router)
+- **CIDR** (a.b.c.d/x): x = prefix length; host bits = 32-x; # addresses = 2^(32-x); first = network addr, last = broadcast
+- **Subnetting**: borrow bits from host portion to create sub-networks; each subnet has its own network address and broadcast
+- **DHCP** (Dynamic Host Configuration Protocol): DORA = Discover → Offer → Request → Acknowledge; provides IP, subnet mask, gateway, DNS
+- **NAT** (Network Address Translation): maps (private IP, port) ↔ (public IP, new port); allows many devices to share one public IP; controversial (violates end-to-end, breaks P2P)
+- **ICMP**: error reporting and diagnostics; carried in IP datagram; types: echo request/reply (ping), TTL exceeded (traceroute), destination unreachable
+- **Traceroute**: sends UDP packets with TTL=1,2,3,...; each router decrements TTL, sends back ICMP TTL Exceeded; destination sends Port Unreachable
+- **IPv6**: 128-bit addresses, simplified header (40 bytes fixed, no fragmentation by routers, no checksum), flow label for QoS
+- **IPv4→IPv6 transition**: dual stack (both protocols) or tunneling (IPv6 encapsulated in IPv4)
+- **Routing algorithms**: link-state (Dijkstra, global knowledge, OSPF) vs distance-vector (Bellman-Ford, distributed, RIP)
+- **Intra-AS** (within organization): OSPF, RIP; **Inter-AS** (between organizations): BGP
 
 ---
 
-> 📝 **Final Exam Tip:** The most heavily tested topics from Chapter 4 are:
-> 1. **Subnetting and CIDR calculations** (always on exams)
-> 2. **IPv4 header fields** (especially TTL, Protocol, Flags, Fragment Offset)
-> 3. **DHCP DORA process**
-> 4. **NAT operation with NAT table**
-> 5. **IPv4 vs IPv6 differences**
-> 6. **Fragmentation calculations** (fragment offset, MF bit)
-> 7. **ICMP message types** (ping and traceroute)
->
-> Practice calculations until they're automatic. Conceptual questions require clear definitions and the ability to distinguish similar terms (forwarding vs routing, static vs dynamic NAT, tunneling vs dual stack).
+## 🛠 C++ Project Suggestions
+
+### Project 1: `SubnetCalculator` — CIDR & subnetting tool
+
+- **Size:** Small (~200 LOC)
+- **Concepts Reinforced:** CIDR notation, subnet masks, network/broadcast addresses, host ranges, subnetting math
+- **Approach:**
+  - Input: IP address + prefix length (e.g., 192.168.1.0/24)
+  - Output: network address, broadcast address, first/last usable host, number of hosts, wildcard mask
+  - Support: "divide this /24 into 4 equal subnets" → output each subnet's details
+  - Validate addresses, detect private vs public ranges
+  - Bonus: accept a list of IPs and determine the minimal CIDR block that covers all of them (supernetting)
+- **Libraries:** Standard C++, bitwise operations on `uint32_t`
+
+### Project 2: `RoutingSim` — Dijkstra and Distance-Vector simulator
+
+- **Size:** Medium (~400 LOC)
+- **Concepts Reinforced:** Link-state (Dijkstra/OSPF), distance-vector (Bellman-Ford/RIP), convergence, count-to-infinity, poisoned reverse
+- **Approach:**
+  - Define a network topology as a weighted graph (adjacency list)
+  - **Link-state mode**: each node floods its link costs; run Dijkstra to compute shortest paths; display forwarding table
+  - **Distance-vector mode**: each node iteratively exchanges distance vectors with neighbors; show convergence rounds
+  - Simulate a link failure: observe reconvergence; demonstrate count-to-infinity problem and poisoned reverse fix
+  - Output: forwarding tables for each node, path taken by a packet from A→Z
+- **Libraries:** Standard C++ (`<queue>`, `<map>`, `<vector>`), `<climits>` for infinity
+
+### Project 3: `PacketParser` — IPv4 datagram parser and fragmenter
+
+- **Size:** Small (~250 LOC)
+- **Concepts Reinforced:** IPv4 header fields, fragmentation/reassembly, checksum calculation, ICMP
+- **Approach:**
+  - Read raw bytes (from file or hardcoded hex dump) and parse IPv4 header fields
+  - Display: version, IHL, total length, TTL, protocol, src/dest IP, flags, fragment offset
+  - Implement fragmentation: given a datagram and MTU, produce the correct fragments (compute offsets, set MF bit)
+  - Implement reassembly: given fragments, reconstruct original datagram
+  - Compute and verify header checksum
+- **Libraries:** Standard C++, `<cstdint>`, bitwise operations
 
 ---
 
 *Notes compiled for exam preparation based on: Computer Networking: A Top-Down Approach, 8th Edition — James F. Kurose & Keith W. Ross*
+
+---
+
+## 🧠 Quick Recall Summary
+
+- **Network layer** moves packets from source host to destination host across multiple routers; two planes: **data plane** (forwarding) and **control plane** (routing)
+- **Forwarding** = local, per-router decision (lookup in forwarding table, nanoseconds, hardware); **Routing** = global, network-wide path computation (algorithms, seconds, software)
+- **Datagram network** (Internet): each packet routed independently, no connection setup, best-effort; **VC network** (ATM): path established first, packets follow same path, QoS guarantees
+- **Router architecture**: input ports → switching fabric → output ports; routing processor runs control plane
+  - Switching: memory (slow), bus (bottleneck), crossbar (parallel, fast)
+  - **HOL blocking**: packet at head of input queue blocks others behind it
+- **IPv4 header** (20 bytes min): version, IHL, TOS, total length, ID, flags (DF/MF), fragment offset, TTL, protocol, checksum, src IP, dest IP
+- **Fragmentation**: when datagram > link MTU; fragments reassembled at destination; offset in units of 8 bytes; MF=1 for all but last fragment
+- **IPv4 addressing**: 32-bit, dotted decimal; **subnet** = interfaces with same network prefix (can communicate without router)
+- **CIDR** (a.b.c.d/x): x = prefix length; host bits = 32-x; # addresses = 2^(32-x); first = network addr, last = broadcast
+- **Subnetting**: borrow bits from host portion to create sub-networks; each subnet has its own network address and broadcast
+- **DHCP** (Dynamic Host Configuration Protocol): DORA = Discover → Offer → Request → Acknowledge; provides IP, subnet mask, gateway, DNS
+- **NAT** (Network Address Translation): maps (private IP, port) ↔ (public IP, new port); allows many devices to share one public IP; controversial (violates end-to-end, breaks P2P)
+- **ICMP**: error reporting and diagnostics; carried in IP datagram; types: echo request/reply (ping), TTL exceeded (traceroute), destination unreachable
+- **Traceroute**: sends UDP packets with TTL=1,2,3,...; each router decrements TTL, sends back ICMP TTL Exceeded; destination sends Port Unreachable
+- **IPv6**: 128-bit addresses, simplified header (40 bytes fixed, no fragmentation by routers, no checksum), flow label for QoS
+- **IPv4→IPv6 transition**: dual stack (both protocols) or tunneling (IPv6 encapsulated in IPv4)
+- **Routing algorithms**: link-state (Dijkstra, global knowledge, OSPF) vs distance-vector (Bellman-Ford, distributed, RIP)
+- **Intra-AS** (within organization): OSPF, RIP; **Inter-AS** (between organizations): BGP
+
+---
+
+## 🛠 C++ Project Suggestions
+
+### Project 1: `SubnetCalculator` — CIDR & subnetting tool
+
+- **Size:** Small (~200 LOC)
+- **Concepts Reinforced:** CIDR notation, subnet masks, network/broadcast addresses, host ranges, subnetting math
+- **Approach:**
+  - Input: IP address + prefix length (e.g., 192.168.1.0/24)
+  - Output: network address, broadcast address, first/last usable host, number of hosts, wildcard mask
+  - Support: "divide this /24 into 4 equal subnets" → output each subnet's details
+  - Validate addresses, detect private vs public ranges
+  - Bonus: accept a list of IPs and determine the minimal CIDR block that covers all of them (supernetting)
+- **Libraries:** Standard C++, bitwise operations on `uint32_t`
+
+### Project 2: `RoutingSim` — Dijkstra and Distance-Vector simulator
+
+- **Size:** Medium (~400 LOC)
+- **Concepts Reinforced:** Link-state (Dijkstra/OSPF), distance-vector (Bellman-Ford/RIP), convergence, count-to-infinity, poisoned reverse
+- **Approach:**
+  - Define a network topology as a weighted graph (adjacency list)
+  - **Link-state mode**: each node floods its link costs; run Dijkstra to compute shortest paths; display forwarding table
+  - **Distance-vector mode**: each node iteratively exchanges distance vectors with neighbors; show convergence rounds
+  - Simulate a link failure: observe reconvergence; demonstrate count-to-infinity problem and poisoned reverse fix
+  - Output: forwarding tables for each node, path taken by a packet from A→Z
+- **Libraries:** Standard C++ (`<queue>`, `<map>`, `<vector>`), `<climits>` for infinity
+
+### Project 3: `PacketParser` — IPv4 datagram parser and fragmenter
+
+- **Size:** Small (~250 LOC)
+- **Concepts Reinforced:** IPv4 header fields, fragmentation/reassembly, checksum calculation, ICMP
+- **Approach:**
+  - Read raw bytes (from file or hardcoded hex dump) and parse IPv4 header fields
+  - Display: version, IHL, total length, TTL, protocol, src/dest IP, flags, fragment offset
+  - Implement fragmentation: given a datagram and MTU, produce the correct fragments (compute offsets, set MF bit)
+  - Implement reassembly: given fragments, reconstruct original datagram
+  - Compute and verify header checksum
+- **Libraries:** Standard C++, `<cstdint>`, bitwise operations
+
+---

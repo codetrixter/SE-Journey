@@ -1484,3 +1484,67 @@ Need reliable, ordered delivery?
 > 💡 **Study Tip:** After reading these notes, try the Wireshark TCP lab. Seeing real TCP segments, three‑way handshakes, retransmissions, and window changes in a packet capture will solidify everything you've learned here.
 >
 > 🎯 **Exam Strategy:** Focus on: (1) TCP segment structure, (2) reliable data transfer FSMs (especially rdt 3.0), (3) three‑way handshake, (4) congestion control state machine (slow start → congestion avoidance → fast recovery), and (5) the difference between flow control and congestion control.
+
+---
+
+## 🧠 Quick Recall Summary
+
+- **Transport layer** = process-to-process communication (via port numbers); **Network layer** = host-to-host (via IP)
+- **Multiplexing** = gathering data from sockets, adding headers; **Demultiplexing** = delivering segments to correct socket
+- **UDP demux**: (dest IP, dest port); **TCP demux**: (src IP, src port, dest IP, dest port) — each connection gets its own socket
+- **UDP**: connectionless, no handshake, no reliability, no congestion control; 8-byte header (src port, dest port, length, checksum)
+- **UDP checksum**: 1's complement sum of 16-bit words; detects bit errors but doesn't fix them
+- **Reliable data transfer evolution**: rdt1.0 (perfect channel) → rdt2.0 (ACK/NAK for bit errors) → rdt2.1 (sequence numbers fix duplicate ACKs) → rdt2.2 (NAK-free, ACK with seq#) → rdt3.0 (timers for packet loss) — stop-and-wait is slow
+- **Pipelining** improves utilization: **GBN** (cumulative ACK, retransmit entire window) vs **SR** (individual ACKs, retransmit only lost)
+- **TCP**: connection-oriented, full-duplex, point-to-point, byte-stream, reliable, flow + congestion controlled
+- **TCP segment**: src/dest port, seq#, ack#, header length, flags (SYN/ACK/FIN/RST), receive window, checksum, urgent pointer, options, data
+- **Seq#** = byte offset of first byte in segment; **ACK#** = next byte expected (cumulative)
+- **RTT estimation**: EWMA with α=0.125; DevRTT with β=0.25; Timeout = EstimatedRTT + 4×DevRTT
+- **TCP reliability**: cumulative ACKs + single retransmission timer + fast retransmit (3 duplicate ACKs → retransmit without waiting for timeout)
+- **Flow control**: receiver advertises `rwnd` (spare buffer space); sender limits unacked data ≤ rwnd
+- **3-way handshake**: SYN (client→server, initial seq#) → SYN-ACK (server→client, server seq#) → ACK (client→server)
+- **Connection teardown**: FIN → ACK → FIN → ACK (4 segments); TIME_WAIT = 2×MSL
+- **Congestion control (AIMD)**: additive increase (cwnd += MSS per RTT), multiplicative decrease (cwnd /= 2 on loss)
+- **Slow start**: cwnd starts at 1 MSS, doubles every RTT (exponential) until ssthresh
+- **Fast recovery**: on 3 dup ACKs → ssthresh = cwnd/2, cwnd = ssthresh + 3, retransmit; on timeout → ssthresh = cwnd/2, cwnd = 1 MSS (back to slow start)
+- **Flow control ≠ Congestion control**: flow control prevents overwhelming the *receiver*; congestion control prevents overwhelming the *network*
+
+---
+
+## 🛠 C++ Project Suggestions
+
+### Project 1: `ReliableUDP` — Implement reliable data transfer over UDP
+
+- **Size:** Medium (~500 LOC)
+- **Concepts Reinforced:** rdt 3.0, Go-Back-N, Selective Repeat, sequence numbers, ACKs, timers, pipelining
+- **Approach:**
+  - Build a file transfer application over raw UDP sockets
+  - Implement three modes: stop-and-wait (rdt 3.0), GBN, and SR
+  - Add configurable packet loss/corruption simulation (randomly drop/corrupt packets)
+  - Measure and compare throughput of each mode with different window sizes
+  - Use `select()` with timeouts for retransmission timers
+- **Libraries:** POSIX sockets (UDP), `<chrono>` for timers, `<random>` for loss simulation
+
+### Project 2: `TCPFromScratch` — A minimal TCP implementation in userspace
+
+- **Size:** Medium-Large (~600 LOC)
+- **Concepts Reinforced:** 3-way handshake, seq/ack numbers, sliding window, flow control (rwnd), congestion control (slow start, AIMD, fast retransmit/recovery), connection teardown
+- **Approach:**
+  - Use raw sockets or a TUN/TAP interface to send/receive IP packets
+  - Implement TCP state machine: CLOSED → SYN_SENT → ESTABLISHED → FIN_WAIT → TIME_WAIT
+  - Implement RTT estimation (EWMA) and adaptive timeout
+  - Implement congestion window with slow start and congestion avoidance
+  - Log cwnd over time to visualize the "sawtooth" pattern
+- **Libraries:** Raw sockets or `<linux/if_tun.h>` for TUN device; plot cwnd with gnuplot or terminal graphs
+
+### Project 3: `FlowControlDemo` — Visualize TCP flow & congestion control
+
+- **Size:** Small (~250 LOC)
+- **Concepts Reinforced:** Receive window, sender-side limiting, congestion window evolution, slow start threshold
+- **Approach:**
+  - Simulate a sender/receiver pair with configurable buffer sizes and link capacity
+  - Sender respects min(cwnd, rwnd) — track both windows over time
+  - Inject events: 3 dup ACKs (fast retransmit), timeout, buffer full
+  - Output a time-series of cwnd, ssthresh, rwnd, and send rate to terminal/CSV
+  - Visualize the state machine transitions (slow start → cong. avoidance → fast recovery)
+- **Libraries:** Standard C++, `<fstream>` for CSV output
