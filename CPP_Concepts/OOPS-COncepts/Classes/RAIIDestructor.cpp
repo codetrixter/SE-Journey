@@ -54,3 +54,31 @@ int main()
 
     return 0;
 } // simple goes out of scope here
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **RAII (Resource Acquisition Is Initialization)** | Object lifetime manages resource lifetime |
+| 2 | **Destructors** | `~Simple()` called automatically at end of scope |
+| 3 | **Stack vs Heap allocation** | `Simple simple{1}` vs `new Simple{2}` |
+| 4 | **Manual memory management** | `delete pSimple` required for heap objects |
+| 5 | **Member initializer list** | `: m_nID{ nID }` |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- **Use `std::unique_ptr`** instead of raw `new`/`delete` — guarantees cleanup even on exceptions
+- **Rule of Zero**: If your class doesn't manage a resource, don't write destructor/copy/move
+- In modern C++, prefer stack allocation or smart pointers; raw `new` is almost never needed
+
+### 🏭 Real-World Usage:
+- RAII is the backbone of C++ resource management: file handles (`std::fstream`), locks (`std::lock_guard`), smart pointers
+- Destructors ensure deterministic cleanup — critical for embedded, OS, and systems programming
+
+### ⚡ Quick Revision:
+- Destructor is called automatically when stack objects go out of scope
+- Heap objects require explicit `delete` (or use smart pointers)
+- RAII = tie resource lifetime to object lifetime
+- One destructor per class, no params, no return type
+*/

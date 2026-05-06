@@ -82,3 +82,33 @@ int main()
 
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **std::chrono library** | `steady_clock`, `duration`, `duration_cast` |
+| 2 | **Type aliases in class** | `using clock_type = std::chrono::steady_clock` |
+| 3 | **RAII timing** | Timer starts in constructor (member init) |
+| 4 | **Selection sort vs std::sort** | ~1000x performance difference |
+| 5 | **std::iota** | Fill array with sequential values |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- C++20: `std::chrono::high_resolution_clock` for max precision
+- Use RAII scoped timer that prints on destruction for automatic profiling
+- Google Benchmark library for production benchmarking
+- `std::ranges::sort` (C++20) for range-based sorting
+
+### 🏭 Real-World Usage:
+- Profiling hot paths in game loops, trading systems, rendering
+- `steady_clock` preferred over `system_clock` (immune to system time changes)
+- Scoped timers used in logging frameworks for function-level profiling
+
+### ⚡ Quick Revision:
+- `steady_clock` = monotonic, best for measuring durations
+- `duration_cast` converts between time units
+- Selection sort O(n²) vs std::sort O(n log n) — massive difference at scale
+- Type aliases make chrono code readable
+*/

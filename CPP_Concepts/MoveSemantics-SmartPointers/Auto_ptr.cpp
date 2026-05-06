@@ -191,3 +191,55 @@ int main(int argc, char const *argv[])
 
 	return 0;
 }
+
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    CONCEPT ANALYSIS — Auto_ptr.cpp                         ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. RAII Smart Pointer — Basic Implementation
+`Auto_ptr1` wraps a raw pointer; destructor calls `delete`. This is the
+fundamental RAII pattern: acquisition in constructor, release in destructor.
+
+### 2. Double-Free Problem with Shallow Copy
+Default copy constructor copies the pointer value → two objects own the same
+resource → double delete on destruction.
+
+### 3. Move Semantics via Copy Constructor (Auto_ptr2)
+`Auto_ptr2` implements "move" in the copy constructor by nullifying the source.
+This transfers ownership but violates copy semantics (source is modified).
+
+**Problems with this approach:**
+1. Pass-by-value silently transfers ownership → original becomes null.
+2. Cannot manage arrays (`delete` vs `delete[]`).
+3. No `release()` to relinquish without deleting.
+
+**Key Takeaway:** `std::auto_ptr` was deprecated (C++11) and removed (C++17)
+because its copy-as-move semantics caused subtle bugs. Use `std::unique_ptr`.
+
+#### Alternatives / Idiomatic C++
+- `std::unique_ptr` — proper move-only semantics, supports custom deleters,
+  works with arrays: `std::unique_ptr<int[]>`.
+- `std::shared_ptr` — shared ownership via reference counting.
+- Never implement your own smart pointer in production code.
+
+#### Real-World Usage
+- **Every modern C++ project** uses `std::unique_ptr`/`std::shared_ptr`.
+- **Chromium**: Exclusively uses `std::unique_ptr` for ownership transfer.
+- **LLVM**: Uses `std::unique_ptr` for AST node ownership.
+
+---
+
+## 🔁 Quick Revision
+- RAII: acquire in ctor, release in dtor.
+- `std::auto_ptr` is removed in C++17 — never use it.
+- Double-free: two owners of same raw pointer.
+- `std::unique_ptr` = move-only, proper ownership transfer.
+
+### ⚠️ Gotchas
+- `delete` on nullptr is safe (no-op).
+- Self-assignment in `operator=` must be checked.
+- Passing `auto_ptr` by value silently nullifies the caller's copy.
+*/

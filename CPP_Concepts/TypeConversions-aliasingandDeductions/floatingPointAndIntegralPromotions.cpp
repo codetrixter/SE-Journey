@@ -49,3 +49,20 @@ int main(int argc, char const *argv[])
     
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Integral promotion** | short/char/bool → int |
+| 2 | **Floating point promotion** | float → double |
+| 3 | **Value-preserving** | No data loss in promotions |
+
+### ⚡ Quick Revision:
+- Promotions are ALWAYS safe (no data loss)
+- `char`, `short`, `bool` → `int` (integral promotion)
+- `float` → `double` (floating point promotion)
+- Promotions happen automatically when needed (function calls, expressions)
+*/

@@ -95,3 +95,62 @@ pop    rbp
 ret
 The brackets ([]) are equivalent to the C++ indirection operator(*),
 so [rbp-0xc] is equivalent to *(base_address - 12) */
+
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                   CONCEPT ANALYSIS — stackandHeap.cpp                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. Memory Segments of a C++ Program
+1. **Code/Text segment** — compiled instructions (read-only).
+2. **BSS segment** — zero-initialized globals/statics.
+3. **Data segment** — initialized globals/statics.
+4. **Heap** — dynamically allocated memory (`new`/`malloc`).
+5. **Stack** — function calls, local variables, return addresses.
+
+### 2. Stack Mechanics
+The call stack uses **stack frames** containing:
+- Return address, function arguments, local variables, saved registers.
+- Local variables are accessed as offsets from the base pointer (`rbp`).
+
+**Code walkthrough (assembly):**
+- `mov DWORD PTR [rbp-0xc], 0x1` — `x` lives at `rbp - 12`.
+- Variables are laid out sequentially in the frame.
+
+### 3. Heap — Advantages and Disadvantages
+- Pro: Large capacity for big data.
+- Con: Slower allocation, manual deallocation needed, pointer indirection.
+
+**Key Takeaway:** Stack = fast, automatic; Heap = flexible, manual management.
+Prefer stack allocation unless data is large or needs dynamic lifetime.
+
+#### Alternatives / Idiomatic C++
+- Use RAII (smart pointers) to manage heap memory automatically.
+- `std::vector`, `std::string` handle heap allocation internally.
+- `std::pmr` (C++17) provides polymorphic allocators for custom memory strategies.
+
+#### Real-World Usage
+- **Game engines** (Unreal, Unity C++ layer): Custom allocators to avoid heap
+  fragmentation; stack allocators for per-frame temporaries.
+- **jemalloc** / **tcmalloc**: High-performance heap allocators used by
+  Firefox, Chrome, and many servers.
+
+---
+
+## 🔁 Quick Revision
+- 5 memory segments: code, bss, data, heap, stack.
+- Stack: LIFO, fast, automatic cleanup, limited size (~1-8MB default).
+- Heap: large, manual, slower, accessed via pointers.
+- Stack overflow = too deep recursion or too-large local arrays.
+
+### 💡 Remember
+- "Where does `new` allocate?" → Heap.
+- "Where do local variables live?" → Stack.
+- Stack frame layout is compiler-specific but always offset-based from `rbp`/`rsp`.
+
+### ⚠️ Gotchas
+- Stack overflow from deep recursion is UB (no exception, just crash).
+- Heap fragmentation degrades performance over time in long-running programs.
+*/

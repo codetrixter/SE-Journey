@@ -87,4 +87,34 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Template classes** | `template <typename T> class Array` |
+| 2 | **Type-independent containers** | Same Array works for int, double, etc. |
+| 3 | **Out-of-class template member definition** | `template <typename T> int Array<T>::getLength()` |
+| 4 | **Deleted copy operations** | Prevents shallow copy of dynamic array |
+| 5 | **RAII with templates** | Constructor allocates, destructor deallocates |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- `std::array` for fixed-size, `std::vector` for dynamic — rarely write your own
+- C++20 concepts to constrain template parameter types
+- `std::span` for non-owning array views
+- Template class definitions must be in headers (not .cpp)
+
+### 🏭 Real-World Usage:
+- STL is entirely template-based: `vector<T>`, `map<K,V>`, `unique_ptr<T>`
+- Game engines: templated resource managers, component systems
+- Serialization libraries: templated encode/decode
+
+### ⚡ Quick Revision:
+- Template class = blueprint; compiler generates code per type used
+- Unused template classes aren't compiled at all
+- Define template members in header (or use explicit instantiation)
+- Each template member defined outside needs its own `template <typename T>`
+*/
+
 

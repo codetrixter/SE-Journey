@@ -199,3 +199,33 @@ int main(int argc, char const *argv[])
 }
 
 //*************Point-3***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Pure virtual functions** | `virtual speak() = 0` — must be overridden |
+| 2 | **Abstract classes** | Cannot instantiate class with pure virtual |
+| 3 | **Interface classes** | `IErrorLog` — all pure virtual, defines contract |
+| 4 | **Pure virtual with body** | `Animal::speak()` has default impl, still must be overridden |
+| 5 | **Dependency injection via interface** | `mySqrt(double, IErrorLog&)` |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- C++20 Concepts for compile-time interface enforcement
+- `std::function` callbacks instead of interface classes for simple cases
+- CRTP for static interfaces (no vtable overhead)
+
+### 🏭 Real-World Usage:
+- Logging interfaces (console, file, network — all implement same interface)
+- Strategy pattern: algorithm families behind interface
+- Plugin systems: plugins implement known interface
+
+### ⚡ Quick Revision:
+- `= 0` makes function pure virtual → class becomes abstract
+- Abstract class = has ≥1 pure virtual function
+- Interface = all functions are pure virtual (+ virtual dtor)
+- Pure virtual CAN have a body (called via `Base::func()`)
+- Vtable entry for pure virtual = null or `__purecall`
+*/

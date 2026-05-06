@@ -61,3 +61,27 @@ int main()
     /// Fraction fiveThirds { 5, 3 };
 	std::cout << fiveThirds << '\n';
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Copy constructor** | `Fraction(const Fraction&)` — memberwise copy |
+| 2 | **Must pass by reference** | Value param → infinite recursion |
+| 3 | **Copy elision** | `Fraction f{Fraction{5,3}}` optimized to single construction |
+| 4 | **Shallow copy** | Default copy = memberwise copy of values |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- `= default` for trivial copy constructors
+- `= delete` to make class non-copyable
+- Move constructor for efficient transfers (C++11)
+- C++17 guarantees copy elision (mandatory RVO)
+
+### ⚡ Quick Revision:
+- Copy ctor param MUST be const reference (avoid infinite recursion)
+- Compiler can elide copies (C++17: mandatory in certain cases)
+- Shallow copy is fine for non-resource-managing classes
+- Classes with pointers need deep copy (Rule of Three/Five)
+*/

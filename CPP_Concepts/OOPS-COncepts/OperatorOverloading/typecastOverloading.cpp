@@ -103,3 +103,21 @@ int main()
     return 0;
 }
 //*******************Converting Dollars to Cents***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Typecast operator overloading** | `operator int() const`, `operator double() const` |
+| 2 | **Implicit conversion via cast operator** | `printInt(cents)` — auto-converts |
+| 3 | **Converting between user types** | `Dollars(const Cents&)` |
+| 4 | **explicit typecast operator** | Prevents unintended implicit conversions |
+
+### ⚡ Quick Revision:
+- `operator T() const` — converts class to type T
+- Without `explicit`: allows implicit conversion (can be surprising)
+- With `explicit`: requires `static_cast` or direct init
+- Conversion operators have no return type in signature (it's implied)
+*/

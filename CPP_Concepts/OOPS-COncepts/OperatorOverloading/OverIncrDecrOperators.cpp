@@ -113,4 +113,21 @@ int main()
 
     return 0;
 }
-//******************Pont-1 & 2***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Prefix increment/decrement** | `Digit& operator++()` — no param, returns ref |
+| 2 | **Postfix increment/decrement** | `Digit operator++(int)` — dummy int param, returns copy |
+| 3 | **Prefix returns *this** | Efficient, no temporary created |
+| 4 | **Postfix returns temp copy** | Must capture state before modification |
+
+### ⚡ Quick Revision:
+- Prefix: no param → modifies and returns `*this` by reference
+- Postfix: dummy `int` param → saves copy, modifies, returns old copy
+- Postfix is slower (creates temporary) — prefer prefix when result unused
+- Dummy int parameter distinguishes postfix from prefix (never used)
+*/

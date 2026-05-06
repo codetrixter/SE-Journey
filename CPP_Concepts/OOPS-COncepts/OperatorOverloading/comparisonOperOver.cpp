@@ -338,3 +338,23 @@ int main()
   return 0;
 } */
 //**********************QUIZ***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Comparison operator overloading** | `operator==`, `operator!=` |
+| 2 | **Member vs friend implementation** | Both shown |
+| 3 | **Implementing != in terms of ==** | `return !(c1 == c2)` |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- C++20 `operator<=>` (spaceship) generates all comparison operators
+- `= default` for `operator==` if all members comparable
+
+### ⚡ Quick Revision:
+- Implement `==` and define `!=` as `!(==)`
+- C++20: just define `operator<=>` and get all 6 comparisons free
+- `operator==` can be member or friend (prefer member)
+*/

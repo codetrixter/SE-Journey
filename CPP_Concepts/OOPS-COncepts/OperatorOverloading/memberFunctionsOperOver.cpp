@@ -48,6 +48,24 @@ int main()
 {
 	Cents cents1 { 6 };
 	Cents cents2 { cents1 + 2 };
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Member function operator overloading** | `Cents operator+(int value)` |
+| 2 | **Hidden this pointer** | Left operand = `*this` |
+| 3 | **Rules of thumb** | When to use member vs friend vs normal |
+
+### ⚡ Quick Revision:
+- Member overload: left operand is always `*this`
+- `=`, `[]`, `()`, `->` MUST be member functions
+- Unary operators → member | Binary not modifying left → normal/friend
+- Binary modifying left (+=) → member | Binary with non-class left (<<) → friend/normal
+*/
+
 	std::cout << "I have " << cents2.getCents() << " cents.\n";
 
 	return 0;

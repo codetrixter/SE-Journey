@@ -91,3 +91,31 @@ int main(int argc, char const *argv[])
     a.print();
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Delegating constructors** | `Employee(const std::string& name) : Employee{ 0, name }` |
+| 2 | **Constructor chaining rules** | Cannot init members AND delegate simultaneously |
+| 3 | **Object reset via assignment** | `*this = Foo()` creates default then assigns |
+| 4 | **Default arguments in ctors** | `Employee(int id=0, const std::string& name="")` |
+| 5 | **Avoiding redundant code** | Single "master" ctor handles initialization |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Use in-class member initializers (NSDMI) to reduce ctor count
+- Factory functions or `std::optional` for complex initialization
+- For reset: consider a named `static` factory returning fresh object
+
+### 🏭 Real-World Usage:
+- Delegating ctors reduce duplication in classes with many constructors (e.g., std::string has ~7 ctors)
+- Reset pattern (`*this = {}`) common in state machines, builders, game objects
+
+### ⚡ Quick Revision:
+- Delegating ctor: must delegate OR initialize, not both
+- No circular delegation chains
+- `*this = Foo()` resets object to default state
+- Prefer one "primary" ctor that others delegate to
+*/

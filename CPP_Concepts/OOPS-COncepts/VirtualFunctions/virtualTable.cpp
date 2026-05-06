@@ -81,3 +81,32 @@ int main(int argc, char const *argv[])
 
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Virtual table (vtable)** | Each class with virtual functions has its own vtable |
+| 2 | **vptr** | Hidden pointer in each object pointing to class's vtable |
+| 3 | **Virtual dispatch mechanism** | `base->function1()` looks up vtable via vptr |
+| 4 | **Partial override** | D1 overrides function1 only; function2 points to Base version |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Devirtualization: compiler optimizes away vtable lookup when type is known
+- CRTP eliminates vtable overhead for static polymorphism
+- `final` keyword helps compiler devirtualize
+
+### 🏭 Real-World Usage:
+- Understanding vtable critical for debugging (viewing vptr in debugger)
+- ABI compatibility: vtable layout matters for shared libraries
+- Performance: vtable = indirect call = potential cache miss
+
+### ⚡ Quick Revision:
+- Each polymorphic class has ONE vtable (shared by all instances)
+- Each object has ONE vptr (points to its class's vtable)
+- Vtable stores function pointers for all virtual functions
+- Non-overridden entries point to base class version
+- Cost: one pointer per object + one indirect call per virtual dispatch
+*/

@@ -36,3 +36,31 @@ int main(int argc, char const *argv[])
 
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **lvalue reference parameter** | `int lValueFunc(int a)` takes lvalue (copy) |
+| 2 | **rvalue reference parameter** | `int rValueFunc(int&& a)` binds only to rvalues |
+| 3 | **const lvalue reference** | `const int&` binds to BOTH lvalues and rvalues |
+| 4 | **Implicit conversion** | rvalue passed to value param → copied into lvalue |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Perfect forwarding: `template<typename T> void f(T&& x)` — universal reference
+- `std::move` to cast lvalue to rvalue for move semantics
+- `std::forward` preserves value category in templates
+
+### 🏭 Real-World Usage:
+- Move constructors use `T&&` to steal resources from temporaries
+- `const T&` is the universal "read-only" parameter type
+- Rvalue references enable zero-copy transfers in containers
+
+### ⚡ Quick Revision:
+- `T&` binds to lvalues only
+- `T&&` binds to rvalues only (named rvalue ref is itself an lvalue!)
+- `const T&` binds to both lvalues and rvalues
+- Rvalue references (C++11) enable move semantics
+*/

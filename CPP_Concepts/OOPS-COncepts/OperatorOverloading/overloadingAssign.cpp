@@ -156,3 +156,21 @@ int main()
 	return 0;
 }
 //***********************self assignments***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Assignment operator overloading** | `Fraction& operator=(const Fraction&)` |
+| 2 | **Return *this for chaining** | `f1 = f2 = f3` works |
+| 3 | **Self-assignment guard** | Prevents deleting own data in deep-copy scenario |
+| 4 | **Copy-and-swap idiom** | Referenced as best practice |
+
+### ⚡ Quick Revision:
+- Assignment operator returns `*this` by reference for chaining
+- Self-assignment: `if (this == &str) return *this`
+- Deep-copy assignment: delete old → allocate new → copy data
+- Copy-and-swap: take param by value (uses copy ctor), then swap internals
+*/

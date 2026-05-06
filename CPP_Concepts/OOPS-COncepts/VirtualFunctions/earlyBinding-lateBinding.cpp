@@ -123,3 +123,32 @@ int main()
     return 0;
 }
 //*******************Point-2***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Early binding (direct addressing)** | `switch/case` directly calls `add()`, `subtract()` |
+| 2 | **Late binding (indirect addressing)** | Function pointer `pFcn(x, y)` resolved at runtime |
+| 3 | **Function pointers** | `int (*pFcn)(int, int)` for runtime dispatch |
+| 4 | **Performance cost** | Late binding: resolve address + jump vs just jump |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- `std::function` + lambdas for type-safe late binding
+- Virtual functions are compiler-managed late binding (vtable)
+- `std::variant` + `std::visit` for compile-time polymorphism
+- Devirtualization: compiler optimization that converts virtual → direct calls
+
+### 🏭 Real-World Usage:
+- Plugin systems, callback mechanisms, event handlers use late binding
+- Virtual dispatch in OOP is the most common form of late binding in C++
+- Performance-critical code (game engines, HFT) may avoid virtual for early binding
+
+### ⚡ Quick Revision:
+- Early binding: address known at compile time → one step at runtime
+- Late binding: address resolved at runtime → two steps (resolve + jump)
+- Virtual functions use vtable (late binding) — slight overhead per call
+- Each polymorphic object gains one vptr (pointer-sized overhead)
+*/

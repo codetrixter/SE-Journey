@@ -188,3 +188,34 @@ int main()
 }
 //***************std::Exception***
 
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Exception classes** | `ArrayException` — custom exception with message |
+| 2 | **Inheritance-based exception catching** | `catch(const Base&)` catches Derived too |
+| 3 | **Handler ordering** | Derived catch BEFORE base catch |
+| 4 | **std::exception hierarchy** | `exception.what()` returns error description |
+| 5 | **RAII during exceptions** | Member destructor called when ctor throws |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Derive custom exceptions from `std::runtime_error` or `std::logic_error`
+- Override `what()` for consistent interface
+- `std::source_location` (C++20) for exception context
+
+### 🏭 Real-World Usage:
+- All STL exceptions derive from `std::exception`
+- Custom exception hierarchies in large projects (domain-specific errors)
+- `catch(const std::exception&)` as fallback catches all standard exceptions
+
+### ⚡ Quick Revision:
+- Custom exceptions: derive from std::exception, override `what()`
+- Catch derived BEFORE base (first match wins)
+- `std::exception::what()` returns `const char*` description
+- When ctor throws, already-constructed members ARE destructed
+- The object itself is NOT fully constructed → no dtor called for it
+*/
+

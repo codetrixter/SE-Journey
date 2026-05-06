@@ -103,3 +103,31 @@ If you intend your class to be inherited from, make sure your destructor is virt
 If you do not intend your class to be inherited from, mark your class as final. This will prevent other classes from inheriting from it in the 
 first place, without imposing any other use restrictions on the class itself. */
 //******************Herb Stutters Wisdome***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Virtual destructors** | `virtual ~Base()` ensures derived dtor is called |
+| 2 | **Memory leak without virtual dtor** | `delete base` would skip `~Derived()` without virtual |
+| 3 | **Ignoring virtualization** | `base->Base::getName()` calls base version explicitly |
+| 4 | **Herb Sutter's rule** | Public+virtual OR protected+nonvirtual destructor |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- `= default` virtual destructor for polymorphic base classes
+- Use `final` to prevent inheritance (avoids needing virtual dtor)
+- Smart pointers (`unique_ptr`) still need virtual dtor for correct deletion through base
+
+### 🏭 Real-World Usage:
+- ANY class intended as a base for polymorphism MUST have virtual destructor
+- Without it: `unique_ptr<Base>` holding Derived leaks derived resources
+- `final` keyword (C++11) prevents accidental inheritance
+
+### ⚡ Quick Revision:
+- Rule: If class has any virtual function → make destructor virtual
+- `delete basePtr` without virtual dtor = undefined behavior
+- `obj->Base::func()` bypasses virtual dispatch
+- `final` class prevents inheritance entirely
+*/

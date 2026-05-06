@@ -215,3 +215,65 @@ int main(int argc, char const *argv[])
 // }
 
 //*********QUIZ***
+
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                 CONCEPT ANALYSIS — functionPointers.cpp                    ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. Function Pointers — Syntax and Assignment
+A function pointer stores the address of a function. Syntax:
+`int (*funptr)(int, int)` — pointer to function taking two ints, returning int.
+
+**Code walkthrough:**
+- `int (*funptr1)(){&foo};` — assigned address of `foo`.
+- `(*funptr1)()` or `funptr1()` — both invoke the pointed-to function.
+
+### 2. Callback Functions
+Passing a function pointer as a parameter allows the caller to customize
+behavior (strategy pattern).
+
+- `selectionSort(array, 9, descending)` — sorts using user-provided comparator.
+- `using validateFunction = bool(*)(int, int);` — type alias cleans up syntax.
+
+### 3. `std::function` as Alternative
+`std::function<int(int,int)>` is a type-erased callable wrapper that works with
+function pointers, lambdas, and functors.
+
+#### Alternatives / Idiomatic C++
+- Prefer **lambdas** over function pointers for inline callbacks.
+- Prefer **templates** (compile-time polymorphism) over `std::function` for
+  performance-critical code:
+  ```cpp
+  template<typename Comparator>
+  void sort(int* arr, int size, Comparator cmp);
+  ```
+- C++20: Use `std::ranges::sort` with a lambda — cleaner and safer.
+- `std::function` has overhead; use only when you need type erasure.
+
+#### Real-World Usage
+- **C libraries** (qsort, signal handlers): Function pointers are the only
+  callback mechanism in C.
+- **GLFW** (https://github.com/glfw/glfw): Uses function pointer callbacks for
+  input events.
+- **Dear ImGui** (https://github.com/ocornut/imgui): Uses function pointers
+  for custom allocators and callbacks.
+
+---
+
+## 🔁 Quick Revision
+- Function pointer syntax: `RetType (*name)(ParamTypes)`.
+- Use `using` aliases to simplify function pointer declarations.
+- Callbacks = passing function pointers as arguments.
+- `std::function` is more flexible but has runtime overhead.
+
+### 💡 Remember
+- A function's name decays to a pointer to itself (like arrays to pointers).
+- `&foo` and `foo` are equivalent when assigning to a function pointer.
+
+### ⚠️ Gotchas
+- Function pointers cannot point to lambdas with non-empty captures.
+- Calling through a null function pointer = undefined behavior.
+*/

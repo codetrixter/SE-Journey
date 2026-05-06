@@ -81,3 +81,46 @@ int main(int argc, char const *argv[])
     en.printName();
     return 0;
 }
+
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║              CONCEPT ANALYSIS — moveSemanticsBasics.cpp                    ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. Custom Move Constructor
+`String(String&& other)` — steals `m_data` pointer and `m_size` from `other`,
+then nullifies `other` to prevent double delete.
+
+### 2. Avoiding Unnecessary Copies with Rvalue Overloads
+`Entity(String&& other) : m_name{static_cast<String&&>(other)}` — forwards the
+rvalue to invoke String's move constructor instead of copy.
+
+Without the `static_cast<String&&>`, `other` (being a named variable = lvalue)
+would invoke the copy constructor. `std::move` is the idiomatic way to do this.
+
+**Key Takeaway:** To propagate rvalue-ness through constructors, you must
+explicitly cast named rvalue references back to rvalue (`std::move` or
+`static_cast<T&&>`).
+
+#### Alternatives / Idiomatic C++
+- Use `std::move(other)` instead of `static_cast<String&&>(other)`.
+- Use `std::string` instead of manual char* management.
+- Perfect forwarding with templates:
+  ```cpp
+  template<typename T>
+  Entity(T&& name) : m_name{std::forward<T>(name)} {}
+  ```
+
+---
+
+## 🔁 Quick Revision
+- Move ctor steals resources (pointer swap), nullifies source.
+- Named `T&&` parameters are lvalues — use `std::move` to forward.
+- `std::string` handles all of this internally — prefer it over raw char*.
+
+### ⚠️ Gotchas
+- `delete m_data` in destructor when `m_data` might be nullptr is safe (no-op).
+- Forgetting to nullify source's pointer → double free on destruction.
+*/

@@ -227,3 +227,60 @@ int main()
 
 	return 0;
 }
+
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                  CONCEPT ANALYSIS — unique-pointer.cpp                     ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. `std::unique_ptr` — Exclusive Ownership
+A smart pointer that owns a resource exclusively. Non-copyable, only movable.
+Destructor automatically deletes the managed object.
+
+### 2. `std::make_unique` (C++14)
+- Exception-safe: object creation and unique_ptr construction are atomic.
+- Cleaner syntax: `auto p = std::make_unique<Fraction>(3, 5);`
+- Pre-C++17, interleaved evaluation could leak if an exception occurred between
+  `new` and unique_ptr construction.
+
+### 3. Returning `unique_ptr` from Functions
+Return by value — the compiler applies move semantics (or elides the move in
+C++17+). Never return by reference/pointer.
+
+### 4. Passing `unique_ptr` to Functions
+- **Transfer ownership**: pass by value → requires `std::move` at call site.
+- **Use resource without ownership**: pass raw pointer via `.get()`.
+
+### 5. Common Misuse Patterns
+- Creating two `unique_ptr`s from the same raw pointer → double free.
+- Manually deleting a managed resource → double free.
+- Both prevented by always using `std::make_unique`.
+
+**Key Takeaway:** `std::unique_ptr` + `std::make_unique` = zero-overhead RAII.
+Express ownership in the type system; use `.get()` for non-owning access.
+
+#### Alternatives / Idiomatic C++
+- `std::shared_ptr` when shared ownership is needed.
+- `std::observer_ptr` (Library Fundamentals TS) for explicit non-owning.
+- C++23: `std::out_ptr` / `std::inout_ptr` for C API interop.
+
+#### Real-World Usage
+- **Chromium**: All owned heap objects use `std::unique_ptr`.
+- **LLVM**: `std::unique_ptr` for AST nodes, passes, etc.
+- **Game engines**: Unique ownership of subsystems and resources.
+
+---
+
+## 🔁 Quick Revision
+- `unique_ptr`: non-copyable, movable, zero overhead over raw pointer.
+- Always use `std::make_unique` — exception-safe, no raw `new`.
+- Transfer ownership: `std::move(ptr)`.
+- Non-owning access: `ptr.get()`.
+
+### ⚠️ Gotchas
+- Never create two `unique_ptr`s from the same raw pointer.
+- `unique_ptr<T[]>` for arrays — calls `delete[]` correctly.
+- Don't use `unique_ptr` with incomplete types unless dtor is visible.
+*/

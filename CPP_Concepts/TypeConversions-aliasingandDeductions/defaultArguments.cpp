@@ -47,3 +47,21 @@ int main(int argc, char const *argv[])
 
 //******************point 2***
 
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Default arguments** | `int y=4`, `double y=20.5` |
+| 2 | **No redeclaration of defaults** | Forward decl + definition can't both have default |
+| 3 | **Ambiguity with defaults** | `print(1)` matches multiple overloads |
+
+### ⚡ Quick Revision:
+- Default args must be rightmost parameters
+- Can't redeclare default in definition if already in declaration
+- Default args + overloading can cause ambiguous calls
+- Brace init doesn't work for default args
+*/
+

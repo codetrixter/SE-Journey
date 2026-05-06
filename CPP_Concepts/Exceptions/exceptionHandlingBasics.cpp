@@ -95,3 +95,33 @@ int main()
     }
 }
 //******************************************Another example***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **try-catch-throw** | Basic exception handling mechanism |
+| 2 | **Throwing different types** | int, const char*, string, enum, objects |
+| 3 | **Multiple catch blocks** | Each matches a specific exception type |
+| 4 | **No implicit conversions** | Exception type must match catch exactly (except derived→base) |
+| 5 | **Control flow after catch** | Execution continues after catch block |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- `std::expected<T,E>` (C++23) for recoverable errors without exceptions
+- `std::error_code` / `std::system_error` for system-level errors
+- Throw objects (not primitives) for rich error info
+
+### 🏭 Real-World Usage:
+- File I/O, network operations, parsing — all throw on failure
+- Libraries throw `std::runtime_error`, `std::invalid_argument`, etc.
+- Catch by const reference: `catch (const std::exception& e)`
+
+### ⚡ Quick Revision:
+- `throw` transfers control to nearest matching `catch`
+- Catch blocks checked top-to-bottom; first match wins
+- No implicit conversions (int won't match double catch)
+- Derived-to-base conversion IS allowed (catch base catches derived)
+- Code after `throw` in same scope is unreachable
+*/

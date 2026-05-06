@@ -80,3 +80,32 @@ int main(int argc, char const *argv[])
     Copier copy(1, 2, 3);
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Diamond problem** | Copier inherits Scanner & Printer, both inherit PoweredDevice |
+| 2 | **Virtual inheritance** | `virtual public PoweredDevice` — single shared base |
+| 3 | **Most-derived class constructs virtual base** | Copier calls `PoweredDevice{power}` |
+| 4 | **Construction order** | Virtual bases first, then left-to-right non-virtual |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Prefer composition over diamond inheritance
+- Mixins/CRTP avoid diamond problem entirely
+- C++20 concepts can replace some MI interface patterns
+
+### 🏭 Real-World Usage:
+- iostream hierarchy: `iostream` inherits `istream` + `ostream`, both inherit `ios_base`
+- Rare in practice — most style guides discourage diamond inheritance
+- When unavoidable, virtual inheritance is the standard solution
+
+### ⚡ Quick Revision:
+- `virtual public Base` = only ONE copy of Base in most-derived object
+- Most-derived class is responsible for constructing virtual base
+- Virtual bases constructed BEFORE non-virtual bases
+- Adds vtable pointer overhead to intermediate classes
+- Scanner/Printer ctor calls to PoweredDevice are ignored when building Copier
+*/

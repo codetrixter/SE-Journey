@@ -130,3 +130,26 @@ int main()
 	return 0;
 } */
 //***********************QUIZ***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **operator() for matrix access** | `matrix(row, col)` — multi-dimensional subscript |
+| 2 | **Functors (function objects)** | `Accumulator` class with stateful `operator()` |
+| 3 | **Const overload of operator()** | Read-only version for const objects |
+| 4 | **operator() as reset** | `matrix()` resets all elements (unusual but valid) |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- C++23: `operator[]` can accept multiple arguments (multidimensional subscript)
+- `std::function` wraps functors, lambdas, function pointers uniformly
+- Lambdas often replace simple functors in modern C++
+
+### ⚡ Quick Revision:
+- `operator()` can take any number of args (unlike `operator[]`)
+- Functors = objects callable like functions, can hold state
+- Lambdas are compiler-generated functors
+- Use for: matrix access, function objects, custom comparators
+*/

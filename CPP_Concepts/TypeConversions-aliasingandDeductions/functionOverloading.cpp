@@ -195,3 +195,34 @@ int main()
     return 0;
 }
 //**********************Multiple param***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Function overloading** | Multiple `print()` with different param types |
+| 2 | **Overload resolution steps** | Exact → Promotion → Conversion → User-defined → Ellipsis |
+| 3 | **Trivial conversions** | non-const → const, value → reference |
+| 4 | **Numeric promotion** | `char`/`bool` → `int`, `float` → `double` |
+| 5 | **Ambiguous matches** | `print(5L)` — long fits both int and double equally |
+| 6 | **User-defined conversions** | `operator int()` for class-to-int conversion |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- C++20 concepts to constrain overload sets
+- `if constexpr` + templates instead of many overloads
+- `std::variant` + `std::visit` for type-safe dispatch
+
+### 🏭 Real-World Usage:
+- STL heavily uses overloading (e.g., `std::sort` with/without comparator)
+- Operator overloading is a form of function overloading
+- Understanding resolution order critical for API design
+
+### ⚡ Quick Revision:
+- Overload differentiation: param count, param types, const/volatile, ref-qualifiers
+- Return type alone does NOT differentiate overloads
+- Resolution: exact > promotion > conversion > user-defined
+- Ambiguous = equally good matches at same step → compile error
+- Fix ambiguity: explicit cast argument to desired type
+*/

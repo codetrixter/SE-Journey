@@ -66,3 +66,72 @@ int main()
 
     return 0;
 }   //ERROR: add is outside main's scope
+
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                  CONCEPT ANALYSIS — InternalLinkage.cpp                    ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. Internal Linkage via `static` Keyword
+An identifier with **internal linkage** is visible only within its translation
+unit. Two TUs can have identically-named internal-linkage identifiers without
+ODR violations — they are independent entities.
+
+**Code walkthrough:**
+- `static int add(int x, int y)` (line 51) — the `static` keyword gives `add`
+  internal linkage, making it invisible to other TUs.
+- `int add(int x, int y);` (line 58) — forward declaration in "main.cpp" tries
+  to access `add` but fails at link time because `add` is file-local.
+
+**Key Takeaway:** `static` on a function/global variable = internal linkage =
+visible only in this file.
+
+### 2. `const` and `constexpr` Have Internal Linkage by Default
+- `const int g_y{1};` — internal linkage by default in C++.
+- `constexpr int g_z{2};` — same.
+
+This allows placing them in headers without ODR violations (each TU gets its
+own copy). C++17 `inline` variables provide an alternative with external linkage.
+
+### 3. Reasons to Use Internal Linkage
+1. **Avoid naming collisions** across translation units.
+2. **Restrict access** — encapsulate implementation details to a single file.
+
+#### Alternatives / Idiomatic C++
+- C++11+: Use **anonymous namespaces** instead of `static` for internal linkage:
+  ```cpp
+  namespace {
+      int add(int x, int y) { return x + y; }
+  }
+  ```
+  Anonymous namespaces are the modern preferred idiom.
+- `[[maybe_unused]]` attribute (C++17) suppresses unused warnings — used here
+  on the static `add` function.
+
+#### Real-World Usage
+- **Linux kernel** (C): Uses `static` extensively to limit symbol visibility.
+- **Boost** (https://github.com/boostorg): Uses anonymous namespaces for
+  implementation details in header-only libraries.
+- **abseil-cpp**: Uses internal namespaces (`::absl::internal`) for the same purpose.
+
+---
+
+## 🔁 Quick Revision
+- `static` on global variable/function → internal linkage (file-local).
+- `const`/`constexpr` globals → internal linkage by default.
+- Anonymous namespaces = modern alternative to `static` for internal linkage.
+
+### 💡 Remember
+- Internal linkage prevents ODR violations when same-named entities exist in
+  multiple TUs.
+- The rationale for const having internal linkage: enables use in constant
+  expressions across multiple TUs via headers.
+
+### ⚠️ Gotchas
+- `static` means different things in different contexts: internal linkage (at
+  file scope), static duration (at block scope), class-level (shared member).
+- This file has a deliberate linker error: the forward-declared `add` cannot
+  find the `static` version.
+*/

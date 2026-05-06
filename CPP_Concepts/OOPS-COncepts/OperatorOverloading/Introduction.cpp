@@ -10,7 +10,7 @@
  * fundamental types so that it can use a matching built in operator(via overlaod type cast). If all the above 
  * it will issue an error.
  * 
- * 2- LIMITAITIONS OF OPERATOR OVERLOADING::
+ * 2- LIMITAITONS OF OPERATOR OVERLOADING::
  *  a. Almost all existing operators in c++ can be overloaded except these:
  *      I. conditional(?:)
  *      II. sizeof
@@ -55,4 +55,23 @@ int main(int argc, char const *argv[])
     std::cout << s1+s2;    
     return 0;
 }
+
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Operator overloading intro** | `s1+s2` uses overloaded `operator+` |
+| 2 | **Resolution rules** | Fundamental → built-in; user-defined → custom operator |
+| 3 | **Limitations** | Can't overload `?:`, `sizeof`, `::`, `.`, `.*`, `typeid` |
+| 4 | **Three ways to overload** | Member function, friend function, normal function |
+
+### ⚡ Quick Revision:
+- At least one operand must be user-defined type
+- Can't create new operators or change arity/precedence/associativity
+- Keep overloaded operator semantics intuitive
+- If unclear, use named function instead
+*/
 

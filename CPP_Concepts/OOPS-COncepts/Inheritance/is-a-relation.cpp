@@ -56,3 +56,29 @@ int main()
 
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **IS-A relationship** | Employee IS-A Person |
+| 2 | **Code reuse via inheritance** | Employee reuses Person's name/age |
+| 3 | **Public inheritance** | Derived has access to public members of base |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Make data members private with getters (public `m_name` breaks encapsulation)
+- Consider composition if relationship is HAS-A not IS-A
+- Prefer encapsulated base class initialization via derived ctor
+
+### 🏭 Real-World Usage:
+- HR systems, game entities, UI widget hierarchies
+- IS-A is the Liskov Substitution Principle foundation
+- Public inheritance = substitutability (derived usable wherever base expected)
+
+### ⚡ Quick Revision:
+- Public inheritance = IS-A relationship
+- Derived inherits all public/protected members
+- Keep data private; expose via getters for proper encapsulation
+*/

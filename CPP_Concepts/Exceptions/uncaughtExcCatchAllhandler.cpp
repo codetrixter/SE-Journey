@@ -53,3 +53,23 @@ int main()
 	}
 } */
 //**********************Catch all handler***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Uncaught exceptions** | No handler → `std::terminate()` → abort |
+| 2 | **Catch-all handler `catch(...)`** | Catches any exception type |
+| 3 | **Handler ordering** | Specific catches first, catch-all last |
+
+### 🏭 Real-World Usage:
+- Top-level catch-all in `main()` for graceful shutdown
+- Server loops: catch-all prevents one request from crashing entire server
+
+### ⚡ Quick Revision:
+- Uncaught exception → `std::terminate()` → program aborts
+- `catch(...)` catches everything but can't inspect the exception
+- Always place catch-all LAST
+*/

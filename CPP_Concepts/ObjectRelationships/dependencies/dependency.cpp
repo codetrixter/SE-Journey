@@ -45,3 +45,23 @@ int main()
 
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Dependency relationship** | Point depends on `std::ostream` (uses-a) |
+| 2 | **Transient usage** | ostream used only during function call, not stored |
+| 3 | **Friend function for dependency** | `operator<<` accesses private members |
+
+### 🏭 Real-World Usage:
+- Most function parameters represent dependencies
+- Dependency injection: pass interfaces as params for testability
+
+### ⚡ Quick Revision:
+- Dependency = "uses-a" — weakest relationship
+- Object is used transiently (not stored as member)
+- Typically via function parameter or local instantiation
+*/

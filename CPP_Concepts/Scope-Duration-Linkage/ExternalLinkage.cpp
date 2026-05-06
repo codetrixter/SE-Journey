@@ -41,3 +41,67 @@ int main()
 
     return 0;
 }
+
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                  CONCEPT ANALYSIS — ExternalLinkage.cpp                    ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. External Linkage
+An identifier with **external linkage** can be accessed from other translation
+units via a **forward declaration**. Functions have external linkage by default.
+
+**Code walkthrough:**
+- `extern int g_y1;` (line 25) — forward declaration for a non-const global
+  defined elsewhere. `extern` without initializer = declaration, not definition.
+- `int g_x1;` / `int g_x2{1};` (lines 30-31) — definitions of external globals
+  (no `extern` keyword needed for definitions of non-const).
+- `extern const int g_x3{2};` (line 34) — `extern` + initializer on a `const`
+  makes it externally linkable (overriding the default internal linkage of const).
+- `void sayHi();` (line 37) — forward declaration of function defined in
+  `another.cpp`. The linker resolves this.
+
+### 2. Forward Declarations with `extern`
+- Non-const globals: `extern int g_y1;` (declaration only).
+- Const globals: `extern const int g_y2;` (declaration only).
+- `constexpr` cannot be forward-declared (must be visible at compile time).
+
+**Key Takeaway:** `extern` = "this exists somewhere else, trust me." The linker
+connects declarations to definitions across TUs.
+
+#### Alternatives / Idiomatic C++
+- C++17 `inline` variables can be defined in headers with external linkage
+  without ODR violations:
+  ```cpp
+  inline constexpr int g_value{42}; // in a header, one entity program-wide
+  ```
+- Prefer passing values via function parameters over extern globals.
+- C++20 modules eliminate much of the need for forward declarations.
+
+#### Real-World Usage
+- **Any multi-file C++ project** uses external linkage for cross-TU access.
+- **SQLite** (https://github.com/nicknash/sqlite): Uses `extern` declarations
+  in headers to share state across compilation units.
+
+---
+
+## 🔁 Quick Revision
+- Functions: external linkage by default.
+- Non-const globals: external linkage by default.
+- `const` globals: internal by default; add `extern` + initializer for external.
+- `constexpr` globals: cannot be forward-declared.
+- `extern` without initializer = forward declaration.
+
+### 💡 Remember
+- Definition vs Declaration: a definition allocates storage; a declaration just
+  announces existence.
+- Only ONE definition allowed across all TUs (ODR), but unlimited declarations.
+
+### ⚠️ Gotchas
+- `extern int g_x;` (no initializer) on a non-const = forward declaration.
+  Adding an initializer makes it a definition: `extern int g_x{5};`.
+- Don't use `extern` on an uninitialized non-const global definition — the
+  compiler thinks it's a forward declaration.
+*/
