@@ -49,3 +49,31 @@ int main(int argc, char const *argv[])
         std::cout << typeid(val).name() << " " << typeid(xx).name();    
     }
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **auto type deduction** | `auto d{5.0}` deduces double |
+| 2 | **const dropped by auto** | `auto xx{val}` — loses const from val |
+| 3 | **String literal deduction** | `"text"` = `const char*`, `"text"s` = `std::string` |
+| 4 | **constexpr and auto** | constexpr dropped, must re-add const explicitly |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- `decltype(auto)` preserves const and reference qualifiers
+- `const auto` to explicitly keep const
+- AAA style (Almost Always Auto) — controversial but popular
+
+### 🏭 Real-World Usage:
+- Range-based for: `for (const auto& item : container)`
+- Lambda return types deduced via auto
+- Structured bindings: `auto [key, value] = pair`
+
+### ⚡ Quick Revision:
+- `auto` drops const and reference — add them back explicitly
+- `auto x{"hello"}` = `const char*`, not `std::string`
+- Use `"hello"s` literal suffix for std::string deduction
+- `decltype(auto)` preserves everything auto drops
+*/

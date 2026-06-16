@@ -81,3 +81,25 @@ int main()
 		std::cout << "Oops\n";
 	}
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Function try block** | `B(int x) try : A{x} { } catch(...) { }` |
+| 2 | **Catching init-list exceptions** | Catches exceptions from base class ctor |
+| 3 | **Implicit rethrow in constructors** | Ctor catch blocks always rethrow |
+| 4 | **Cannot access members in catch** | Object is "dead" — UB to access members |
+
+### 🏭 Real-World Usage:
+- Logging ctor failures before propagating exception
+- Translating exception types at construction boundary
+
+### ⚡ Quick Revision:
+- Function try wraps entire function INCLUDING init list
+- Constructor catch blocks MUST throw (implicit rethrow if not)
+- Can't "fix" failed construction — object is dead in catch block
+- Primarily useful for logging or exception translation
+*/

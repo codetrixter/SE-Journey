@@ -267,4 +267,19 @@ int main()
 
     return 0;
 }
-//**************************QUIZ-2***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Friend function operator overloading** | `friend Cents operator+` |
+| 2 | **Overloading for mixed types** | `operator+(Cents, int)` and `operator+(int, Cents)` |
+| 3 | **Returning new object** | `return Cents{...}` — doesn't modify operands |
+
+### ⚡ Quick Revision:
+- Friend overload: non-member function with private access
+- Binary operators that don't modify operands → return new object
+- Mixed types need two overloads (or rely on converting constructor)
+*/

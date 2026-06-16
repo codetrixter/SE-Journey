@@ -81,15 +81,32 @@ int main()
 
     return 0;
 }
-/**
- * @brief Output:
- * Start main
- * Start first
- * Start second
- * Start third
- * Start last
- * last throwing int exception
- * first caught int exception
- * End first
- * End main
- */
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Stack unwinding** | Exception propagates up call stack until caught |
+| 2 | **Exception propagation** | last→third→second→first (caught in first) |
+| 3 | **Unmatched catch skipped** | `catch(double)` in second doesn't match int |
+| 4 | **Execution resumes after handler** | "End first" prints after catch |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- `std::nested_exception` for exception chaining
+- RAII ensures resources cleaned up during unwinding
+- `noexcept` prevents unwinding (calls `std::terminate` instead)
+
+### 🏭 Real-World Usage:
+- Stack unwinding triggers destructors — RAII guarantees cleanup
+- Deep call stacks in servers: exception caught at request handler level
+- Without RAII, stack unwinding causes resource leaks
+
+### ⚡ Quick Revision:
+- Exception searches up the call stack for matching catch
+- Stack frames are unwound (local objects destructed) during propagation
+- First matching catch block handles the exception
+- Execution continues AFTER the catch block (not after throw point)
+- If no match found → `std::terminate()` called
+*/

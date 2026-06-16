@@ -126,3 +126,31 @@ int main()
 	return 0;
 }
 //*************point - 2 -- b ***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Changing access specifiers** | `using Base::printValue` — protected → public |
+| 2 | **Hiding base members** | `using Base::m_value` in private section |
+| 3 | **Deleting inherited functions** | `int getValue() = delete` |
+| 4 | **Calling hidden base functions** | `derived.Base::getValue()` or `static_cast<Base&>` |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Private inheritance already hides everything — simpler than selective hiding
+- `= delete` is cleaner than making function private (gives clear error message)
+- Composition avoids needing to hide inherited interface
+
+### 🏭 Real-World Usage:
+- Restricting base class interface in specialized derived classes
+- Preventing dangerous operations (e.g., deleting `resize()` in fixed-size container)
+- Adapter pattern: expose only relevant base functionality
+
+### ⚡ Quick Revision:
+- `using Base::member` can change access level in derived
+- `= delete` makes inherited function uncallable on derived
+- Can still call base version via `obj.Base::func()` or cast
+- `static_cast<Base&>(derived)` accesses base interface
+*/

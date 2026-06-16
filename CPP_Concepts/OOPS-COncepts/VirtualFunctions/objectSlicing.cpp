@@ -112,7 +112,8 @@ int main(int argc, char const *argv[])
 		std::cout << "I am a " << element.get().getName() << " with value " << element.get().getValue() << '\n';
 
     return 0;
-} */
+}
+
 //**************Frankenobject***
 class Base
 {
@@ -175,4 +176,34 @@ int main()
     return 0;
 }
 //**************Frankenobject***
+
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Object slicing** | Assigning Derived to Base copies only base portion |
+| 2 | **Slicing via pass-by-value** | Function taking `Base` by value slices |
+| 3 | **Prevention via references/pointers** | `Base&` or `Base*` preserves polymorphism |
+| 4 | **std::reference_wrapper** | Allows storing references in containers |
+| 5 | **Frankenobject** | Partial slice creating inconsistent state |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- `std::vector<std::unique_ptr<Base>>` — idiomatic ownership of polymorphic objects
+- `std::reference_wrapper<Base>` for non-owning polymorphic containers
+- `std::variant` for closed set of types (no slicing possible)
+
+### 🏭 Real-World Usage:
+- Entity component systems store pointers to avoid slicing
+- Always pass polymorphic objects by reference or pointer
+- Slicing bugs are subtle and common in codebases with deep hierarchies
+
+### ⚡ Quick Revision:
+- Assigning derived → base by VALUE = slicing (derived data lost)
+- Use `Base&` or `Base*` to preserve polymorphism
+- Vectors: use `vector<unique_ptr<Base>>` not `vector<Base>`
+- `std::reference_wrapper` enables reference semantics in containers
+*/
 

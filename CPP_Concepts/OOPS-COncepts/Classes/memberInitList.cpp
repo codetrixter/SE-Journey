@@ -48,3 +48,31 @@ int main(int argc, char const *argv[])
 
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Member initializer list** | `B(int valA, int valB): mem_A{valA}, Arr{...}, sum{valB}` |
+| 2 | **Initializing composition members** | `mem_A{valA}` calls A's constructor |
+| 3 | **Const array initialization** | `const int Arr[5]` initialized via list |
+| 4 | **Order of initialization** | Members initialized in declaration order, not list order |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Use `std::array` instead of C-style arrays for safer, more flexible initialization
+- In-class member initializers (NSDMI) for default values, override in init list when needed
+- `= default` for trivial constructors
+
+### 🏭 Real-World Usage:
+- Member init lists are mandatory for const members, references, and base classes
+- Performance: avoids default-construct-then-assign for complex members
+- All production C++ code uses init lists as standard practice
+
+### ⚡ Quick Revision:
+- Init list runs BEFORE constructor body
+- Only way to initialize `const` and `&` members
+- Order of init = order of declaration in class, NOT order in list
+- More efficient than assignment in body (one construction vs construct + assign)
+*/

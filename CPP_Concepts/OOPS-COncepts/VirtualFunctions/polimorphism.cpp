@@ -340,3 +340,33 @@ int main()
 	return 0;
 } */
 //*************QUIZ-5***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Virtual functions** | `virtual speak()` enables runtime polymorphism |
+| 2 | **Base pointer/reference dispatch** | `animal->speak()` calls correct derived version |
+| 3 | **Protected constructor** | Prevents direct Animal instantiation |
+| 4 | **Polymorphic container** | `array<const Animal*>` holds mixed types |
+| 5 | **Don't call virtual from ctor/dtor** | Derived not yet constructed in base ctor |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- `override` keyword (C++11) to catch signature mismatches
+- `std::variant` + `std::visit` for compile-time polymorphism
+- CRTP for static polymorphism (no vtable overhead)
+- `std::unique_ptr<Animal>` for owning polymorphic containers
+
+### 🏭 Real-World Usage:
+- GUI frameworks: Widget → Button/Slider/TextBox with virtual `draw()`/`handleEvent()`
+- Game engines: Entity hierarchy with virtual `update()`/`render()`
+- Plugin architectures: base interface + dynamically loaded derived classes
+
+### ⚡ Quick Revision:
+- `virtual` in base → derived version called through base ptr/ref
+- Only base needs `virtual`; derived `virtual` is optional but good practice
+- Use `override` to ensure you're actually overriding
+- Never call virtual functions in constructors or destructors
+*/

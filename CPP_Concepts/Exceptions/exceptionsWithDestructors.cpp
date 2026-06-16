@@ -240,3 +240,32 @@ int main()
 
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Never throw in destructors** | Two active exceptions → `std::terminate()` |
+| 2 | **noexcept destructors** | `~GoodResource() noexcept` — documents intent |
+| 3 | **Catch-and-swallow pattern** | try/catch inside destructor, log but don't throw |
+| 4 | **Explicit release pattern** | `release()` method CAN throw; dtor handles leftovers |
+| 5 | **Stack unwinding danger** | Exception during unwinding = termination |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Explicit `close()`/`release()` methods for fallible cleanup
+- `std::uncaught_exceptions()` (C++17) to detect if already unwinding
+- Scope guards (`std::experimental::scope_exit`) for deterministic cleanup
+
+### 🏭 Real-World Usage:
+- Database connections: explicit `commit()`/`rollback()`, dtor does safe close
+- File handles: `flush()` can fail, dtor closes without throwing
+- Network sockets: graceful shutdown in release(), hard close in dtor
+
+### ⚡ Quick Revision:
+- Destructors are implicitly noexcept — throwing = `std::terminate()`
+- Two simultaneous exceptions = program termination
+- Pattern: explicit `release()` that can throw + safe dtor fallback
+- Always catch exceptions in dtors and log/swallow them
+*/

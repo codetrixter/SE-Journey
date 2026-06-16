@@ -125,3 +125,31 @@ int main()
 
 	return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Function hiding/overriding** | Derived `identify()` hides Base version |
+| 2 | **Calling base version explicitly** | `Base::identify()` inside derived |
+| 3 | **Access specifiers not inherited** | Private `print()` in Base, public in Derived — OK |
+| 4 | **Friend functions with inheritance** | `operator<<` uses `static_cast<const Base&>(d)` |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Use `virtual` + `override` for runtime polymorphism (not just hiding)
+- Without `virtual`, this is name hiding — not true polymorphism
+- NVI (Non-Virtual Interface) pattern for controlled extension points
+
+### 🏭 Real-World Usage:
+- Extending logging/tracing in derived classes while preserving base behavior
+- `operator<<` chaining through hierarchy via static_cast to base
+- Name hiding is a common source of bugs — use `override` to catch mistakes
+
+### ⚡ Quick Revision:
+- Without `virtual`: derived function HIDES base (no polymorphism)
+- `Base::func()` explicitly calls base version from derived
+- Access specifiers in derived are independent of base
+- Friend functions need `static_cast` to call base version (can't use scope resolution)
+*/

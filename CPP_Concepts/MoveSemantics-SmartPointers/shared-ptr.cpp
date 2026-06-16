@@ -51,3 +51,63 @@ int main()
 
 	return 0;
 } // ptr1 goes out of scope here, and the allocated Resource is destroyed since counter goes to 0.
+
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                   CONCEPT ANALYSIS — shared-ptr.cpp                        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. `std::shared_ptr` — Reference-Counted Ownership
+Multiple `shared_ptr`s can own the same resource. An internal reference count
+tracks owners; resource is deleted when count reaches zero.
+
+### 2. The Control Block
+`shared_ptr` allocates a **control block** containing: reference count, weak
+count, deleter, and allocator. `make_shared` combines object + control block
+in a single allocation (more cache-friendly).
+
+### 3. The Aliasing Anti-Pattern (Double Ownership)
+```cpp
+Resource* res = new Resource;
+shared_ptr<Resource> ptr1{res};
+shared_ptr<Resource> ptr2{res}; // BAD: independent control blocks!
+```
+Two independent shared_ptrs each think they exclusively own `res` → double free.
+
+**Fix:** Always copy/assign from an existing shared_ptr:
+`shared_ptr<Resource> ptr2{ptr1};`
+
+### 4. `std::make_shared` — Best Practice
+- Single allocation for object + control block.
+- Exception-safe.
+- Cannot use custom deleter (use shared_ptr constructor for that).
+
+**Key Takeaway:** Always create shared_ptrs via `make_shared` or copy from
+existing shared_ptr. Never create independent shared_ptrs from raw pointers.
+
+#### Alternatives / Idiomatic C++
+- Prefer `unique_ptr` unless shared ownership is genuinely needed.
+- C++20: `std::atomic<std::shared_ptr<T>>` for thread-safe pointer updates.
+- `weak_ptr` breaks circular references (see weak-ptr file).
+
+#### Real-World Usage
+- **Asio**: Shared ownership of connection objects across async handlers.
+- **ROS2** (Robot OS): Shared pointers for message passing between nodes.
+- **Unreal Engine**: Uses its own `TSharedPtr` (similar concept).
+
+---
+
+## 🔁 Quick Revision
+- `shared_ptr`: ref-counted, last owner deletes resource.
+- `make_shared`: single allocation, exception-safe, preferred.
+- Never create two shared_ptrs from the same raw pointer.
+- Control block = ref count + weak count + deleter.
+
+### ⚠️ Gotchas
+- `make_shared` delays memory deallocation if `weak_ptr`s exist (control block
+  stays alive).
+- Thread-safe ref count but NOT thread-safe access to the pointed object.
+- Circular references → memory leak (use `weak_ptr`).
+*/

@@ -41,3 +41,31 @@ int main(int argc, char const *argv[])
         //void func1(int a, auto b); //error: ‘auto’ not allowed in function prototype
     }
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **auto return type deduction** | `auto functionOne(bool b)->int` |
+| 2 | **Trailing return type** | `auto func() -> int` syntax |
+| 3 | **Consistent return types required** | All paths must return same type |
+| 4 | **Forward declaration limitation** | Can't use auto before function is defined |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- C++20: `auto` in function params (abbreviated function templates)
+- `decltype(auto)` preserves references and cv-qualifiers
+- Trailing return useful with `decltype`: `auto f(T a, U b) -> decltype(a+b)`
+
+### 🏭 Real-World Usage:
+- Trailing returns common in template metaprogramming
+- `decltype(auto)` for perfect forwarding return types
+- C++20 auto params simplify generic code
+
+### ⚡ Quick Revision:
+- `auto` return: all return statements must deduce to same type
+- Function must be fully defined before auto deduction works
+- Trailing return: `auto f() -> RetType` — useful with decltype
+- C++20: `auto` in params = implicit template
+*/

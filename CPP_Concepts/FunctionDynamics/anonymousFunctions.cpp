@@ -302,3 +302,81 @@ int main()
   return 0;
 }
 //************Quiz-2***
+
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                CONCEPT ANALYSIS — anonymousFunctions.cpp                   ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. Lambda Expressions (Anonymous Functions)
+Syntax: `[captures](params) -> return_type { body }`
+Lambdas are unnamed function objects defined inline. They avoid polluting the
+namespace with single-use helper functions.
+
+**Code walkthrough:**
+- Lines 55-60: Lambda passed to `std::find_if` — replaces the named
+  `containsNut` function. No capture needed since no outer variables are used.
+
+### 2. Naming Lambdas / Storing in Variables
+- Function pointer: `bool (*isEven)(int) = [](int n){...};` — works only if
+  the lambda has an empty capture clause.
+- `std::function<int(int,int)>`: Type-erased wrapper, supports captures but has
+  overhead (heap allocation possible).
+- `auto`: Preferred for initialization — unique closure type, no overhead.
+
+**Key Takeaway:** Use `auto` to store lambdas; use `std::function` when you
+need to store lambdas with different signatures in a container or as a parameter.
+
+### 3. Generic Lambdas (C++14+)
+Using `auto` in parameter list: `[](auto value) { ... }`.
+The compiler generates a separate instantiation for each deduced type.
+
+**Code walkthrough:** The `print` lambda (line ~190) uses `auto value`. When
+called with `"hello"` and `1`, two versions are generated. The `static int
+callcount` is **separate per instantiation**.
+
+### 4. Return Type Deduction
+If the lambda body has multiple return statements of different types, the
+compiler cannot deduce — use explicit trailing return: `-> double`.
+
+### 5. Using `std::function` for Function Parameters
+Before C++20, `auto` couldn't be used in regular function parameters. Use
+`const std::function<void(int)>&` for accepting any callable.
+
+#### Alternatives / Idiomatic C++
+- C++20: `auto` parameters in regular functions (abbreviated function templates):
+  ```cpp
+  void repeat(int reps, auto&& fn) { for(int i=0;i<reps;++i) fn(i); }
+  ```
+- C++20 `std::ranges` algorithms often eliminate the need for explicit lambdas.
+- Prefer `auto` over `std::function` unless you need type erasure.
+- Common pitfall: `std::function` has overhead; don't use it for hot paths.
+
+#### Real-World Usage
+- **STL algorithms**: `std::sort`, `std::find_if`, `std::transform` — lambdas
+  are the primary way to customize behavior.
+- **Qt** (https://github.com/nicknash/qt): Uses lambdas with signal/slot connections.
+- **Folly** (https://github.com/facebook/folly): Uses `folly::Function` as a
+  more efficient alternative to `std::function`.
+
+---
+
+## 🔁 Quick Revision
+- Lambda syntax: `[captures](params) -> ret { body }`.
+- Empty capture → convertible to function pointer.
+- `auto` for storing lambdas, `std::function` for type-erased parameters.
+- Generic lambdas (`auto` params) generate per-type instantiations.
+- Each instantiation has its own `static` variables.
+
+### 💡 Remember
+- Lambda = unnamed closure object; its type is unique and unnamed.
+- `std::function` has overhead (virtual dispatch + possible heap alloc).
+- C++20 allows `auto` params in regular functions.
+
+### ⚠️ Gotchas
+- `static` inside a generic lambda is per-instantiation, not shared.
+- Return type ambiguity: multiple return types → must specify explicitly.
+- Lambda stored in `std::function` is copied — use `std::ref` to avoid.
+*/

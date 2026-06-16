@@ -463,3 +463,69 @@ int main()
     return 0;
 }
 
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                CONCEPT ANALYSIS — moveCtorAndassign.cpp                    ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. Move Constructor
+`Auto_ptr3(Auto_ptr3&& a) noexcept : m_ptr(a.m_ptr) { a.m_ptr = nullptr; }`
+- Takes ownership of `a`'s resource by stealing the pointer.
+- Nullifies the source to prevent double-delete.
+- Must be `noexcept` for STL compatibility (e.g., `vector` reallocation).
+
+### 2. Move Assignment Operator
+Same pattern: check self-assignment, delete current resource, steal source's
+resource, nullify source.
+
+### 3. When Move Semantics Are Invoked
+- Returning local objects by value → move ctor (or copy elision).
+- Assigning from temporaries → move assignment.
+- Explicitly via `std::move()`.
+
+### 4. Copy Elision (RVO/NRVO)
+The compiler may elide moves entirely, constructing the return value directly
+in the caller's storage. Mandatory in C++17 for prvalues.
+
+### 5. Disabling Copy (Auto_ptr5)
+`Auto_ptr5(const Auto_ptr5&) = delete;` — forces move-only semantics.
+This is the pattern `std::unique_ptr` uses.
+
+### 6. Performance: Move vs Copy
+The DynamicArray benchmark shows ~30% speedup with move semantics, as moves
+are O(1) pointer swaps vs O(n) element copies.
+
+**Key Takeaway:** Move semantics transfer ownership in O(1) time. Mark move
+operations `noexcept` for STL compatibility. Use `= delete` to prevent copies.
+
+#### Alternatives / Idiomatic C++
+- Rule of Five: if you define any of {dtor, copy ctor, copy assign, move ctor,
+  move assign}, define all five.
+- Better: Rule of Zero — use RAII members (`unique_ptr`, `vector`) and let the
+  compiler generate correct special members.
+- `std::exchange` simplifies move ctors:
+  ```cpp
+  MyClass(MyClass&& o) noexcept : m_ptr{std::exchange(o.m_ptr, nullptr)} {}
+  ```
+
+#### Real-World Usage
+- **std::unique_ptr**: The canonical move-only type.
+- **Folly** (Facebook): Move-only `Promise`/`Future` types.
+- **Abseil** (Google): `absl::flat_hash_map` relies on noexcept moves.
+
+---
+
+## 🔁 Quick Revision
+- Move ctor/assign: steal resource, nullify source.
+- Always mark `noexcept` — enables `vector` optimizations.
+- Copy elision may eliminate moves entirely.
+- Rule of Five / Rule of Zero.
+
+### ⚠️ Gotchas
+- Forgetting to nullify the source → double delete.
+- Non-`noexcept` move → `vector` falls back to copy during reallocation.
+- `std::swap(*this, name)` in move ctor → infinite recursion (use member swap).
+*/
+

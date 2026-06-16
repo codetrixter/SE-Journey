@@ -63,3 +63,28 @@ int main(int argc, char const *argv[])
     D d;
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Construction order** | Base → Derived (A→B→C→D) |
+| 2 | **Implicit base ctor call** | Each derived ctor implicitly calls base default ctor |
+| 3 | **Most vexing parse** | `A a()` declares function, not object |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Use `A a{}` (brace init) to avoid most vexing parse
+- Virtual inheritance changes construction order (virtual bases first)
+
+### 🏭 Real-World Usage:
+- Understanding construction order critical for resource management in hierarchies
+- Destruction is reverse: D→C→B→A (LIFO)
+- Logging constructors is a debugging technique for complex hierarchies
+
+### ⚡ Quick Revision:
+- Construction: base-to-derived | Destruction: derived-to-base
+- `A a()` = function declaration (most vexing parse) — use `A a{}` instead
+- Each level's ctor completes before next level begins
+*/

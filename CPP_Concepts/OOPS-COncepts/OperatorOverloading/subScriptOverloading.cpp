@@ -283,3 +283,25 @@ int main()
 } */
 //**********************************QUIZ-1***
 
+const IntList clist{};
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Subscript operator overloading** | `int& operator[](int index)` |
+| 2 | **Const overload** | `const int& operator[](int) const` for const objects |
+| 3 | **Return by reference** | Enables `intList[5] = 26` (lvalue on LHS) |
+| 4 | **Bounds checking via assert** | Safer than raw array access |
+| 5 | **Non-integer subscript** | `operator[]` param can be any type (e.g., string) |
+
+### ⚡ Quick Revision:
+- Must be member function (C++ requirement)
+- Return `T&` for read/write, `const T&` for const version
+- Use assert/exceptions for bounds checking
+- C++23: multi-subscript `operator[](int x, int y)` supported
+- Pointer to object: `(*ptr)[index]` not `ptr[index]`
+*/
+

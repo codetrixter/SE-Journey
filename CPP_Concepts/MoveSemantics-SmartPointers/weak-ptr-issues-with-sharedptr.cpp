@@ -135,3 +135,57 @@ int main()
 
 	return 0;
 } */
+
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║          CONCEPT ANALYSIS — weak-ptr-issues-with-sharedptr.cpp            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. Circular Reference Problem with `shared_ptr`
+When two objects hold `shared_ptr`s to each other, neither's ref count reaches
+zero → memory leak (no destructor called).
+
+**Code walkthrough:** Lucy's `m_partner` → Ricky, Ricky's `m_partner` → Lucy.
+Both have use_count 2. When stack shared_ptrs die, counts go to 1 (not 0).
+
+### 2. `std::weak_ptr` — Non-Owning Observer
+`weak_ptr` observes a `shared_ptr`-managed object WITHOUT incrementing the ref
+count. Breaks circular dependencies.
+
+- `lock()` — returns a `shared_ptr` if the object still exists, else nullptr.
+- `expired()` — checks if the managed object has been deleted.
+
+### 3. Detecting Dangling with `weak_ptr`
+Unlike raw pointers, `weak_ptr` can detect if the referenced object is gone
+(`expired()` returns true). Raw pointers become dangling silently.
+
+**Key Takeaway:** Use `weak_ptr` for back-references in bidirectional
+relationships and for caches/observers that shouldn't extend object lifetime.
+
+#### Alternatives / Idiomatic C++
+- Design to avoid circular ownership in the first place (e.g., parent owns
+  children via `shared_ptr`, children reference parent via raw pointer or
+  `weak_ptr`).
+- `std::enable_shared_from_this` — allows an object to create a `shared_ptr`
+  to itself safely.
+
+#### Real-World Usage
+- **Observer pattern**: Observers hold `weak_ptr` to subject.
+- **Caches**: Cache holds `weak_ptr`; if object is still alive, reuse it.
+- **Asio**: Uses `weak_ptr` + `lock()` pattern in async handlers.
+
+---
+
+## 🔁 Quick Revision
+- Circular `shared_ptr` references → memory leak.
+- `weak_ptr`: non-owning, doesn't affect ref count.
+- `lock()` → `shared_ptr` (or nullptr if expired).
+- `expired()` → safe dangling detection.
+
+### ⚠️ Gotchas
+- `weak_ptr` alone can't access the object — must `lock()` first.
+- Between `expired()` check and `lock()`, object could be destroyed (TOCTOU).
+  Always use `lock()` and check the returned `shared_ptr`.
+*/

@@ -51,3 +51,30 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **C-style cast** | `(double)3/4` — avoid in C++ |
+| 2 | **static_cast** | `static_cast<int>(3/dd)` — safe, explicit narrowing |
+| 3 | **Direct-list-init of temporary** | `uint{c}` — only single-word type names |
+| 4 | **Type alias for list-init** | `using uint = unsigned int` enables `uint{c}` |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Always prefer `static_cast` over C-style casts
+- `dynamic_cast` for polymorphic downcasting
+- `std::bit_cast` (C++20) for type punning
+
+### 🏭 Real-World Usage:
+- `static_cast` is the most common cast in production C++
+- Compiler warnings on implicit narrowing caught by `-Wconversion`
+
+### ⚡ Quick Revision:
+- C-style cast: `(type)expr` — dangerous, no compile-time safety
+- `static_cast<T>(expr)` — compile-time checked, preferred
+- List-init temp: `int{x}` prevents narrowing (use type alias for multi-word types)
+*/
+

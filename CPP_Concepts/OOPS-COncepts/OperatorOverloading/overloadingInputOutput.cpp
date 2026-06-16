@@ -162,3 +162,21 @@ int main()
 	return 0;
 } */
 //********************QUIZ***
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **operator<< overloading** | `friend std::ostream& operator<<(ostream&, const Point&)` |
+| 2 | **operator>> overloading** | `friend std::istream& operator>>(istream&, Point&)` |
+| 3 | **Return stream reference** | Enables chaining: `cout << a << b` |
+| 4 | **Must be friend/non-member** | Left operand is ostream, not our class |
+
+### ⚡ Quick Revision:
+- `operator<<`: takes `ostream&` + `const T&`, returns `ostream&`
+- `operator>>`: takes `istream&` + `T&` (non-const!), returns `istream&`
+- Cannot be member function (left operand is stream, not our class)
+- Return stream reference for chaining
+*/

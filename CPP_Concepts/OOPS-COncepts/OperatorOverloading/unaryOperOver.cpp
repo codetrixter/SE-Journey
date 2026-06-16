@@ -71,3 +71,20 @@ int main()
 
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Unary operator overloading** | `operator-`, `operator+`, `operator!` |
+| 2 | **Member function form** | Unary operators should be member functions |
+| 3 | **Return by value** | `-point` returns new Point, doesn't modify original |
+
+### ⚡ Quick Revision:
+- Unary operators: no parameters (hidden `this` is the operand)
+- Return new object (don't modify original) for `-` and `+`
+- `operator!` returns bool
+- Always overload as member function (best practice for unary)
+*/

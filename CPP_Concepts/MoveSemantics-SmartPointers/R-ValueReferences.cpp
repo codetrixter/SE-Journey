@@ -123,3 +123,57 @@ int main()
 	return 0;
 }
 //***********************************QUIZ***
+
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║               CONCEPT ANALYSIS — R-ValueReferences.cpp                    ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. Rvalue References (`T&&`)
+C++11 introduced rvalue references that bind ONLY to rvalues. They allow
+modification of temporaries — the foundation of move semantics.
+
+### 2. Reference Binding Rules
+| Reference Type       | Binds to lvalue? | Binds to rvalue? | Can modify? |
+|---------------------|-----------------|-----------------|-------------|
+| `T&`                | Yes             | No              | Yes         |
+| `const T&`          | Yes             | Yes             | No          |
+| `T&&`               | No              | Yes             | Yes         |
+| `const T&&`         | No              | Yes             | No          |
+
+### 3. Rvalue References as Function Parameters
+When both `fun(const int&)` and `fun(int&&)` exist, rvalue arguments prefer
+the `&&` overload. Named rvalue references (`int&& ref{16}`) are themselves
+**lvalues** (they have names and addresses).
+
+**Code walkthrough:**
+- `fun(ref)` calls the lvalue overload even though `ref` was declared as `&&`,
+  because `ref` is a named entity (lvalue).
+
+**Key Takeaway:** Rvalue references extend temporary lifetimes and enable move
+semantics. A named `&&` variable is an lvalue.
+
+#### Alternatives / Idiomatic C++
+- Use `std::move(ref)` to cast a named rvalue reference back to an rvalue.
+- Forwarding references (`T&&` in templates) use reference collapsing — 
+  different from plain rvalue references.
+
+#### Real-World Usage
+- **STL containers**: `push_back(T&&)` overloads use rvalue references to
+  enable move-insertion of temporaries.
+- **Folly**: Move-only types throughout for efficient async programming.
+
+---
+
+## 🔁 Quick Revision
+- `T&&` = rvalue reference; binds only to rvalues.
+- `const T&` = universal reader; binds to both.
+- Named rvalue reference = lvalue (has identity).
+- `std::move` casts lvalue to rvalue reference.
+
+### ⚠️ Gotchas
+- `T&&` in a template is a **forwarding reference**, not an rvalue reference!
+- Never return `T&&` from a function (dangling reference).
+*/

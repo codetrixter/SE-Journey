@@ -29,3 +29,19 @@ int main(int argc, char const *argv[])
     std::cout << val;
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Narrowing conversions** | `double` → `int` loses precision |
+| 2 | **Brace init prevents narrowing** | `int i{3.5}` — compile error |
+| 3 | **static_cast for explicit narrowing** | `static_cast<int>(d)` — intentional |
+
+### ⚡ Quick Revision:
+- Narrowing = wider → narrower type (potential data loss)
+- `{}` init catches narrowing at compile time
+- `static_cast` makes intent explicit and silences warnings
+*/

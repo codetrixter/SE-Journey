@@ -79,3 +79,31 @@ int main()
 
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **noexcept specifier** | `void nt() noexcept` — promises no exceptions escape |
+| 2 | **noexcept violation** | Exception thrown from noexcept → `std::terminate()` |
+| 3 | **Stack unwinding vs terminate** | noexcept may skip unwinding (implementation-defined) |
+| 4 | **Implicitly noexcept functions** | Destructors, defaulted special members |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- `noexcept(expr)` — conditional noexcept based on expression
+- Move operations should be `noexcept` for STL container optimization
+- `static_assert` + `noexcept` operator to verify at compile time
+
+### 🏭 Real-World Usage:
+- Move ctors/assignment MUST be noexcept for `vector::push_back` optimization
+- Destructors are implicitly noexcept — throwing = terminate
+- `swap` functions should be noexcept
+
+### ⚡ Quick Revision:
+- `noexcept` = promise that no exception escapes this function
+- Violation → `std::terminate()` (may not unwind stack)
+- Destructors implicitly noexcept
+- Mark move operations noexcept for optimal STL performance
+*/

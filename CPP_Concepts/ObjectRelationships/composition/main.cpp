@@ -32,3 +32,23 @@ int main()
 
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Composition** | Creature HAS-A Point2D (owns it, manages its lifetime) |
+| 2 | **Encapsulation** | Point2D manages x,y; Creature manages name+position |
+| 3 | **Object lifetime** | Point2D dies with Creature (part-of relationship) |
+
+### 🏭 Real-World Usage:
+- Game entities composed of Transform, Mesh, Physics components
+- GUI: Window composed of TitleBar, MenuBar, ContentArea
+
+### ⚡ Quick Revision:
+- Composition = "part-of" — part cannot exist without whole
+- Part's lifetime managed entirely by the whole
+- Prefer composition over inheritance for HAS-A relationships
+*/

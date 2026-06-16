@@ -54,3 +54,21 @@ int main(int argc, char const *argv[])
 
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Arithmetic conversion rules** | Higher priority type wins in expressions |
+| 2 | **Priority hierarchy** | long double > double > float > ull > ll > ... > int |
+| 3 | **Promotion when not on list** | `short + short` → promoted to int |
+| 4 | **Signed/unsigned pitfall** | `-3 < 5u` is FALSE (signed converted to unsigned) |
+
+### ⚡ Quick Revision:
+- Mixed types → lower priority converted to higher
+- Both below int on list → both promoted to int
+- Signed + unsigned same rank → signed becomes unsigned (DANGER!)
+- `-3 < 5u` = false because -3 wraps to huge unsigned value
+*/

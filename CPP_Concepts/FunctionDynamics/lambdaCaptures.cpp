@@ -379,3 +379,78 @@ int main()
  */
 
 //************ QUIZ***
+
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                  CONCEPT ANALYSIS — lambdaCaptures.cpp                     ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. Capture by Value
+`[search]` copies the outer variable into the lambda's closure object. The copy
+is `const` by default — cannot be modified unless `mutable` is used.
+
+### 2. Mutable Lambdas
+`[ammo]() mutable { --ammo; }` — the `mutable` keyword removes constness from
+captured-by-value variables. Changes persist across calls (they modify the
+closure's member, not the original).
+
+### 3. Capture by Reference
+`[&ammo]()` — captures a reference to the outer variable. No `mutable` needed;
+changes affect the original variable directly.
+
+### 4. Default Captures
+- `[=]` — capture all used variables by value.
+- `[&]` — capture all used variables by reference.
+- Mixed: `[=, &length]` or `[&, length]`.
+- Default capture must be first; can't repeat modes.
+
+### 5. Init Captures (C++14)
+`[userArea{ width * height }](int knownArea)` — declares a new variable inside
+the capture, initialized from an expression. Useful for computed values or
+move-capturing.
+
+### 6. Dangling Captures
+Capturing a local by reference inside a lambda that outlives the local →
+**dangling reference** → undefined behavior.
+
+**Code walkthrough:** `makeWalrus` returns a lambda capturing `name` by
+reference, but `name` dies when the function returns → UB.
+
+### 7. Unintended Copies of Lambdas
+Passing a mutable lambda to `std::function` copies it. Use `std::ref(count)`
+to pass by reference and maintain shared state.
+
+#### Alternatives / Idiomatic C++
+- C++14 **init capture** for move-only types: `[ptr = std::move(uptr)](){}`
+- C++20: Lambdas can capture structured bindings and `*this` by value.
+- Always prefer `[&]` for short-lived lambdas and `[=]` (or explicit captures)
+  for lambdas that outlive the current scope.
+- Rule: if a lambda escapes the current scope, never capture by reference.
+
+#### Real-World Usage
+- **Asio** (https://github.com/chriskohlhoff/asio): Uses shared_ptr capture
+  patterns to extend lifetime in async callbacks.
+- **Folly futures** (Facebook): Lambdas with move-captured state for async continuations.
+
+---
+
+## 🔁 Quick Revision
+- `[x]` = copy (const by default); `[&x]` = reference (mutable).
+- `mutable` on lambda allows modifying by-value captures.
+- `[=]`/`[&]` = default capture modes; explicit is safer.
+- Init captures allow creating new variables in the capture.
+- `std::ref` prevents unintended lambda copies.
+
+### 💡 Remember
+- Captures are members of the closure object — they persist across calls.
+- By-value captures are independent of the original after capture.
+- By-reference captures are just pointers under the hood.
+
+### ⚠️ Gotchas
+- Dangling reference captures: lambda outlives captured variable → UB.
+- `[=]` captures `this` pointer by value (not the object) in member functions.
+  Use `[*this]` (C++17) to capture the object by value.
+- `static` variables are NOT captured — they're accessed directly.
+*/

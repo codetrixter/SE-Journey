@@ -53,3 +53,19 @@ int main()
 
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Operator overloading with templates** | `average()` works with Cents class |
+| 2 | **operator+= and /= overloading** | Required for template to compile |
+| 3 | **Template type requirements** | Class must support operations used in template |
+
+### ⚡ Quick Revision:
+- Templates generate code per type → class must support all used operators
+- Overload `+=`, `/=`, `<<` etc. to make class work with generic algorithms
+- C++20 concepts formalize these requirements explicitly
+*/

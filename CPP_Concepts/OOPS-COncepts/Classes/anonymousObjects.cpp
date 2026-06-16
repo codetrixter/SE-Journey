@@ -61,3 +61,31 @@ int main()
 
     return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Anonymous/temporary objects** | `Cents{6}`, `Cents{8}` passed directly |
+| 2 | **static_cast creating temporaries** | `static_cast<std::string>(sv)` |
+| 3 | **Explicit temporary construction** | `std::string{sv}`, `std::string(sv)` |
+| 4 | **std::string_view vs std::string** | `sv` won't implicitly convert |
+| 5 | **Lifetime of temporaries** | Bound to const ref extends to statement end |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Prefer `std::string{sv}` (list-init) over C-style cast for clarity
+- In C++23, `std::string_view` interop with `std::string` is improved
+- Use `std::string(sv)` (direct-init) or `static_cast` — avoid C-style casts
+
+### 🏭 Real-World Usage:
+- Anonymous objects reduce boilerplate when passing args to functions
+- Temporary-to-const-ref binding is used extensively in operator overloading and return values
+- `string_view` → `string` conversion is common when interfacing legacy APIs
+
+### ⚡ Quick Revision:
+- Temporaries live until end of full expression (or bound to const ref)
+- `static_cast<T>(x)` creates a temporary of type T
+- Anonymous objects avoid naming things you only use once
+*/

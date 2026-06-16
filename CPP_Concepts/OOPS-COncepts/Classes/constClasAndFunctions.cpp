@@ -81,3 +81,32 @@ int main()
 	return 0;
 }
 //*********************************
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **const member functions** | `int getValue() const` — promises not to modify object |
+| 2 | **const objects** | `const Something something{}` — can only call const methods |
+| 3 | **const overloading** | Two `getValue()` — one const, one non-const |
+| 4 | **Return type differences** | const version returns `const std::string&`, non-const returns `std::string&` |
+| 5 | **Const correctness** | Compiler enforces no mutation through const interface |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Use `mutable` keyword for members that can change even in const context (e.g., caches, mutexes)
+- C++23 `deducing this` can eliminate const/non-const overload duplication
+- Always mark methods `const` unless they need to modify state — enables use with const refs
+
+### 🏭 Real-World Usage:
+- APIs accept `const&` parameters — your class must have const member functions to work with them
+- STL containers store const keys; const correctness is critical for map/set usage
+- Thread-safe interfaces often rely on const methods (read-only = safe to share)
+
+### ⚡ Quick Revision:
+- `const` after method → hidden `this` becomes `const T*`
+- const objects can only call const member functions
+- Overloading on const allows different behavior for mutable vs immutable access
+- const member functions cannot return non-const references to members
+*/

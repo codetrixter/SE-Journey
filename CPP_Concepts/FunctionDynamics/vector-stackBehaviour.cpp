@@ -90,3 +90,51 @@ int main()
 	return 0;
 }
 //**********************vetor resizing value is taken with incremental values to avoid constant resizing.
+
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║              CONCEPT ANALYSIS — vector-stackBehaviour.cpp                  ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. `std::vector` as a Stack
+`push_back()` = push; `pop_back()` = pop; `back()` = top.
+Vector provides O(1) amortized push/pop at the back.
+
+### 2. Capacity vs Size
+- `size()` = number of elements currently stored.
+- `capacity()` = allocated storage (≥ size).
+- When size exceeds capacity, reallocation occurs (expensive: allocate + copy).
+
+### 3. `reserve()` to Avoid Reallocations
+`stack.reserve(5)` pre-allocates capacity. No reallocation until size > 5.
+
+### 4. Growth Strategy
+When capacity is exhausted, implementations typically **double** capacity
+(GCC's libstdc++ uses factor 2; MSVC uses 1.5).
+
+**Key Takeaway:** `reserve()` when you know the expected size; avoids
+reallocations and iterator invalidation.
+
+#### Alternatives / Idiomatic C++
+- Use `std::stack<int>` adapter if you only need stack semantics.
+- C++23 `std::inplace_vector` for fixed-capacity, no-heap vectors.
+- `shrink_to_fit()` can release excess capacity (non-binding request).
+
+#### Real-World Usage
+- **Game engines**: Pre-reserve vectors for entity lists to avoid frame hitches.
+- **Protobuf** (https://github.com/protocolbuffers/protobuf): Uses
+  `RepeatedField` with similar capacity-doubling strategy.
+
+---
+
+## 🔁 Quick Revision
+- `reserve(n)` prevents reallocations up to n elements.
+- Capacity doubles (typically) on reallocation.
+- Reallocation invalidates all iterators, pointers, and references.
+
+### ⚠️ Gotchas
+- Never hold iterators/pointers into a vector across `push_back` — they may
+  be invalidated by reallocation.
+*/

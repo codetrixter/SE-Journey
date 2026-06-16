@@ -206,3 +206,33 @@ int main()
     DummyClass D2 = D1;
     D2.showData();
 }
+
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **Shallow copy** | Default memberwise copy — copies pointer value, not data |
+| 2 | **Deep copy** | Allocates new memory and copies actual data |
+| 3 | **Self-assignment guard** | `if (this == &fraction) return *this` |
+| 4 | **Rule of Three** | Custom dtor → need custom copy ctor + copy assignment |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Use `std::string`/`std::vector` — they deep-copy automatically
+- Copy-and-swap idiom for exception-safe assignment
+- Rule of Five (add move ctor + move assignment)
+- Rule of Zero: prefer not managing resources directly
+
+### 🏭 Real-World Usage:
+- Any class owning raw pointers needs deep copy
+- STL containers all implement deep copy internally
+- Copy-and-swap is the gold standard for safe assignment operators
+
+### ⚡ Quick Revision:
+- Shallow copy: copies pointer → two objects share same memory → double-free!
+- Deep copy: allocates new memory → each object owns its own copy
+- Self-assignment check prevents deleting own data
+- Prefer `std::string`/`std::vector` to avoid writing deep copy manually
+*/

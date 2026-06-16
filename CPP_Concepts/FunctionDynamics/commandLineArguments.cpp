@@ -56,3 +56,42 @@ int main(int argc, char* const argv[])
 	return 0;
 }*/
 //****************Dealing with numerc arguments***
+
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║              CONCEPT ANALYSIS — commandLineArguments.cpp                   ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+## Concepts
+
+### 1. `argc` and `argv`
+- `argc` = count of arguments (including program name).
+- `argv` = array of C-strings; `argv[0]` = program name.
+
+### 2. Parsing Numeric Arguments with `std::stringstream`
+`std::stringstream convert{argv[1]}; convert >> myint;` — converts string to int.
+
+#### Alternatives / Idiomatic C++
+- C++17: `std::from_chars` is faster and doesn't allocate:
+  ```cpp
+  int val; std::from_chars(argv[1], argv[1]+strlen(argv[1]), val);
+  ```
+- Use libraries like **CLI11**, **cxxopts**, or **Boost.Program_options** for
+  robust argument parsing.
+- `std::stoi`/`std::stol` are simpler than stringstream for single conversions.
+
+#### Real-World Usage
+- **Every CLI tool** uses argc/argv.
+- **LLVM tools** (clang, opt): Use their own `cl::opt` command-line library.
+
+---
+
+## 🔁 Quick Revision
+- `argv[0]` = program name; `argv[argc]` = nullptr.
+- Shell handles quoting: `"hello world"` → single argv entry.
+- Use `std::from_chars` (C++17) for fast numeric parsing.
+
+### ⚠️ Gotchas
+- `argv[0]` can be empty on some systems.
+- Always check `argc` before accessing `argv[n]`.
+*/

@@ -102,3 +102,32 @@ int main()
 
 	return 0;
 }
+
+/*
+## 📝 CONCEPT ANALYSIS
+
+### 🔑 Core Concepts Demonstrated:
+| # | Concept | Where Used |
+|---|---------|-----------|
+| 1 | **std::initializer_list** | `IntArray(std::initializer_list<int> list)` |
+| 2 | **Delegating constructor** | Init-list ctor delegates to `IntArray(int length)` |
+| 3 | **Brace-init preference** | `vector{5}` calls init_list ctor, `vector(5)` calls size ctor |
+| 4 | **Assignment operator with init_list** | `operator=(std::initializer_list<int>)` |
+| 5 | **Range-based for on init_list** | No subscript access, must iterate |
+
+### 🔄 Alternatives & Modern C++ Idioms:
+- Use `std::vector` which already supports initializer_list
+- C++20 `std::span` for non-owning views of contiguous data
+- Consider move semantics for efficient list assignment
+
+### 🏭 Real-World Usage:
+- All STL containers support initializer_list construction
+- Config/builder objects: `Config cfg{opt1, opt2, opt3}`
+- DSLs and fluent APIs benefit from init-list syntax
+
+### ⚡ Quick Revision:
+- `std::initializer_list<T>` enables `{a, b, c}` syntax for custom classes
+- Init-list ctor is PREFERRED over other ctors when using braces
+- `vector(5)` ≠ `vector{5}` — parentheses vs braces matter!
+- Init-list doesn't support `[]` — must use range-for or iterators
+*/
