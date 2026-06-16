@@ -152,6 +152,62 @@ int main()
 } */
 //***************************Deep copying***
 
+//--------Alternate example----------
+#include <iostream>
+using namespace std;
+
+class DummyClass
+{
+private:
+    int num1, num2;
+    int *ptr;
+
+public:
+    DummyClass()
+    {
+        ptr = new int;
+    }
+
+    void setData(int x, int y, int z)
+    {
+        num1 = x;
+        num2 = y;
+        *ptr = z;
+    }
+
+    void showData()
+    {
+        cout << "A = " << num1 << " B = " << num2 << endl;
+    }
+
+    /// copy constructor -> it is responsible for deep copy.
+    DummyClass(DummyClass &D)
+    {
+        ptr = new int;  //This needs to be allocated here else seg fault will occur.
+        num1 = D.num1;
+        num2 = D.num2;
+        *ptr = *(D.ptr);    //data pointed to by the pointer is copied and not the just the pointer address itself
+    }
+
+    /// destructor -> to deallocate memory consumed by new pointer ptr.
+    ~DummyClass()
+    {
+        delete ptr;
+    }
+};
+
+int main()
+{
+    DummyClass D1;
+    D1.setData(3, 5, 11);
+    D1.showData();
+
+    /// Copy constructor declared above will came in action and do deep copy.
+    DummyClass D2 = D1;
+    D2.showData();
+}
+
+
 /*
 ## 📝 CONCEPT ANALYSIS
 

@@ -114,6 +114,70 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
+//**************Frankenobject***
+class Base
+{
+public:
+    int m_value{};
+    char* m_name;
+
+public:
+    Base(int value, char* name)
+        : m_value{value}, m_name{name}
+    {
+    }
+
+    virtual ~Base() = default;  // Good practice for polymorphic base
+
+    virtual const char* getName() const { return m_name; }
+    virtual int getValue() const { return m_value; }
+};
+
+class Derived : public Base
+{
+    int m_increment{};  // Derived-specific data
+
+public:
+    Derived(int value, int increment, char* name)
+        : Base(value, name), m_increment{increment}
+    {
+    }
+
+    const char* getName() const override { return m_name; }
+
+    int getValue() const override 
+    { 
+        return m_value + m_increment;  // Uses base m_value + derived-specific increment
+    }
+
+    int getIncrement() const { return m_increment; }  // For demonstration
+};
+
+int main()
+{
+    Derived d1{10, 100, const_cast<char*>("d1")};  // base value 10, derived adds +100 → visible 110
+    Derived d2{20,   1, const_cast<char*>("d2")};  // base value 20, derived adds +1  → visible 21
+
+    Base& base = d2;
+
+    std::cout << "Before assignment:\n";
+    std::cout << "  d2.getValue(): " << d2.getValue() << "  (base " << d2.m_value << " + derived increment " << d2.getIncrement() << ")\n\n";
+
+    // This triggers slicing: copies only Base part of d1 into d2's Base part
+    base = d1;
+
+    std::cout << "After base = d1 (object slicing occurred):\n";
+    std::cout << "  d2.getValue(): " << d2.getValue() << "  (base now " << d2.m_value 
+              << " [copied from d1] + derived increment " << d2.getIncrement() 
+              << " [still d2's original])\n";
+    std::cout << "  base.getValue(): " << base.getValue() << "  (same as above, virtual dispatch)\n";
+    std::cout << "  d2.getName(): " << d2.getName() << "  (still original d2 name)\n";
+
+    return 0;
+}
+//**************Frankenobject***
+
+
 /*
 ## 📝 CONCEPT ANALYSIS
 
