@@ -1,5 +1,8 @@
 # System Design Primer - Performance, Scalability, and Availability
 
+> 📂 **In-depth deep dives** for the major topics below live in [`./Topics/`](./Topics/README.md)
+> — each expands a topic with diagrams, trade-offs, comparison tables, and interview notes.
+
 ---
 
 ## Table of Contents

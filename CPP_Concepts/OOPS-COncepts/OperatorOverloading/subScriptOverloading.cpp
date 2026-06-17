@@ -283,7 +283,7 @@ int main()
 } */
 //**********************************QUIZ-1***
 
-const IntList clist{};
+// const IntList clist{};
 
 /*
 ## 📝 CONCEPT ANALYSIS
