@@ -1,0 +1,2732 @@
+{
+  "generated_at": "2026-06-17T07:54:40",
+  "overall": {
+    "total": 1356,
+    "checked": 433,
+    "percent": 31.9
+  },
+  "domains": [
+    {
+      "name": "C++ Concepts",
+      "file": "/mnt/c/Personal-Projects/personal-repo/SE-Journey/Analysis-Curriculum-coverage/CPP/Cpp-concepts-covered.md",
+      "dashboard": "c-concepts.md",
+      "last_analyzed": "April 7, 2026",
+      "days_since_analyzed": 71,
+      "sources": "Concurrency/, CPP_Concepts/",
+      "total": 156,
+      "checked": 43,
+      "percent": 27.6,
+      "must_percent": 43.8,
+      "has_must_know": true,
+      "weighted_percent": 29.3,
+      "priority_counts": {
+        "Must Know": {
+          "checked": 21,
+          "total": 48
+        },
+        "Should Know": {
+          "checked": 1,
+          "total": 42
+        },
+        "Nice to Have": {
+          "checked": 0,
+          "total": 13
+        },
+        "Untagged": {
+          "checked": 21,
+          "total": 53
+        }
+      },
+      "sections": [
+        {
+          "name": "Core Language & Standard Library",
+          "total": 77,
+          "checked": 15,
+          "percent": 19.5,
+          "must_percent": 34.4,
+          "has_must_know": true,
+          "weighted_percent": 22.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 11,
+              "total": 32
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 27
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 10
+            },
+            "Untagged": {
+              "checked": 4,
+              "total": 8
+            }
+          }
+        },
+        {
+          "name": "Concurrency & Parallelism",
+          "total": 34,
+          "checked": 15,
+          "percent": 44.1,
+          "must_percent": 69.2,
+          "has_must_know": true,
+          "weighted_percent": 47.2,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 9,
+              "total": 13
+            },
+            "Should Know": {
+              "checked": 1,
+              "total": 12
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 2
+            },
+            "Untagged": {
+              "checked": 5,
+              "total": 7
+            }
+          }
+        },
+        {
+          "name": "Performance Engineering",
+          "total": 4,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 4
+            }
+          }
+        },
+        {
+          "name": "Memory Management",
+          "total": 3,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 3
+            }
+          }
+        },
+        {
+          "name": "API & ABI Design",
+          "total": 3,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 3
+            }
+          }
+        },
+        {
+          "name": "Tooling & Build Systems",
+          "total": 3,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 3
+            }
+          }
+        },
+        {
+          "name": "Testing & Quality",
+          "total": 3,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 3
+            }
+          }
+        },
+        {
+          "name": "Security & Reliability",
+          "total": 3,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 3
+            }
+          }
+        },
+        {
+          "name": "Architecture & Design",
+          "total": 7,
+          "checked": 1,
+          "percent": 14.3,
+          "must_percent": 33.3,
+          "has_must_know": true,
+          "weighted_percent": 18.8,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 1,
+              "total": 3
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 3
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 1
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 0
+            }
+          }
+        },
+        {
+          "name": "Cross-Platform & Systems",
+          "total": 2,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 2
+            }
+          }
+        },
+        {
+          "name": "Domain Libraries & Ecosystem",
+          "total": 3,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 3
+            }
+          }
+        },
+        {
+          "name": "DevEx & Scale",
+          "total": 2,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 2
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Data Structures & Algorithms",
+      "file": "/mnt/c/Personal-Projects/personal-repo/SE-Journey/Analysis-Curriculum-coverage/DS-Algo/DS-Algo-concepts-covered.md",
+      "dashboard": "data-structures-algorithms.md",
+      "last_analyzed": "April 7, 2026",
+      "days_since_analyzed": 71,
+      "sources": "DS_Algo/",
+      "total": 205,
+      "checked": 36,
+      "percent": 17.6,
+      "must_percent": 29.8,
+      "has_must_know": true,
+      "weighted_percent": 20.9,
+      "priority_counts": {
+        "Must Know": {
+          "checked": 17,
+          "total": 57
+        },
+        "Should Know": {
+          "checked": 3,
+          "total": 31
+        },
+        "Nice to Have": {
+          "checked": 0,
+          "total": 5
+        },
+        "Untagged": {
+          "checked": 16,
+          "total": 112
+        }
+      },
+      "sections": [
+        {
+          "name": "Arrays & Strings",
+          "total": 28,
+          "checked": 4,
+          "percent": 14.3,
+          "must_percent": 15.4,
+          "has_must_know": true,
+          "weighted_percent": 13.3,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 2,
+              "total": 13
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 6
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 2
+            },
+            "Untagged": {
+              "checked": 2,
+              "total": 7
+            }
+          }
+        },
+        {
+          "name": "Hashing & Hash Maps",
+          "total": 9,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 9
+            }
+          }
+        },
+        {
+          "name": "Linked Lists",
+          "total": 19,
+          "checked": 4,
+          "percent": 21.1,
+          "must_percent": 22.2,
+          "has_must_know": true,
+          "weighted_percent": 22.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 2,
+              "total": 9
+            },
+            "Should Know": {
+              "checked": 1,
+              "total": 4
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 1
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 5
+            }
+          }
+        },
+        {
+          "name": "Stacks & Queues",
+          "total": 18,
+          "checked": 6,
+          "percent": 33.3,
+          "must_percent": 28.6,
+          "has_must_know": true,
+          "weighted_percent": 30.6,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 2,
+              "total": 7
+            },
+            "Should Know": {
+              "checked": 1,
+              "total": 4
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 3,
+              "total": 7
+            }
+          }
+        },
+        {
+          "name": "Trees",
+          "total": 27,
+          "checked": 7,
+          "percent": 25.9,
+          "must_percent": 30.0,
+          "has_must_know": true,
+          "weighted_percent": 26.5,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 3,
+              "total": 10
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 2
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 4,
+              "total": 15
+            }
+          }
+        },
+        {
+          "name": "Heaps & Priority Queues",
+          "total": 8,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 8
+            }
+          }
+        },
+        {
+          "name": "Graphs",
+          "total": 14,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 14
+            }
+          }
+        },
+        {
+          "name": "Recursion & Backtracking",
+          "total": 23,
+          "checked": 9,
+          "percent": 39.1,
+          "must_percent": 55.6,
+          "has_must_know": true,
+          "weighted_percent": 41.7,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 5,
+              "total": 9
+            },
+            "Should Know": {
+              "checked": 1,
+              "total": 7
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 1
+            },
+            "Untagged": {
+              "checked": 3,
+              "total": 6
+            }
+          }
+        },
+        {
+          "name": "Dynamic Programming",
+          "total": 16,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 16
+            }
+          }
+        },
+        {
+          "name": "Sorting & Searching",
+          "total": 26,
+          "checked": 6,
+          "percent": 23.1,
+          "must_percent": 33.3,
+          "has_must_know": true,
+          "weighted_percent": 23.1,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 3,
+              "total": 9
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 8
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 1
+            },
+            "Untagged": {
+              "checked": 3,
+              "total": 8
+            }
+          }
+        },
+        {
+          "name": "Greedy Algorithms",
+          "total": 4,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 4
+            }
+          }
+        },
+        {
+          "name": "Bit Manipulation",
+          "total": 4,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 4
+            }
+          }
+        },
+        {
+          "name": "Advanced Data Structures",
+          "total": 6,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 6
+            }
+          }
+        },
+        {
+          "name": "Complexity Analysis & Problem-Solving Strategies",
+          "total": 3,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Design Patterns",
+      "file": "/mnt/c/Personal-Projects/personal-repo/SE-Journey/Analysis-Curriculum-coverage/Design-Patterns/design-patterns-covered.md",
+      "dashboard": "design-patterns.md",
+      "last_analyzed": "April 7, 2026",
+      "days_since_analyzed": 71,
+      "sources": "DesignPatterns/",
+      "total": 224,
+      "checked": 23,
+      "percent": 10.3,
+      "must_percent": 20.0,
+      "has_must_know": true,
+      "weighted_percent": 10.9,
+      "priority_counts": {
+        "Must Know": {
+          "checked": 13,
+          "total": 65
+        },
+        "Should Know": {
+          "checked": 0,
+          "total": 94
+        },
+        "Nice to Have": {
+          "checked": 0,
+          "total": 20
+        },
+        "Untagged": {
+          "checked": 10,
+          "total": 45
+        }
+      },
+      "sections": [
+        {
+          "name": "Creational Patterns",
+          "total": 34,
+          "checked": 6,
+          "percent": 17.6,
+          "must_percent": 44.4,
+          "has_must_know": true,
+          "weighted_percent": 21.2,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 4,
+              "total": 9
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 14
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 5
+            },
+            "Untagged": {
+              "checked": 2,
+              "total": 6
+            }
+          }
+        },
+        {
+          "name": "Structural Patterns",
+          "total": 35,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": true,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 12
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 13
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 3
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 7
+            }
+          }
+        },
+        {
+          "name": "Behavioral Patterns",
+          "total": 52,
+          "checked": 3,
+          "percent": 5.8,
+          "must_percent": 14.3,
+          "has_must_know": true,
+          "weighted_percent": 6.7,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 2,
+              "total": 14
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 24
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 6
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 8
+            }
+          }
+        },
+        {
+          "name": "Concurrency Patterns",
+          "total": 25,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": true,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 8
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 11
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 1
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 5
+            }
+          }
+        },
+        {
+          "name": "Architectural Patterns",
+          "total": 25,
+          "checked": 2,
+          "percent": 8.0,
+          "must_percent": 20.0,
+          "has_must_know": true,
+          "weighted_percent": 8.3,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 1,
+              "total": 5
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 13
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 2
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 5
+            }
+          }
+        },
+        {
+          "name": "Modern C++ & Pattern Evolution",
+          "total": 22,
+          "checked": 2,
+          "percent": 9.1,
+          "must_percent": 20.0,
+          "has_must_know": true,
+          "weighted_percent": 9.8,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 1,
+              "total": 5
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 9
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 3
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 5
+            }
+          }
+        },
+        {
+          "name": "Anti-Patterns & Pattern Misuse",
+          "total": 10,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": true,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 3
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 3
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 4
+            }
+          }
+        },
+        {
+          "name": "SOLID Principles in Practice",
+          "total": 21,
+          "checked": 10,
+          "percent": 47.6,
+          "must_percent": 55.6,
+          "has_must_know": true,
+          "weighted_percent": 43.5,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 5,
+              "total": 9
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 7
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 5,
+              "total": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Networking Concepts",
+      "file": "/mnt/c/Personal-Projects/personal-repo/SE-Journey/Analysis-Curriculum-coverage/Networking/Networking-concepts-covered.md",
+      "dashboard": "networking-concepts.md",
+      "last_analyzed": "April 7, 2026",
+      "days_since_analyzed": 71,
+      "sources": "Networking-Concepts/",
+      "total": 184,
+      "checked": 73,
+      "percent": 39.7,
+      "must_percent": 75.0,
+      "has_must_know": true,
+      "weighted_percent": 48.7,
+      "priority_counts": {
+        "Must Know": {
+          "checked": 45,
+          "total": 60
+        },
+        "Should Know": {
+          "checked": 8,
+          "total": 47
+        },
+        "Nice to Have": {
+          "checked": 0,
+          "total": 6
+        },
+        "Untagged": {
+          "checked": 20,
+          "total": 71
+        }
+      },
+      "sections": [
+        {
+          "name": "Network Fundamentals & OSI/TCP-IP Models",
+          "total": 16,
+          "checked": 15,
+          "percent": 93.8,
+          "must_percent": 100.0,
+          "has_must_know": true,
+          "weighted_percent": 94.1,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 7,
+              "total": 7
+            },
+            "Should Know": {
+              "checked": 3,
+              "total": 4
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 5,
+              "total": 5
+            }
+          }
+        },
+        {
+          "name": "Physical & Data Link Layer",
+          "total": 15,
+          "checked": 2,
+          "percent": 13.3,
+          "must_percent": 25.0,
+          "has_must_know": true,
+          "weighted_percent": 14.3,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 1,
+              "total": 4
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 5
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 1
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 5
+            }
+          }
+        },
+        {
+          "name": "Network Layer (IP)",
+          "total": 29,
+          "checked": 15,
+          "percent": 51.7,
+          "must_percent": 80.0,
+          "has_must_know": true,
+          "weighted_percent": 55.7,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 8,
+              "total": 10
+            },
+            "Should Know": {
+              "checked": 3,
+              "total": 12
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 1
+            },
+            "Untagged": {
+              "checked": 4,
+              "total": 6
+            }
+          }
+        },
+        {
+          "name": "Transport Layer",
+          "total": 29,
+          "checked": 17,
+          "percent": 58.6,
+          "must_percent": 92.9,
+          "has_must_know": true,
+          "weighted_percent": 66.2,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 13,
+              "total": 14
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 8
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 4,
+              "total": 7
+            }
+          }
+        },
+        {
+          "name": "Application Layer Protocols",
+          "total": 31,
+          "checked": 13,
+          "percent": 41.9,
+          "must_percent": 66.7,
+          "has_must_know": true,
+          "weighted_percent": 46.9,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 8,
+              "total": 12
+            },
+            "Should Know": {
+              "checked": 1,
+              "total": 9
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 3
+            },
+            "Untagged": {
+              "checked": 4,
+              "total": 7
+            }
+          }
+        },
+        {
+          "name": "Socket Programming",
+          "total": 19,
+          "checked": 5,
+          "percent": 26.3,
+          "must_percent": 57.1,
+          "has_must_know": true,
+          "weighted_percent": 38.2,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 4,
+              "total": 7
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 1
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 1
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 10
+            }
+          }
+        },
+        {
+          "name": "Network Security",
+          "total": 23,
+          "checked": 6,
+          "percent": 26.1,
+          "must_percent": 66.7,
+          "has_must_know": true,
+          "weighted_percent": 34.9,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 4,
+              "total": 6
+            },
+            "Should Know": {
+              "checked": 1,
+              "total": 8
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 9
+            }
+          }
+        },
+        {
+          "name": "Network Performance & Debugging",
+          "total": 6,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 6
+            }
+          }
+        },
+        {
+          "name": "Network Architecture & Design",
+          "total": 5,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 5
+            }
+          }
+        },
+        {
+          "name": "Cloud Networking",
+          "total": 5,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 5
+            }
+          }
+        },
+        {
+          "name": "Distributed Systems Networking",
+          "total": 6,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 6
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Operating Systems Concepts",
+      "file": "/mnt/c/Personal-Projects/personal-repo/SE-Journey/Analysis-Curriculum-coverage/OS/OS-concepts-covered.md",
+      "dashboard": "operating-systems-concepts.md",
+      "last_analyzed": "April 7, 2026",
+      "days_since_analyzed": 71,
+      "sources": "OS-COncepts/",
+      "total": 174,
+      "checked": 73,
+      "percent": 42.0,
+      "must_percent": 88.4,
+      "has_must_know": true,
+      "weighted_percent": 51.5,
+      "priority_counts": {
+        "Must Know": {
+          "checked": 38,
+          "total": 43
+        },
+        "Should Know": {
+          "checked": 8,
+          "total": 45
+        },
+        "Nice to Have": {
+          "checked": 0,
+          "total": 2
+        },
+        "Untagged": {
+          "checked": 27,
+          "total": 84
+        }
+      },
+      "sections": [
+        {
+          "name": "Process Management",
+          "total": 28,
+          "checked": 18,
+          "percent": 64.3,
+          "must_percent": 100.0,
+          "has_must_know": true,
+          "weighted_percent": 69.8,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 13,
+              "total": 13
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 9
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 5,
+              "total": 6
+            }
+          }
+        },
+        {
+          "name": "Threads & Concurrency",
+          "total": 24,
+          "checked": 13,
+          "percent": 54.2,
+          "must_percent": 100.0,
+          "has_must_know": true,
+          "weighted_percent": 60.4,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 6,
+              "total": 6
+            },
+            "Should Know": {
+              "checked": 4,
+              "total": 12
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 1
+            },
+            "Untagged": {
+              "checked": 3,
+              "total": 5
+            }
+          }
+        },
+        {
+          "name": "Synchronization & Deadlocks",
+          "total": 42,
+          "checked": 22,
+          "percent": 52.4,
+          "must_percent": 100.0,
+          "has_must_know": true,
+          "weighted_percent": 54.9,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 10,
+              "total": 10
+            },
+            "Should Know": {
+              "checked": 3,
+              "total": 20
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 1
+            },
+            "Untagged": {
+              "checked": 9,
+              "total": 11
+            }
+          }
+        },
+        {
+          "name": "Memory Management",
+          "total": 28,
+          "checked": 5,
+          "percent": 17.9,
+          "must_percent": 50.0,
+          "has_must_know": true,
+          "weighted_percent": 28.3,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 4,
+              "total": 8
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 2
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 18
+            }
+          }
+        },
+        {
+          "name": "File Systems",
+          "total": 1,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 1
+            }
+          }
+        },
+        {
+          "name": "I/O & Device Management",
+          "total": 4,
+          "checked": 1,
+          "percent": 25.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 25.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 4
+            }
+          }
+        },
+        {
+          "name": "Inter-Process Communication (IPC)",
+          "total": 13,
+          "checked": 7,
+          "percent": 53.8,
+          "must_percent": 100.0,
+          "has_must_know": true,
+          "weighted_percent": 70.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 3,
+              "total": 3
+            },
+            "Should Know": {
+              "checked": 1,
+              "total": 1
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 3,
+              "total": 9
+            }
+          }
+        },
+        {
+          "name": "Process Scheduling (Advanced)",
+          "total": 4,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 4
+            }
+          }
+        },
+        {
+          "name": "Security & Protection",
+          "total": 6,
+          "checked": 1,
+          "percent": 16.7,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 16.7,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 6
+            }
+          }
+        },
+        {
+          "name": "Containers & Virtualization",
+          "total": 4,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 4
+            }
+          }
+        },
+        {
+          "name": "System Calls & Kernel Interface",
+          "total": 10,
+          "checked": 5,
+          "percent": 50.0,
+          "must_percent": 66.7,
+          "has_must_know": true,
+          "weighted_percent": 52.9,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 2,
+              "total": 3
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 1
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 3,
+              "total": 6
+            }
+          }
+        },
+        {
+          "name": "Performance & Observability",
+          "total": 7,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 7
+            }
+          }
+        },
+        {
+          "name": "Boot Process & System Initialization",
+          "total": 3,
+          "checked": 1,
+          "percent": 33.3,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 33.3,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Problem Solving (NeetCode 250)",
+      "file": "/mnt/c/Personal-Projects/personal-repo/SE-Journey/Analysis-Curriculum-coverage/Problem-Solving/Problem-Solving-covered.md",
+      "dashboard": "problem-solving-neetcode-250.md",
+      "last_analyzed": "April 7, 2026",
+      "days_since_analyzed": 71,
+      "sources": "NeetCode250/",
+      "total": 206,
+      "checked": 103,
+      "percent": 50.0,
+      "must_percent": 0.0,
+      "has_must_know": false,
+      "weighted_percent": 50.0,
+      "priority_counts": {
+        "Must Know": {
+          "checked": 0,
+          "total": 0
+        },
+        "Should Know": {
+          "checked": 0,
+          "total": 0
+        },
+        "Nice to Have": {
+          "checked": 0,
+          "total": 0
+        },
+        "Untagged": {
+          "checked": 103,
+          "total": 206
+        }
+      },
+      "sections": [
+        {
+          "name": "Arrays & Hashing",
+          "total": 13,
+          "checked": 13,
+          "percent": 100.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 100.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 13,
+              "total": 13
+            }
+          }
+        },
+        {
+          "name": "Two Pointers",
+          "total": 10,
+          "checked": 8,
+          "percent": 80.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 80.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 8,
+              "total": 10
+            }
+          }
+        },
+        {
+          "name": "Sliding Window",
+          "total": 10,
+          "checked": 8,
+          "percent": 80.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 80.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 8,
+              "total": 10
+            }
+          }
+        },
+        {
+          "name": "Stack",
+          "total": 12,
+          "checked": 9,
+          "percent": 75.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 75.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 9,
+              "total": 12
+            }
+          }
+        },
+        {
+          "name": "Binary Search",
+          "total": 12,
+          "checked": 11,
+          "percent": 91.7,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 91.7,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 11,
+              "total": 12
+            }
+          }
+        },
+        {
+          "name": "Linked List",
+          "total": 17,
+          "checked": 11,
+          "percent": 64.7,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 64.7,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 11,
+              "total": 17
+            }
+          }
+        },
+        {
+          "name": "Trees",
+          "total": 24,
+          "checked": 11,
+          "percent": 45.8,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 45.8,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 11,
+              "total": 24
+            }
+          }
+        },
+        {
+          "name": "Tries",
+          "total": 4,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 4
+            }
+          }
+        },
+        {
+          "name": "Heap / Priority Queue",
+          "total": 10,
+          "checked": 1,
+          "percent": 10.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 10.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 10
+            }
+          }
+        },
+        {
+          "name": "Backtracking",
+          "total": 10,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 10
+            }
+          }
+        },
+        {
+          "name": "Graphs",
+          "total": 14,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 14
+            }
+          }
+        },
+        {
+          "name": "Advanced Graphs",
+          "total": 7,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 7
+            }
+          }
+        },
+        {
+          "name": "1-D Dynamic Programming",
+          "total": 13,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 13
+            }
+          }
+        },
+        {
+          "name": "2-D Dynamic Programming",
+          "total": 2,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 2
+            }
+          }
+        },
+        {
+          "name": "Greedy",
+          "total": 12,
+          "checked": 4,
+          "percent": 33.3,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 33.3,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 4,
+              "total": 12
+            }
+          }
+        },
+        {
+          "name": "Intervals",
+          "total": 10,
+          "checked": 5,
+          "percent": 50.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 50.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 5,
+              "total": 10
+            }
+          }
+        },
+        {
+          "name": "Math & Geometry",
+          "total": 13,
+          "checked": 12,
+          "percent": 92.3,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 92.3,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 12,
+              "total": 13
+            }
+          }
+        },
+        {
+          "name": "Bit Manipulation",
+          "total": 12,
+          "checked": 9,
+          "percent": 75.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 75.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 9,
+              "total": 12
+            }
+          }
+        },
+        {
+          "name": "Core Skills / Data Structure Implementation",
+          "total": 1,
+          "checked": 1,
+          "percent": 100.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 100.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "System Design",
+      "file": "/mnt/c/Personal-Projects/personal-repo/SE-Journey/Analysis-Curriculum-coverage/System-Design/System-design-concepts-covered.md",
+      "dashboard": "system-design.md",
+      "last_analyzed": "April 7, 2026",
+      "days_since_analyzed": 71,
+      "sources": "SYSTEM-DESIGN/",
+      "total": 207,
+      "checked": 82,
+      "percent": 39.6,
+      "must_percent": 67.2,
+      "has_must_know": true,
+      "weighted_percent": 48.5,
+      "priority_counts": {
+        "Must Know": {
+          "checked": 45,
+          "total": 67
+        },
+        "Should Know": {
+          "checked": 11,
+          "total": 36
+        },
+        "Nice to Have": {
+          "checked": 0,
+          "total": 1
+        },
+        "Untagged": {
+          "checked": 26,
+          "total": 103
+        }
+      },
+      "sections": [
+        {
+          "name": "Fundamentals of System Design",
+          "total": 24,
+          "checked": 11,
+          "percent": 45.8,
+          "must_percent": 50.0,
+          "has_must_know": true,
+          "weighted_percent": 45.6,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 7,
+              "total": 14
+            },
+            "Should Know": {
+              "checked": 1,
+              "total": 5
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 3,
+              "total": 5
+            }
+          }
+        },
+        {
+          "name": "Networking & Communication",
+          "total": 16,
+          "checked": 3,
+          "percent": 18.8,
+          "must_percent": 33.3,
+          "has_must_know": true,
+          "weighted_percent": 21.2,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 2,
+              "total": 6
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 5
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 5
+            }
+          }
+        },
+        {
+          "name": "Load Balancing & Reverse Proxy",
+          "total": 18,
+          "checked": 9,
+          "percent": 50.0,
+          "must_percent": 85.7,
+          "has_must_know": true,
+          "weighted_percent": 62.9,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 6,
+              "total": 7
+            },
+            "Should Know": {
+              "checked": 1,
+              "total": 3
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 2,
+              "total": 8
+            }
+          }
+        },
+        {
+          "name": "Caching",
+          "total": 20,
+          "checked": 11,
+          "percent": 55.0,
+          "must_percent": 66.7,
+          "has_must_know": true,
+          "weighted_percent": 60.5,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 6,
+              "total": 9
+            },
+            "Should Know": {
+              "checked": 3,
+              "total": 5
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 2,
+              "total": 6
+            }
+          }
+        },
+        {
+          "name": "Database Design",
+          "total": 18,
+          "checked": 15,
+          "percent": 83.3,
+          "must_percent": 75.0,
+          "has_must_know": true,
+          "weighted_percent": 81.6,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 6,
+              "total": 8
+            },
+            "Should Know": {
+              "checked": 4,
+              "total": 4
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 5,
+              "total": 6
+            }
+          }
+        },
+        {
+          "name": "Database Scaling & Replication",
+          "total": 20,
+          "checked": 10,
+          "percent": 50.0,
+          "must_percent": 75.0,
+          "has_must_know": true,
+          "weighted_percent": 56.1,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 6,
+              "total": 8
+            },
+            "Should Know": {
+              "checked": 1,
+              "total": 5
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 1
+            },
+            "Untagged": {
+              "checked": 3,
+              "total": 6
+            }
+          }
+        },
+        {
+          "name": "Distributed Systems Concepts",
+          "total": 21,
+          "checked": 8,
+          "percent": 38.1,
+          "must_percent": 62.5,
+          "has_must_know": true,
+          "weighted_percent": 40.9,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 5,
+              "total": 8
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 7
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 3,
+              "total": 6
+            }
+          }
+        },
+        {
+          "name": "Message Queues & Event Streaming",
+          "total": 11,
+          "checked": 3,
+          "percent": 27.3,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 27.3,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 3,
+              "total": 11
+            }
+          }
+        },
+        {
+          "name": "Storage & Data Systems",
+          "total": 5,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 5
+            }
+          }
+        },
+        {
+          "name": "Microservices Architecture",
+          "total": 13,
+          "checked": 5,
+          "percent": 38.5,
+          "must_percent": 100.0,
+          "has_must_know": true,
+          "weighted_percent": 52.6,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 2,
+              "total": 2
+            },
+            "Should Know": {
+              "checked": 1,
+              "total": 2
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 2,
+              "total": 9
+            }
+          }
+        },
+        {
+          "name": "Reliability & Fault Tolerance",
+          "total": 15,
+          "checked": 3,
+          "percent": 20.0,
+          "must_percent": 100.0,
+          "has_must_know": true,
+          "weighted_percent": 36.8,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 2,
+              "total": 2
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 13
+            }
+          }
+        },
+        {
+          "name": "Scalability Patterns",
+          "total": 12,
+          "checked": 4,
+          "percent": 33.3,
+          "must_percent": 100.0,
+          "has_must_know": true,
+          "weighted_percent": 55.6,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 3,
+              "total": 3
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 1,
+              "total": 9
+            }
+          }
+        },
+        {
+          "name": "Monitoring, Logging & Observability",
+          "total": 1,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 1
+            }
+          }
+        },
+        {
+          "name": "Security in System Design",
+          "total": 1,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 1
+            }
+          }
+        },
+        {
+          "name": "Classic System Design Problems",
+          "total": 12,
+          "checked": 0,
+          "percent": 0.0,
+          "must_percent": 0.0,
+          "has_must_know": false,
+          "weighted_percent": 0.0,
+          "priority_counts": {
+            "Must Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Should Know": {
+              "checked": 0,
+              "total": 0
+            },
+            "Nice to Have": {
+              "checked": 0,
+              "total": 0
+            },
+            "Untagged": {
+              "checked": 0,
+              "total": 12
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
