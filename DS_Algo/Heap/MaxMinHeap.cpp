@@ -37,7 +37,7 @@ void insertMinHeap(vector<int>& B, int elem)
     }
 }
 
-int main(int argc, char const *argv[])
+int main01(int argc, char const *argv[])
 {
     vector<int> inp = {30, 20, 15, 5};
     vector<int> inpMin = {10, 20, 30, 40, 50, 60};
