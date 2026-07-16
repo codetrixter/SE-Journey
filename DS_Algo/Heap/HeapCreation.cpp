@@ -7,7 +7,9 @@
 #include "MaxMinHeap.cpp"
 using namespace std;
 
-void createHeap(vector<int>& inp)
+/// @brief This function create Max heap using max heap insertion logic
+/// @param inp 
+void createMaxHeap(vector<int>& inp)
 {
     int i = 1, len = inp.size()-1;
     if(inp.size() == 1)
@@ -21,6 +23,29 @@ void createHeap(vector<int>& inp)
         insertMaxHeap(subV, val);
         
         // update the max heap values back in orginal input
+        for(int j = 0; j < subV.size(); j++)
+            inp[j] = subV[j];
+
+        i++;
+    }
+}
+
+/// @brief This creates min heap using min heap insertion logic.
+/// @param inp 
+void createMinHeap(vector<int>& inp)
+{
+    int i = 1, len = inp.size()-1;
+    if(inp.size() == 1)
+        return;
+    
+    // create subarray with incremental values
+    while (i <= len)
+    {
+        vector<int> subV(inp.begin(), inp.begin()+i);
+        int val = inp[i];
+        insertMinHeap(subV, val);
+        
+        // update the min heap values back in orginal input
         for(int j = 0; j < subV.size(); j++)
             inp[j] = subV[j];
 
@@ -47,10 +72,14 @@ void siftDown(vector<int>& inp, int i, int n)
         int left    = 2 * i + 1;
         int right   = 2 * i + 2;
 
-        if (left  < n && inp[left]  > inp[largest]) largest = left;
-        if (right < n && inp[right] > inp[largest]) largest = right;
+        if (left  < n && inp[left]  > inp[largest]) 
+            largest = left;
+        if (right < n && inp[right] > inp[largest]) 
+            largest = right;
 
-        if (largest == i) break;   // heap property satisfied
+        // “If neither child is larger, heap property holds at this node, so stop sifting down.”
+        if (largest == i) 
+            break;   // heap property satisfied
 
         swap(inp[i], inp[largest]);
         i = largest;               // continue sifting down
@@ -65,11 +94,11 @@ void createHeapOptimized(vector<int>& inp)
         siftDown(inp, i, n);
 }
 
-int main(int argc, char const *argv[])
+int main00(int argc, char const *argv[])
 {
     vector<int> inp = {10, 20, 30, 25, 5, 40, 35};
 
-    createHeap(inp);
+    createMaxHeap(inp);
 
     for(int item : inp)
     {
